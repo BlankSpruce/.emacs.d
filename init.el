@@ -18,6 +18,7 @@
   '(
     clang-format
     solarized-theme
+    undo-tree
     ))
 
 (mapc #'(lambda (package)
@@ -25,9 +26,8 @@
             (package-install package)))
       dynamic-packages)
 
-;; Theme
-(require 'solarized)
-(load-theme 'solarized-dark t)
+;; UI
+(load-file "~/.emacs.d/config/ui.el")
 
 ;; Keybindings
-(load-file "./config/keybindings.el")
+(load-file "~/.emacs.d/config/keybindings.el")

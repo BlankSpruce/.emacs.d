@@ -1,12 +1,14 @@
 ;;;; Keybindings
-;; Copy/Cut/Paste
-(cua-mode t)
-
 ;; Keybinding helper
 (defun set-keybinding (keybinding action)
-  (global-unset-key (kbd keybinding))
-  (global-set-key (kbd keybinding) action)
+  (define-key global-map (kbd keybinding) action)
   )
+
+;; Reload config
+(set-keybinding "<f12>" 'reload-emacs-config)
+
+;; Copy/Cut/Paste
+(cua-mode t)
 
 ;; Open/Create file
 (global-unset-key (kbd "C-k"))
@@ -18,6 +20,9 @@
 ;; Close file
 (set-keybinding "C-w" 'kill-buffer)
 
+;; Open buffers
+(set-keybinding "<f11>" 'buffer-menu-other-window)
+
 ;; Go to line
 (set-keybinding "C-l" 'goto-line)
 
@@ -26,6 +31,22 @@
 (set-keybinding "C-z" 'undo-tree-undo)
 (set-keybinding "C-S-z" 'undo-tree-redo)
 (set-keybinding "M-z" 'undo-tree-visualize)
+
+;; Search and replace
+(set-keybinding "C-f" 'isearch-forward)
+(set-keybinding "C-r" 'query-replace)
+(define-key isearch-mode-map (kbd "<up>") 'isearch-repeat-backward)
+(define-key isearch-mode-map (kbd "<down>") 'isearch-repeat-forward)
+
+;; Regexp
+(require 'visual-regexp-steroids)
+(set-keybinding "M-f" 'vr/isearch-forward)
+(set-keybinding "M-r" 'vr/query-replace)
+
+;; Move text
+(require 'move-text)
+(set-keybinding "<C-S-up>" 'move-text-up)
+(set-keybinding "<C-S-down>" 'move-text-down)
 
 ;;;; Windows
 ;; Switch windows
@@ -40,4 +61,14 @@
 
 ;; Close window
 (set-keybinding "M-w" 'delete-window)
+
+;; Kill buffer
+(set-keybinding "M-q" 'kill-buffer)
+
+;;;; Git
+(global-unset-key (kbd "M-g"))
+(set-keybinding "M-g b" 'magit-blame)
+(set-keybinding "M-g s" 'magit-status)
+(set-keybinding "M-g l" 'magit-log-buffer-file)
+(set-keybinding "M-g c" 'magit-blame-copy-hash)
 

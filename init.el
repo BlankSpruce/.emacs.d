@@ -20,6 +20,7 @@
     dashboard
     magit
     move-text
+    neotree
     pcre2el
     solarized-theme
     undo-tree

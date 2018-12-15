@@ -72,3 +72,10 @@
 (set-keybinding "M-g l" 'magit-log-buffer-file)
 (set-keybinding "M-g c" 'magit-blame-copy-hash)
 
+;;;; Neotree
+(set-keybinding "<f8>" 'neotree-toggle)
+(define-key neotree-mode-map (kbd "c") 'neotree-change-root)
+(define-key neotree-mode-map (kbd "u") 'neotree-select-up-node)
+
+;;;; Dashboard
+(set-keybinding "<f10>" 'dashboard-refresh-buffer)

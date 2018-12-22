@@ -1,22 +1,38 @@
-;; Theme
-(require 'solarized)
-(load-theme 'solarized-dark t)
+(when (display-graphic-p)
+  ;; Cursor
+  (setq-default cursor-type 'bar)
 
-;; Cursor
-(setq-default cursor-type 'bar)
+  ;; Font
+  (add-to-list 'default-frame-alist
+	       '(font . "Meslo LG M DZ for Powerline-9"))
+
+  ;; Others
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  )
+
+(if (display-graphic-p)
+    (progn
+      (menu-bar-mode 1)
+      )
+  (menu-bar-mode -1)
+  )
+
+;; Theme
+(require 'doom-themes)
+(load-theme 'doom-city-lights t)
 
 ;; Line numbers
 (global-linum-mode)
 (setq linum-format "%4d\u2502")
 
-;; Font
-;(set-face-attribute 'default t :font "Meslo LG M DZ for Powerline-9")
-(add-to-list 'default-frame-alist
-	     '(font . "Meslo LG M DZ for Powerline-9"))
-
 ;; Dashboard
 (require 'dashboard)
 (dashboard-setup-startup-hook)
+(setq dashboard-items '((recents  . 10)
+                        (projects . 10)
+                        (bookmarks . 10)))
+;                        (agenda . 5)))
 
 ;; File tree
 (require 'neotree)
@@ -27,6 +43,3 @@
 (add-hook 'neo-after-create-hook
 	  (lambda (&optional dummy) (linum-mode -1)))
 
-;; Others
-(tool-bar-mode -1)
-(scroll-bar-mode -1)

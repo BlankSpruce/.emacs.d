@@ -11,8 +11,6 @@
 (cua-mode t)
 
 ;; Open/Create file
-(global-unset-key (kbd "C-k"))
-(set-keybinding "C-k f" 'find-file)
 
 ;; Save file
 (set-keybinding "C-s" 'save-buffer)
@@ -78,4 +76,9 @@
 (define-key neotree-mode-map (kbd "u") 'neotree-select-up-node)
 
 ;;;; Dashboard
-(set-keybinding "<f10>" 'dashboard-refresh-buffer)
+(set-keybinding "<f10>"
+		'(lambda () (interactive) (switch-to-buffer dashboard-buffer-name)))
+
+;;;; Projectile
+(global-unset-key (kbd "C-k"))
+(set-keybinding "C-k f" 'projectile-find-file)

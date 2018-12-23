@@ -9,25 +9,30 @@
 (when (< emacs-major-version 24)
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives
-	       '("gnu" . "http://elpa.gnu.org/packages/") t))
+	       '("gnu" . "http://elpa.gnu.org/packages/") t)
+)
 (package-initialize)
 (when (not package-archive-contents)
-  (package-refresh-contents))
+  (package-refresh-contents)
+)
 
 ;; Packages
 (defvar dynamic-packages
   '(
     clang-format
     dashboard
+    doom-themes
     magit
     move-text
     neotree
     pcre2el
     projectile
-    solarized-theme
     undo-tree
+    vdiff
+    vdiff-magit
     visual-regexp-steroids
-    ))
+    )
+)
 
 (mapc #'(lambda (package)
           (unless (package-installed-p package)
@@ -39,11 +44,19 @@
   (interactive)
   (load-file "~/.emacs.d/init.el"))
 
-;; UI
-(load-file "~/.emacs.d/config/ui.el")
+;; Load configs
+(defvar config-files
+  '(
+    "diff.el"
+    "keybindings.el"
+    "ui.el"
+   )
+  )
 
-;; Keybindings
-(load-file "~/.emacs.d/config/keybindings.el")
+(mapc #'(lambda (single-file)
+	  (load-file (concat "~/.emacs.d/config/" single-file)))
+      config-files)
 
 ;; Regexp
 (setq vr/engine 'python)
+

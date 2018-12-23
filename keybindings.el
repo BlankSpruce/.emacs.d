@@ -10,8 +10,6 @@
 ;; Copy/Cut/Paste
 (cua-mode t)
 
-;; Open/Create file
-
 ;; Save file
 (set-keybinding "C-s" 'save-buffer)
 
@@ -46,6 +44,10 @@
 (set-keybinding "<C-S-up>" 'move-text-up)
 (set-keybinding "<C-S-down>" 'move-text-down)
 
+;; Comment/uncomment
+(define-key undo-tree-map (kbd "C-/") nil)
+(set-keybinding "C-/" 'comment-line)
+
 ;;;; Windows
 ;; Switch windows
 (set-keybinding "<M-left>" 'windmove-left)
@@ -70,7 +72,21 @@
 (set-keybinding "M-g l" 'magit-log-buffer-file)
 (set-keybinding "M-g c" 'magit-blame-copy-hash)
 
+;; vdiff + magit intergration
+(require 'vdiff)
+(define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
+(define-key vdiff-3way-mode-map (kbd "C-c") vdiff-mode-prefix-map)
+
+(require 'vdiff-magit)
+(define-key magit-mode-map "e" 'vdiff-magit-dwim)
+(define-key magit-mode-map "E" 'vdiff-magit-popup)
+(setcdr (assoc ?e (plist-get magit-dispatch-popup :actions))
+        '("vdiff dwim" 'vdiff-magit-dwim))
+(setcdr (assoc ?E (plist-get magit-dispatch-popup :actions))
+        '("vdiff popup" 'vdiff-magit-popup))
+
 ;;;; Neotree
+(require 'neotree)
 (set-keybinding "<f8>" 'neotree-toggle)
 (define-key neotree-mode-map (kbd "c") 'neotree-change-root)
 (define-key neotree-mode-map (kbd "u") 'neotree-select-up-node)

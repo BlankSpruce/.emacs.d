@@ -4,25 +4,32 @@
   (define-key global-map (kbd keybinding) action)
   )
 
-;; Reload config
-(set-keybinding "<f12>" 'reload-emacs-config)
-
 ;; Copy/Cut/Paste
 (cua-mode t)
 
-;; Save file
+;; Buffers
 (set-keybinding "C-s" 'save-buffer)
+(set-keybinding "<f6>" 'buffer-menu-other-window)
+(set-keybinding "<M-left>" 'windmove-left)
+(set-keybinding "<M-right>" 'windmove-right)
+(set-keybinding "<M-up>" 'windmove-up)
+(set-keybinding "<M-down>" 'windmove-down)
+(set-keybinding "M-o" 'split-window-horizontally)
+(set-keybinding "M-e" 'split-window-vertically)
+(set-keybinding "M-w" 'delete-window)
+(set-keybinding "M-q" 'kill-buffer)
+(set-keybinding "M-p" 'reposition-window)
 
-;; Close file
-(set-keybinding "C-w" 'kill-buffer)
-
-;; Open buffers
-(set-keybinding "<f11>" 'buffer-menu-other-window)
+; Reload buffer
+(defun revert-buffer-without-confirmation ()
+    (interactive) (revert-buffer t t))
+(set-keybinding "<f5>" 'revert-buffer-without-confirmation)
 
 ;; Go to line
 (set-keybinding "C-l" 'goto-line)
 
 ;; Undo/redo
+(require 'undo-tree)
 (global-undo-tree-mode)
 (set-keybinding "C-z" 'undo-tree-undo)
 (set-keybinding "C-S-z" 'undo-tree-redo)
@@ -34,7 +41,7 @@
 (define-key isearch-mode-map (kbd "<up>") 'isearch-repeat-backward)
 (define-key isearch-mode-map (kbd "<down>") 'isearch-repeat-forward)
 
-;; Regexp
+; Regexp
 (require 'visual-regexp-steroids)
 (set-keybinding "M-f" 'vr/isearch-forward)
 (set-keybinding "M-r" 'vr/query-replace)
@@ -48,24 +55,8 @@
 (define-key undo-tree-map (kbd "C-/") nil)
 (set-keybinding "C-/" 'comment-line)
 
-;;;; Windows
-;; Switch windows
-(set-keybinding "<M-left>" 'windmove-left)
-(set-keybinding "<M-right>" 'windmove-right)
-(set-keybinding "<M-up>" 'windmove-up)
-(set-keybinding "<M-down>" 'windmove-down)
-
-;; Split window
-(set-keybinding "M-o" 'split-window-horizontally)
-(set-keybinding "M-e" 'split-window-vertically)
-
-;; Close window
-(set-keybinding "M-w" 'delete-window)
-
-;; Kill buffer
-(set-keybinding "M-q" 'kill-buffer)
-
-;;;; Git
+;; magit
+(require 'magit)
 (global-unset-key (kbd "M-g"))
 (set-keybinding "M-g b" 'magit-blame)
 (set-keybinding "M-g s" 'magit-status)
@@ -85,16 +76,16 @@
 (setcdr (assoc ?E (plist-get magit-dispatch-popup :actions))
         '("vdiff popup" 'vdiff-magit-popup))
 
-;;;; Neotree
+;; Neotree
 (require 'neotree)
 (set-keybinding "<f8>" 'neotree-toggle)
 (define-key neotree-mode-map (kbd "c") 'neotree-change-root)
 (define-key neotree-mode-map (kbd "u") 'neotree-select-up-node)
 
-;;;; Dashboard
-(set-keybinding "<f10>"
+;; Dashboard
+(set-keybinding "<f7>"
 		'(lambda () (interactive) (switch-to-buffer dashboard-buffer-name)))
 
-;;;; Projectile
-(global-unset-key (kbd "C-k"))
-(set-keybinding "C-k f" 'projectile-find-file)
+;; Projectile
+(global-unset-key (kbd "C-p"))
+(set-keybinding "C-p f" 'projectile-find-file)

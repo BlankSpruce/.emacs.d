@@ -22,7 +22,9 @@
     clang-format
     dashboard
     doom-themes
+    latex-preview-pane
     magit
+    markdown-mode
     move-text
     neotree
     pcre2el
@@ -60,3 +62,7 @@
 ;; Regexp
 (setq vr/engine 'python)
 
+;; Ghostscript
+(if (eq system-type 'windows-nt)
+    (setq doc-view-ghostscript-program "gswin64c")
+  )

@@ -32,7 +32,6 @@
 (setq dashboard-items '((recents  . 10)
                         (projects . 10)
                         (bookmarks . 10)))
-;                        (agenda . 5)))
 
 ;; File tree
 (require 'neotree)
@@ -40,6 +39,7 @@
 (setq neo-smart-open t)
 
 ; Disable line numbering in neotree
-(add-hook 'neo-after-create-hook
-	  (lambda (&optional dummy) (linum-mode -1)))
+(add-hook 'neo-after-create-hook (lambda (&rest _) (linum-mode -1)))
 
+;; Highlight matching parentheses
+(show-paren-mode)

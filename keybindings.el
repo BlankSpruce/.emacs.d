@@ -4,22 +4,28 @@
   (define-key global-map (kbd keybinding) action)
   )
 
+(defun disable-keybinding (mode keybinding)
+  (define-key mode (kbd keybinding) nil)
+  )
+
 ;; Copy/Cut/Paste
 (cua-mode t)
 
 ;; Buffers
 (set-keybinding "C-s" 'save-buffer)
 (set-keybinding "<f6>" 'buffer-menu-other-window)
-(set-keybinding "<M-left>" 'windmove-left)
-(set-keybinding "<M-right>" 'windmove-right)
-(set-keybinding "<M-up>" 'windmove-up)
-(set-keybinding "<M-down>" 'windmove-down)
+(set-keybinding "<M-f6>" 'buffer-menu)
 (set-keybinding "M-o" 'split-window-horizontally)
 (set-keybinding "M-e" 'split-window-vertically)
 (set-keybinding "M-w" 'delete-window)
 (set-keybinding "M-q" 'kill-buffer)
 (set-keybinding "M-p" 'reposition-window)
-
+; Move to other buffer
+(require 'windmove)
+(set-keybinding "<M-left>" 'windmove-left)
+(set-keybinding "<M-right>" 'windmove-right)
+(set-keybinding "<M-up>" 'windmove-up)
+(set-keybinding "<M-down>" 'windmove-down)
 ; Reload buffer
 (defun revert-buffer-without-confirmation ()
     (interactive) (revert-buffer t t))
@@ -34,6 +40,7 @@
 (set-keybinding "C-z" 'undo-tree-undo)
 (set-keybinding "C-S-z" 'undo-tree-redo)
 (set-keybinding "M-z" 'undo-tree-visualize)
+(disable-keybinding undo-tree-map "C-/")
 
 ;; Search and replace
 (set-keybinding "C-f" 'isearch-forward)
@@ -52,8 +59,11 @@
 (set-keybinding "<C-S-down>" 'move-text-down)
 
 ;; Comment/uncomment
-(define-key undo-tree-map (kbd "C-/") nil)
+
 (set-keybinding "C-/" 'comment-line)
+
+;; Select all
+(set-keybinding "C-a" 'mark-whole-buffer)
 
 ;; magit
 (require 'magit)
@@ -83,9 +93,25 @@
 (define-key neotree-mode-map (kbd "u") 'neotree-select-up-node)
 
 ;; Dashboard
+(require 'dashboard)
 (set-keybinding "<f7>"
 		'(lambda () (interactive) (switch-to-buffer dashboard-buffer-name)))
 
 ;; Projectile
+(require 'projectile)
 (global-unset-key (kbd "C-p"))
 (set-keybinding "C-p f" 'projectile-find-file)
+
+;; Elpy
+(require 'elpy)
+(define-key elpy-mode-map (kbd "C-<SPC>") 'elpy-company-backend)
+; Conflicts with windmove
+(defvar elpy-keybindings-to-disable
+  '(
+    "<M-up>"
+    "<M-down>"
+    "<M-left>"
+    "<M-right>"
+    )
+  )
+(mapc #'(lambda (keybinding) (disable-keybinding mode keybinding)) elpy-keybindings-to-disable)

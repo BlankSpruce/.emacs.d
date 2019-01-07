@@ -19,9 +19,9 @@
 ;; Packages
 (defvar dynamic-packages
   '(
-    clang-format
     dashboard
     doom-themes
+    elpy
     latex-preview-pane
     magit
     markdown-mode
@@ -66,3 +66,6 @@
 (if (eq system-type 'windows-nt)
     (setq doc-view-ghostscript-program "gswin64c")
   )
+
+;; Python
+(add-hook 'python-mode-hook (lambda () (elpy-mode)))

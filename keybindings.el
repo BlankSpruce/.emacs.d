@@ -67,11 +67,15 @@
 
 ;; magit
 (require 'magit)
+(defhydra hydra-magit ()
+  "Magit"
+  ("b" magit-blame "blame")
+  ("l" magit-log-buffer-file "file log")
+  ("s" magit-status "status")
+  )
 (global-unset-key (kbd "M-g"))
-(set-keybinding "M-g b" 'magit-blame)
-(set-keybinding "M-g s" 'magit-status)
-(set-keybinding "M-g l" 'magit-log-buffer-file)
-(set-keybinding "M-g c" 'magit-blame-copy-hash)
+(set-keybinding "M-g" 'hydra-magit/body)
+(define-key magit-blame-read-only-mode-map "c" 'magit-blame-copy-hash)
 
 ;; vdiff + magit intergration
 (require 'vdiff)

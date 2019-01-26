@@ -23,6 +23,7 @@
     dashboard
     doom-themes
     elpy
+    hydra
     latex-preview-pane
     magit
     markdown-mode

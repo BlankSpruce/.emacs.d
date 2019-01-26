@@ -99,8 +99,8 @@
 
 ;; Projectile
 (require 'projectile)
-(global-unset-key (kbd "C-p"))
-(set-keybinding "C-p f" 'projectile-find-file)
+(global-unset-key (kbd "C-k"))
+(set-keybinding "C-k" 'projectile-find-file)
 
 ;; Elpy
 (require 'elpy)
@@ -114,4 +114,12 @@
     "<M-right>"
     )
   )
-(mapc #'(lambda (keybinding) (disable-keybinding mode keybinding)) elpy-keybindings-to-disable)
+(mapc #'(lambda (keybinding) (disable-keybinding elpy-mode-map keybinding)) elpy-keybindings-to-disable)
+
+;; Company
+(require 'company)
+(define-key company-mode-map (kbd "C-<SPC>") 'company-complete)
+
+;; Origami
+(require 'origami)
+(define-key origami-mode-map (kbd "<C-tab>") 'origami-recursively-toggle-node)

@@ -19,14 +19,17 @@
 ;; Packages
 (defvar dynamic-packages
   '(
+    company
     dashboard
     doom-themes
     elpy
     latex-preview-pane
     magit
     markdown-mode
+    markdown-preview-mode
     move-text
     neotree
+    origami
     pcre2el
     projectile
     undo-tree
@@ -69,3 +72,32 @@
 
 ;; Python
 (add-hook 'python-mode-hook (lambda () (elpy-mode)))
+
+;; Markdown
+(setq markdown-css-filepath
+      (concat
+       (getenv "HOME")
+       "/.emacs.d/config/markdown"
+       "/github.css"
+       )
+      )
+(setq markdown-command
+      (concat
+       "pandoc"
+       " --mathjax"
+       " --metadata pagetitle=\"...\""
+       " --standalone"
+       " --css="
+       markdown-css-filepath
+       " --self-contained"
+       " --from=markdown --to=html5"
+       " --highlight-style=pygments"
+       )
+      )
+(setq markdown-fontify-code-blocks-natively t)
+(setq markdown-header-scaling t)
+
+(setq markdown-preview-stylesheets (list))
+
+;; Origami
+(global-origami-mode)

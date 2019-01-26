@@ -45,15 +45,11 @@
             (package-install package)))
       dynamic-packages)
 
-;; Reload config
-(defun reload-emacs-config ()
-  (interactive)
-  (load-file "~/.emacs.d/init.el"))
-
 ;; Load configs
 (defvar config-files
   '(
     "diff.el"
+    "helpers.el"
     "keybindings.el"
     "ui.el"
    )
@@ -97,7 +93,6 @@
       )
 (setq markdown-fontify-code-blocks-natively t)
 (setq markdown-header-scaling t)
-
 (setq markdown-preview-stylesheets (list))
 
 ;; Origami

@@ -59,7 +59,6 @@
 (set-keybinding "<C-S-down>" 'move-text-down)
 
 ;; Comment/uncomment
-
 (set-keybinding "C-/" 'comment-line)
 
 ;; Select all
@@ -127,3 +126,13 @@
 ;; Origami
 (require 'origami)
 (define-key origami-mode-map (kbd "<C-tab>") 'origami-recursively-toggle-node)
+
+;; Markdown
+(require 'markdown-preview-mode)
+(defhydra hydra-markdown ()
+  "Markdown"
+  ("p" markdown-preview-mode "preview")
+  ("c" markdown-preview-cleanup "cleanup")
+  )
+(global-unset-key (kbd "M-m"))
+(set-keybinding "M-m" 'hydra-markdown/body)

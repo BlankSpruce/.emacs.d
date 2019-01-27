@@ -37,6 +37,7 @@
     vdiff
     vdiff-magit
     visual-regexp-steroids
+    yaml-mode
     )
 )
 

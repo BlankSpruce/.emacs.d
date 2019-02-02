@@ -13,8 +13,9 @@
 
 ;; Buffers
 (set-keybinding "C-s" 'save-buffer)
-(set-keybinding "<f6>" 'buffer-menu-other-window)
-(set-keybinding "<M-f6>" 'buffer-menu)
+(set-keybinding "<C-f6>" 'buffer-menu)
+(set-keybinding "<M-f6>" 'buffer-menu-other-window)
+(set-keybinding "<f6>" 'ido-switch-buffer)
 (set-keybinding "M-o" 'split-window-horizontally)
 (set-keybinding "M-e" 'split-window-vertically)
 (set-keybinding "M-w" 'delete-window)

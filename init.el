@@ -98,3 +98,7 @@
 
 ;; Origami
 (global-origami-mode)
+
+;; Ido
+(require 'ido)
+(ido-mode t)

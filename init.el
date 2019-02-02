@@ -24,6 +24,7 @@
     doom-themes
     elpy
     hydra
+    hlinum
     latex-preview-pane
     magit
     markdown-mode

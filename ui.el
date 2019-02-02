@@ -25,6 +25,7 @@
 ;; Line numbers
 (global-linum-mode)
 (setq linum-format "%4d\u2502")
+(hlinum-activate)
 
 ;; Dashboard
 (require 'dashboard)

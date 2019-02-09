@@ -19,6 +19,7 @@
 ;; Packages
 (defvar dynamic-packages
   '(
+    ag
     company
     dashboard
     doom-themes

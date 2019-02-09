@@ -101,10 +101,16 @@
 (set-keybinding "<f7>"
 		'(lambda () (interactive) (switch-to-buffer dashboard-buffer-name)))
 
+;; Ag
+(require 'ag)
+(set-keybinding "C-S-k" 'ag)
+
 ;; Projectile
 (require 'projectile)
 (global-unset-key (kbd "C-k"))
 (set-keybinding "C-k" 'projectile-find-file)
+(global-unset-key (kbd "M-k"))
+(set-keybinding "M-k" 'projectile-ag)
 
 ;; Elpy
 (require 'elpy)

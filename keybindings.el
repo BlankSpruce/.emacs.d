@@ -70,7 +70,11 @@
 (defhydra hydra-magit ()
   "Magit"
   ("b" magit-blame "blame")
+  ("c" magit-checkout "checkout")
+  ("h" magit-log-all "log")
   ("l" magit-log-buffer-file "file log")
+  ("n" magit-branch-and-checkout "new branch from current one")
+  ("r" magit-show-refs-popup "show branches")
   ("s" magit-status "status")
   )
 (global-unset-key (kbd "M-g"))

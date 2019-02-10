@@ -107,7 +107,17 @@
 
 ;; Ag
 (require 'ag)
+(require 'wgrep-ag)
 (set-keybinding "C-S-k" 'ag)
+(defhydra hydra-ag ()
+ "Ag"
+ ("e" wgrep-change-to-wgrep-mode "edit")
+ ("f" wgrep-finish-edit "finish edits")
+ ("s" wgrep-save-all-buffers "save edits")
+ )
+(global-unset-key (kbd "M-i"))
+(define-key ag-mode-map (kbd "M-i") 'hydra-ag/body)
+(define-key wgrep-mode-map (kbd "M-i") 'hydra-ag/body)
 
 ;; Projectile
 (require 'projectile)

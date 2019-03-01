@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: transform with non-const input
+# key: tra
+# --
+std::transform(std::begin(${1:input}), std::end($1),
+  ${2:output iterator}, [$3]($4) {
+$5
+});
+$0

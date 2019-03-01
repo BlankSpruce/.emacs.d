@@ -25,6 +25,7 @@
     doom-themes
     elpy
     fill-column-indicator
+    helm-c-yasnippet
     hydra
     hlinum
     latex-preview-pane
@@ -42,6 +43,8 @@
     visual-regexp-steroids
     wgrep-ag
     yaml-mode
+    yasnippet
+    yasnippet-snippets
     )
 )
 
@@ -118,3 +121,14 @@
 	  (lambda ()
 	    (setq fci-rule-column 140)
 	    (fci-mode)))
+
+;; YASnippet
+(require 'yasnippet)
+(require 'helm-c-yasnippet)
+(setq helm-yas-space-match-any-greedy t)
+(setq yas-snippet-dirs (append yas-snippet-dirs
+	     '("~/.emacs.d/config/yasnippet")))
+(yas-reload-all)
+(add-hook 'c++-mode-hook (lambda () (yas-minor-mode)))
+(add-hook 'python-mode-hook (lambda () (yas-minor-mode)))
+

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: transform with const input
+# key: ctra
+# --
+std::transform(std::cbegin(${1:container}), std::cend($1),
+  ${2:output iterator}, [$3]($4) {
+$5
+});
+$0

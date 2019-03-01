@@ -157,3 +157,6 @@
   )
 (global-unset-key (kbd "M-m"))
 (set-keybinding "M-m" 'hydra-markdown/body)
+
+;; YASnippet
+(global-set-key (kbd "M-/") 'helm-yas-complete)

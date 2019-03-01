@@ -24,6 +24,7 @@
     dashboard
     doom-themes
     elpy
+    fill-column-indicator
     hydra
     hlinum
     latex-preview-pane
@@ -110,3 +111,10 @@
 ;; Ido
 (require 'ido)
 (ido-mode t)
+
+;; Fill column indicator
+(require 'fill-column-indicator)
+(add-hook 'python-mode-hook
+	  (lambda ()
+	    (setq fci-rule-column 140)
+	    (fci-mode)))

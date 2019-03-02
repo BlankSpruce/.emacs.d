@@ -115,13 +115,6 @@
 (require 'ido)
 (ido-mode t)
 
-;; Fill column indicator
-(require 'fill-column-indicator)
-(add-hook 'python-mode-hook
-	  (lambda ()
-	    (setq fci-rule-column 140)
-	    (fci-mode)))
-
 ;; YASnippet
 (require 'yasnippet)
 (require 'helm-c-yasnippet)

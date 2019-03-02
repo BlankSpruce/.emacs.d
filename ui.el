@@ -26,6 +26,9 @@
 (global-linum-mode)
 (setq linum-format "%4d\u2502")
 (hlinum-activate)
+(global-hl-line-mode t)
+(require 'elpy)
+(add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
 
 ;; Dashboard
 (require 'dashboard)
@@ -44,3 +47,7 @@
 
 ;; Highlight matching parentheses
 (show-paren-mode)
+
+;; Fill column indicator
+(require 'fill-column-indicator)
+(setq fci-rule-column 140)

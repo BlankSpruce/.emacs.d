@@ -23,10 +23,10 @@
 (load-theme 'doom-city-lights t)
 
 ;; Line numbers
-(global-linum-mode)
-(setq linum-format "%4d\u2502")
-(hlinum-activate)
-(global-hl-line-mode t)
+(setq nlinum-format "%4d\u2502")
+(setq nlinum-highlight-current-line t)
+(global-nlinum-mode)
+(global-hl-line-mode)
 (require 'elpy)
 (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
 
@@ -43,7 +43,7 @@
 (setq neo-smart-open t)
 
 ; Disable line numbering in neotree
-(add-hook 'neo-after-create-hook (lambda (&rest _) (linum-mode -1)))
+(add-hook 'neo-after-create-hook (lambda (&rest _) (nlinum-mode -1)))
 
 ;; Highlight matching parentheses
 (show-paren-mode)

@@ -27,13 +27,13 @@
     fill-column-indicator
     helm-c-yasnippet
     hydra
-    hlinum
     latex-preview-pane
     magit
     markdown-mode
     markdown-preview-mode
     move-text
     neotree
+    nlinum
     origami
     pcre2el
     projectile

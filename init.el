@@ -40,7 +40,6 @@
 (use-package ag
   :bind
   ("C-S-k" . 'ag)
-  ("M-i" . 'hydra-ag/body)
   )
 (use-package wgrep-ag
   :requires ag hydra

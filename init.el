@@ -106,14 +106,24 @@
   (setq fci-rule-column 140)
   )
 
+(use-package helm
+  :config
+  (setq helm-always-two-windows nil)
+  (setq helm-display-buffer-display-height 16)
+  (setq helm-default-display-buffer-functions '(display-buffer-in-side-window))
+  (setq helm-buffer-max-length 80)
+
+  :bind
+  ("<f6>" . 'helm-buffers-list)
+  )
+
+(use-package helm-ag)
+
 (use-package hydra)
 
 (use-package ido
   :config
   (ido-mode t)
-
-  :bind
-  ("<f6>" . 'ido-switch-buffer)
   )
 
 (use-package magit
@@ -222,10 +232,24 @@
   :requires ag
   :config
   (projectile-global-mode)
+  (setq projectile-enable-caching t)
+  )
+
+(use-package helm-projectile
+  :requires helm projectile helm-ag
+
+  :config
+  (defun actual-helm-projectile-find-file-dwim ()
+    (interactive)
+    (if (not (projectile-project-p))
+	(helm-projectile-switch-project)
+      (helm-projectile-find-file)
+      )
+    )
 
   :bind
-  ("C-k" . 'projectile-find-file)
-  ("M-k" . 'projectile-ag)
+  ("C-k" . 'actual-helm-projectile-find-file-dwim)
+  ("M-k" . 'helm-projectile-ag)
   )
 
 (use-package undo-tree

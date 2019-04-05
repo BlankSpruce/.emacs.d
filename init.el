@@ -264,25 +264,25 @@
   )
 
 (use-package vdiff
+  :requires hydra
+
   :config
   (setq vdiff-diff-algorithm 'git-diff-patience)
-  (defun custom-vdiff-3way-layout-function (buffer-a buffer-b buffer-c)
-    (delete-other-windows)
-    (switch-to-buffer buffer-a)
-    (set-window-buffer (split-window-horizontally) buffer-c)
-    (set-window-buffer (split-window-horizontally) buffer-b)
-    (balance-windows)
-    )
-  (custom-set-variables
-   '(vdiff-3way-layout-function (quote custom-vdiff-3way-layout-function))
-   )
   (setq vdiff-subtraction-fill-char ? )
+  (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
+  (define-key vdiff-3way-mode-map (kbd "C-c") vdiff-mode-prefix-map)
+  (defhydra hydra-vdiff-entry ()
+    "vdiff"
+    ("b" vdiff-buffers "diff 2 buffers")
+    ("B" vdiff-buffers3 "diff 3 buffers")
+    ("f" vdiff-files "diff 2 files")
+    ("F" vdiff-files3 "diff 3 files")
+    ("c" vdiff-current-file "diff current file")
+    ("m" vdiff-merge-conflict "resolve merge conflict")
+    )
 
   :bind
-  (:map vdiff-mode-map
-	("C-c" . 'vdiff-mode-prefix-map))
-  (:map vdiff-3way-mode-map
-	("C-c" . 'vdiff-mode-prefix-map))
+  ("M-d" . #'hydra-vdiff-entry/body)
 
   :custom-face
   (diff-added   ((t (:background "#335533" :foreground "#ddffdd"))))

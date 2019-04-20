@@ -120,6 +120,8 @@
 
   :bind
   ("<f6>" . 'helm-buffers-list)
+  ("M-x" . 'helm-M-x)
+  ("C-M-x" . 'execute-extended-command)
   )
 
 (use-package helm-ag)

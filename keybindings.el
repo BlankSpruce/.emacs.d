@@ -93,3 +93,5 @@ T - tag prefix
   '(progn
      (define-key dired-mode-map "." 'hydra-dired/body))
   )
+
+(set-keybinding "<f2>" 'compile)

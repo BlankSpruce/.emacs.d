@@ -233,6 +233,30 @@
 	)
   )
 
+(use-package popwin
+  :config
+  (popwin-mode 1)
+  (setq popwin:popup-window-height 0.25)
+  (setq popwin:special-display-config nil)
+  (push '("*compilation*"
+	  :dedicated t
+	  :position bottom
+	  :stick t
+	  :noselect t)
+	popwin:special-display-config)
+  (push '(" *undo-tree*"
+	  :dedicated t
+	  :position bottom
+	  :stick t
+	  :noselect nil)
+	popwin:special-display-config)
+  (push '(ag-mode
+	  :position bottom
+	  :stick t
+	  :noselect t)
+	popwin:special-display-config)
+  )
+
 (use-package projectile
   :requires ag
   :config

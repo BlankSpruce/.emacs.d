@@ -60,6 +60,11 @@
   )
 
 (use-package company
+  :config
+  (add-hook 'c++-mode-hook #'company-mode)
+  (add-hook 'emacs-lisp-mode-hook #'company-mode)
+  (add-hook 'python-mode-hook #'company-mode)
+
   :bind
   (:map company-mode-map
 	("C-<SPC>" . 'company-complete)

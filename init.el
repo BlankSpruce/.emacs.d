@@ -126,6 +126,24 @@
 
 (use-package helm-ag)
 
+(use-package highlight-symbol
+  :config
+  (defhydra hydra-highlight-symbol ()
+    "Highlight symbol"
+    ("," highlight-symbol-prev "previous")
+    ("." highlight-symbol-next "next")
+    ("c" highlight-symbol-remove-all "clear highlights")
+    ("h" highlight-symbol "highlight")
+    ("r" highlight-symbol-query-replace "replace")
+    )
+  (setq highlight-symbol-idle-delay 0.7)
+  (add-hook 'text-mode-hook #'highlight-symbol-mode)
+  (add-hook 'prog-mode-hook #'highlight-symbol-mode)
+
+  :bind
+  ("M-h" . 'hydra-highlight-symbol/body)
+  )
+
 (use-package hydra)
 
 (use-package ido

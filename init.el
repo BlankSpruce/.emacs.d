@@ -261,6 +261,8 @@
   :config
   (setq neo-theme (if (display-graphic-p) 'nerd 'ascii))
   (setq neo-smart-open t)
+  (setq neo-window-fixed-size nil)
+  (setq neo-window-width 30)
   ;; Disable line numbering in neotree
   (add-hook 'neo-after-create-hook (lambda (&rest _) (nlinum-mode -1)))
 

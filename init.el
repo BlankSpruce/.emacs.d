@@ -103,6 +103,10 @@
   (load-theme 'doom-city-lights t)
   )
 
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode)
+  )
+
 (use-package elpy
   :config
   (add-hook 'python-mode-hook #'elpy-mode)

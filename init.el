@@ -83,11 +83,13 @@
   )
 
 (use-package company
-  :init
-  (add-hook 'c++-mode-hook #'company-mode)
-  (add-hook 'cmake-mode-hook #'company-mode)
-  (add-hook 'emacs-lisp-mode-hook #'company-mode)
-  (add-hook 'python-mode-hook #'company-mode)
+  :hook
+  (
+   (c++-mode        . company-mode)
+   (cmake-mode      . company-mode)
+   (emacs-lisp-mode . company-mode)
+   (python-mode     . company-mode)
+   )
 
   :bind
   (:map company-mode-map
@@ -103,7 +105,9 @@
 
   :config
   (dashboard-setup-startup-hook)
-  (add-hook 'dashboard-mode-hook (lambda (&rest _) (nlinum-mode -1)))
+
+  :hook
+  (dashboard-mode . (lambda (&rest _) (nlinum-mode -1)))
 
   :bind
   ("<f7>" . (lambda () (interactive) (switch-to-buffer dashboard-buffer-name)))
@@ -120,13 +124,17 @@
 
 (use-package elpy
   :config
-  (add-hook 'python-mode-hook #'elpy-mode)
   ; Conflicts with windmove
   (unbind-key "<M-up>" elpy-mode-map)
   (unbind-key "<M-down>" elpy-mode-map)
   (unbind-key "<M-left>" elpy-mode-map)
   (unbind-key "<M-right>" elpy-mode-map)
-  (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
+
+  :hook
+  (
+   (elpy-mode   . (lambda () (highlight-indentation-mode -1)))
+   (python-mode . elpy-mode)
+   )
 
   :bind
   (:map elpy-mode-map
@@ -142,8 +150,10 @@
 (use-package flycheck
   :requires cc-mode
 
-  :config
-  (add-hook 'c-mode-common-hook #'flycheck-mode)
+  :hook
+  (
+   (c-mode-common . flycheck-mode)
+   )
   )
 
 (use-package helm
@@ -172,8 +182,12 @@
     ("r" highlight-symbol-query-replace "replace")
     )
   (setq highlight-symbol-idle-delay 0.7)
-  (add-hook 'text-mode-hook #'highlight-symbol-mode)
-  (add-hook 'prog-mode-hook #'highlight-symbol-mode)
+
+  :hook
+  (
+   (text-mode . highlight-symbol-mode)
+   (prog-mode . highlight-symbol-mode)
+   )
 
   :bind
   ("M-h" . 'hydra-highlight-symbol/body)
@@ -298,8 +312,12 @@
   (setq neo-smart-open t)
   (setq neo-window-fixed-size nil)
   (setq neo-window-width 30)
-  ;; Disable line numbering in neotree
-  (add-hook 'neo-after-create-hook (lambda (&rest _) (nlinum-mode -1)))
+
+  :hook
+  (
+   ;; Disable line numbering in neotree
+   (neo-after-create . (lambda (&rest _) (nlinum-mode -1)))
+   )
 
   :bind
   ("<f8>" . 'neotree-toggle)
@@ -346,7 +364,11 @@
     (setq-local flycheck-highlighting-mode nil)
     (setq-local flycheck-check-syntax-automatically nil)
     )
-  (add-hook 'c-mode-common-hook #'flycheck-with-rtags-setup)
+
+  :hook
+  (
+   (c-mode-common . flycheck-with-rtags-setup)
+   )
   )
 
 (use-package origami
@@ -481,10 +503,14 @@
 
 (use-package yasnippet
   :config
-  (add-hook 'c++-mode-hook #'yas-minor-mode)
-  (add-hook 'python-mode-hook #'yas-minor-mode)
   (setq yas-snippet-dirs (append yas-snippet-dirs '("~/.emacs.d/config/yasnippet")))
   (yas-reload-all)
+
+  :hook
+  (
+   (c++-mode    . yas-minor-mode)
+   (python-mode . yas-minor-mode)
+   )
   )
 
 (use-package yasnippet-snippets)

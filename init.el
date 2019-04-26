@@ -66,6 +66,17 @@
 	("M-i" . 'hydra-ag/body))
   )
 
+(use-package cc-mode)
+
+(use-package clang-format
+  :requires cc-mode
+
+  :bind
+  (:map c-mode-base-map
+	("C-;" . 'clang-format-buffer)
+	)
+  )
+
 (use-package cmake-mode
   :config
   (setq cmake-tab-width 4)

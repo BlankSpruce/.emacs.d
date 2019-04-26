@@ -448,14 +448,18 @@
   (setq vdiff-subtraction-fill-char ? )
   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
   (define-key vdiff-3way-mode-map (kbd "C-c") vdiff-mode-prefix-map)
-  (defhydra hydra-vdiff-entry ()
-    "vdiff"
-    ("b" vdiff-buffers "diff 2 buffers")
-    ("B" vdiff-buffers3 "diff 3 buffers")
-    ("f" vdiff-files "diff 2 files")
-    ("F" vdiff-files3 "diff 3 files")
-    ("c" vdiff-current-file "diff current file")
-    ("m" vdiff-merge-conflict "resolve merge conflict")
+  (defhydra hydra-vdiff-entry (:hint nil)
+    "
+ 2-way^^              3-way^^              Miscellaneous
+------------------------------------------------------------------------
+ [_b_] Diff 2 buffers [_B_] Diff 3 buffers [_c_] Diff current file
+ [_f_] Diff 2 files   [_F_] Diff 3 files   [_m_] Resolve merge conflict"
+    ("b" vdiff-buffers)
+    ("B" vdiff-buffers3)
+    ("f" vdiff-files)
+    ("F" vdiff-files3)
+    ("c" vdiff-current-file)
+    ("m" vdiff-merge-conflict)
     )
 
   :bind

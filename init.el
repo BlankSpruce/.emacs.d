@@ -37,6 +37,12 @@
     (setq doc-view-ghostscript-program "gswin64c")
   )
 
+;; TRAMP
+(setq tramp-default-method "ssh")
+
+;; Save history
+(savehist-mode 1)
+
 ;; Packages
 (use-package ag
   :bind

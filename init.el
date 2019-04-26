@@ -174,7 +174,7 @@
   :config
   (defhydra hydra-magit ()
     "Magit"
-    ("b" magit-blame "blame")
+    ("b" magit-blame-addition "blame")
     ("c" magit-checkout "checkout")
     ("h" magit-log-all "log")
     ("l" magit-log-buffer-file "file log")
@@ -211,10 +211,11 @@
   (setq markdown-preview-stylesheets (list))
 
   :custom-face
-  (markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold))))
+  (markdown-header-face   ((t (:inherit font-lock-function-name-face :weight bold))))
   (markdown-header-face-1 ((t (:inherit markdown-header-face :height 2.0))))
   (markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.7))))
   (markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.4))))
+  (markdown-table-face    ((t (:inherit font-lock-variable-name-face))))
   )
 
 (use-package markdown-preview-mode
@@ -313,7 +314,7 @@
   (popwin-mode 1)
   (setq popwin:popup-window-height 0.25)
   (setq popwin:special-display-config nil)
-  (push '("*compilation*"
+  (push '(compilation-mode
 	  :dedicated t
 	  :position bottom
 	  :stick t

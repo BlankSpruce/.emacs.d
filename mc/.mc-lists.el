@@ -1,6 +1,6 @@
 (setq mc/cmds-to-run-for-all
       '(
-	hydra-multiple-cursors/mc/insert-letters-and-exit
+	c-electric-colon
 	))
 
 (setq mc/cmds-to-run-once

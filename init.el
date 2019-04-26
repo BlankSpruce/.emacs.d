@@ -66,9 +66,15 @@
 	("M-i" . 'hydra-ag/body))
   )
 
-(use-package company
+(use-package cmake-mode
   :config
+  (setq cmake-tab-width 4)
+  )
+
+(use-package company
+  :init
   (add-hook 'c++-mode-hook #'company-mode)
+  (add-hook 'cmake-mode-hook #'company-mode)
   (add-hook 'emacs-lisp-mode-hook #'company-mode)
   (add-hook 'python-mode-hook #'company-mode)
 

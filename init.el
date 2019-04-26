@@ -139,6 +139,13 @@
   (setq fci-rule-column 140)
   )
 
+(use-package flycheck
+  :requires cc-mode
+
+  :config
+  (add-hook 'c-mode-common-hook #'flycheck-mode)
+  )
+
 (use-package helm
   :config
   (setq helm-always-two-windows nil)
@@ -308,6 +315,38 @@
   (setq nlinum-highlight-current-line t)
   (global-nlinum-mode)
   (global-hl-line-mode)
+  )
+
+(use-package rtags
+  :init
+  (setq rtags-completions-enabled t)
+  (rtags-start-process-unless-running)
+  )
+
+(use-package company-rtags
+  :requires company cc-mode rtags
+
+  :config
+  (push 'company-rtags company-backends)
+
+  :bind
+  (:map c-mode-base-map
+	("M-." . 'rtags-find-symbol-at-point)
+	("M-," . 'rtags-find-references-at-point)
+	)
+  )
+
+(use-package flycheck-rtags
+  :requires cc-mode flycheck rtags
+
+  :config
+  (defun flycheck-with-rtags-setup ()
+    (flycheck-select-checker 'rtags)
+    ;; RTags create more accurate overlays
+    (setq-local flycheck-highlighting-mode nil)
+    (setq-local flycheck-check-syntax-automatically nil)
+    )
+  (add-hook 'c-mode-common-hook #'flycheck-with-rtags-setup)
   )
 
 (use-package origami

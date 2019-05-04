@@ -156,6 +156,19 @@
    )
   )
 
+(use-package git-gutter-fringe
+  :config
+  (global-git-gutter-mode)
+  (setq-default fringes-outside-margins t)
+  (setq git-gutter-fr:side 'left-fringe)
+  (define-fringe-bitmap 'git-gutter-fr:added [224]
+    nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:modified [224]
+    nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240]
+    nil nil 'bottom)
+  )
+
 (use-package helm
   :config
   (setq helm-always-two-windows nil)

@@ -116,6 +116,7 @@
 (use-package doom-themes
   :config
   (load-theme 'doom-city-lights t)
+  (doom-themes-neotree-config)
   )
 
 (use-package doom-modeline

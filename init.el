@@ -353,6 +353,12 @@
   :init
   (setq rtags-completions-enabled t)
   (rtags-start-process-unless-running)
+
+  :bind
+  (:map c-mode-base-map
+	("M-." . 'rtags-find-symbol-at-point)
+	("M-," . 'rtags-find-references-at-point)
+	)
   )
 
 (use-package company-rtags
@@ -360,12 +366,6 @@
 
   :config
   (push 'company-rtags company-backends)
-
-  :bind
-  (:map c-mode-base-map
-	("M-." . 'rtags-find-symbol-at-point)
-	("M-," . 'rtags-find-references-at-point)
-	)
   )
 
 (use-package flycheck-rtags

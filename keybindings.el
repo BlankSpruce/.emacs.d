@@ -37,6 +37,7 @@
 (set-keybinding "C-a" 'mark-whole-buffer)
 
 ;; Dired
+(require 'hydra)
 (defhydra hydra-dired (:hint nil :color pink)
   "
 _+_ mkdir          _v_iew           _m_ark             _(_ details        _i_nsert-subdir    wdired

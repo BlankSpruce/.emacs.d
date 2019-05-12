@@ -52,8 +52,9 @@
   :requires ag hydra
 
   :config
-  (defhydra hydra-ag ()
-    "Ag"
+  (defhydra hydra-wgrep-ag (:exit t
+			    :idle 1.0)
+    "wgrep-ag"
     ("e" wgrep-change-to-wgrep-mode "edit")
     ("f" wgrep-finish-edit "finish edits")
     ("s" wgrep-save-all-buffers "save edits")
@@ -61,9 +62,9 @@
 
   :bind
   (:map ag-mode-map
-	("M-i" . 'hydra-ag/body))
+	("M-i" . 'hydra-wgrep-ag/body))
   (:map wgrep-mode-map
-	("M-i" . 'hydra-ag/body))
+	("M-i" . 'hydra-wgrep-ag/body))
   )
 
 (use-package cc-mode)
@@ -183,17 +184,50 @@
   ("C-M-x" . 'execute-extended-command)
   )
 
-(use-package helm-ag)
+(use-package helm-ag
+  :requires ag hydra
+
+  :config
+  (defhydra hydra-helm-ag (:exit t
+			   :hint nil
+			   :idle 1.0)
+    "
+ ^Interactive^       ^Current^           [Ag Search]
+----------------------------------------------------
+ [_b_] buffers       [_B_] buffers
+ [_d_] directory     [_D_] directory
+ [_f_] file          [_F_] file
+ [_p_] project       [_P_] project"
+    ("b" helm-do-ag-buffers)
+    ("d" helm-do-ag)
+    ("f" helm-do-ag-this-file)
+    ("p" helm-do-ag-project-root)
+    ("B" helm-ag-buffers)
+    ("D" helm-ag)
+    ("F" helm-ag-this-file)
+    ("P" helm-ag-project-root)
+    )
+
+  :bind
+  ("M-a" . 'hydra-helm-ag/body)
+  )
 
 (use-package highlight-symbol
+  :requires hydra
+
   :config
-  (defhydra hydra-highlight-symbol ()
-    "Highlight symbol"
-    ("," highlight-symbol-prev "previous")
-    ("." highlight-symbol-next "next")
-    ("c" highlight-symbol-remove-all "clear highlights")
-    ("h" highlight-symbol "highlight")
-    ("r" highlight-symbol-query-replace "replace")
+  (defhydra hydra-highlight-symbol (:hint nil
+				    :idle 1.0)
+    "
+ ^Navigation^       ^Current symbol^     ^Miscellaneous^          [highlight-symbol]^
+-------------------------------------------------------------------------------
+ [_,_] previous     [_h_] highlight      [_c_] clear highlights
+ [_._] next         [_r_] replace"
+    ("," highlight-symbol-prev)
+    ("." highlight-symbol-next)
+    ("c" highlight-symbol-remove-all)
+    ("h" highlight-symbol)
+    ("r" highlight-symbol-query-replace)
     )
   (setq highlight-symbol-idle-delay 0.7)
 
@@ -218,7 +252,8 @@
   :requires hydra
 
   :config
-  (defhydra hydra-magit ()
+  (defhydra hydra-magit (:exit t
+			 :idle 1.0)
     "Magit"
     ("b" magit-blame-addition "blame")
     ("c" magit-checkout "checkout")

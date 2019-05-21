@@ -177,11 +177,22 @@
   (setq helm-display-buffer-display-height 16)
   (setq helm-default-display-buffer-functions '(display-buffer-in-side-window))
   (setq helm-buffer-max-length 80)
+  (setq helm-ff-lynx-style-map nil)
 
   :bind
   ("<f6>" . 'helm-buffers-list)
   ("M-x" . 'helm-M-x)
   ("C-M-x" . 'execute-extended-command)
+  ("C-x C-f" . 'helm-find-files)
+  (:map helm-map
+	("<left>" . 'backward-char)
+	("<right>" . 'forward-char)
+	("<tab>" . 'helm-execute-persistent-action)
+	("C-z" . 'helm-select-action)
+	)
+  (:map helm-find-files-map
+  	("C-<backspace>" . 'backward-kill-word)
+  	)
   )
 
 (use-package helm-ag
@@ -478,6 +489,32 @@
   ("M-k" . 'helm-projectile-ag)
   )
 
+(use-package helm-swoop
+  :load-path "config/static/helm-swoop/"
+
+  :requires helm hydra projectile
+
+  :init
+  (setq helm-swoop-split-window-function
+	'(lambda (buffer &rest restvar)
+	   (helm-default-display-buffer buffer)))
+
+  :config
+  (defhydra hydra-helm-swoop (:exit t
+			      :hint nil
+			      :columns 3)
+    ("a" helm-multi-swoop-all "All buffers")
+    ("m" helm-multi-swoop "Multiple buffers")
+    ("s" helm-multi-swoop-current-mode "All same major-mode buffers")
+    ("p" helm-multi-swoop-projectile "All current project buffers")
+    ("f" helm-swoop "Swoop with preinput")
+    )
+
+  :bind
+  ("C-f" . 'helm-swoop-without-pre-input)
+  ("M-f" . 'hydra-helm-swoop/body)
+  )
+
 (use-package undo-tree
   :config
   (global-undo-tree-mode)
@@ -540,7 +577,6 @@
   (setq vr/engine 'python)
 
   :bind
-  ("M-f" . 'vr/isearch-forward)
   ("M-r" . 'vr/query-replace)
   )
 

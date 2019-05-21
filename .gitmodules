@@ -1,0 +1,3 @@
+[submodule "static/helm-swoop"]
+	path = static/helm-swoop
+	url = https://github.com/ashiklom/helm-swoop.git

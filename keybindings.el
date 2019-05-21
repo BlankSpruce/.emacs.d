@@ -24,12 +24,6 @@
 ;; Go to line
 (set-keybinding "C-l" 'goto-line)
 
-;; Search and replace
-(set-keybinding "C-f" 'isearch-forward)
-(set-keybinding "C-r" 'query-replace)
-(define-key isearch-mode-map (kbd "<up>") 'isearch-repeat-backward)
-(define-key isearch-mode-map (kbd "<down>") 'isearch-repeat-forward)
-
 ;; Comment/uncomment
 (set-keybinding "C-/" 'comment-line)
 

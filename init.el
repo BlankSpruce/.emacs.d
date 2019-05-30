@@ -178,6 +178,9 @@
   (setq helm-default-display-buffer-functions '(display-buffer-in-side-window))
   (setq helm-buffer-max-length 80)
   (setq helm-ff-lynx-style-map nil)
+  (with-eval-after-load "helm-files"
+    (bind-key "C-<backspace>" #'backward-kill-word helm-find-files-map)
+    )
 
   :bind
   ("<f6>" . 'helm-buffers-list)
@@ -190,9 +193,6 @@
 	("<tab>" . 'helm-execute-persistent-action)
 	("C-z" . 'helm-select-action)
 	)
-  (:map helm-find-files-map
-  	("C-<backspace>" . 'backward-kill-word)
-  	)
   )
 
 (use-package helm-ag

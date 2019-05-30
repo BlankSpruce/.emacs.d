@@ -2,15 +2,14 @@
 (prefer-coding-system 'utf-8)
 
 (require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "http://melpa.org/packages/") t)
-(add-to-list 'package-archives
-	     '("melpa-stable" . "http://stable.melpa.org/packages/") t)
-(add-to-list 'package-archives
-	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
-  ;; For important compatibility libraries like cl-lib
-(add-to-list 'package-archives
-	     '("gnu" . "https://elpa.gnu.org/packages/") t)
+(setq package-archives
+      '(
+	("gnu"          . "https://elpa.gnu.org/packages/")
+	("melpa"        . "https://melpa.org/packages/")
+	("melpa-stable" . "https://stable.melpa.org/packages/")
+	("marmalade"    . "https://marmalade-repo.org/packages/")
+	)
+      )
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents)
@@ -100,9 +99,13 @@
 
 (use-package dashboard
   :init
-  (setq dashboard-items '((recents  . 10)
-			  (projects . 10)
-			  (bookmarks . 10)))
+  (setq dashboard-items
+	'(
+	  (recents   . 10)
+	  (projects  . 10)
+	  (bookmarks . 10)
+	  )
+	)
 
   :config
   (dashboard-setup-startup-hook)
@@ -127,9 +130,9 @@
 (use-package elpy
   :config
   ; Conflicts with windmove
-  (unbind-key "<M-up>" elpy-mode-map)
-  (unbind-key "<M-down>" elpy-mode-map)
-  (unbind-key "<M-left>" elpy-mode-map)
+  (unbind-key "<M-up>"    elpy-mode-map)
+  (unbind-key "<M-down>"  elpy-mode-map)
+  (unbind-key "<M-left>"  elpy-mode-map)
   (unbind-key "<M-right>" elpy-mode-map)
 
   :hook

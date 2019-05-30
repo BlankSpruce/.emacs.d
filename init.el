@@ -315,6 +315,8 @@ T - tag prefix
 	)
   )
 
+(use-package ialign)
+
 (use-package ido
   :config
   (ido-mode t)

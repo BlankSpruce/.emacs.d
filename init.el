@@ -42,6 +42,13 @@
 ;; Save history
 (savehist-mode 1)
 
+;; Customize file
+(setq custom-file "~/.emacs.d/custom.el")
+(if (not (file-exists-p custom-file))
+    (with-temp-buffer (write-file custom-file))
+  )
+(load custom-file)
+
 ;; Packages
 (use-package ag
   :bind

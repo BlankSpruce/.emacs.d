@@ -19,17 +19,28 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; Load configs
-(defvar config-files
-  '(
-    "helpers.el"
-    "keybindings.el"
-    "ui.el"
-   )
+(require 'cl)
+(defun concat-path (&rest parts)
+  (reduce (lambda (a b) (expand-file-name b a)) parts)
   )
-(mapc #'(lambda (single-file)
-	  (load-file (concat "~/.emacs.d/config/" single-file)))
-      config-files)
+
+(defconst emacs-config (concat-path user-emacs-directory "config"))
+(defun ec-path (&rest parts)
+  (apply 'concat-path (cons emacs-config parts))
+  )
+
+;; Load configs
+(defun ec-load (&rest parts)
+  (load-file (apply #'ec-path parts))
+  )
+
+(mapc #'ec-load
+      '(
+	"helpers.el"
+	"keybindings.el"
+	"ui.el"
+	)
+      )
 
 ;; Ghostscript
 (if (eq system-type 'windows-nt)
@@ -43,7 +54,7 @@
 (savehist-mode 1)
 
 ;; Customize file
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file (concat-path user-emacs-directory "custom.el"))
 (if (not (file-exists-p custom-file))
     (with-temp-buffer (write-file custom-file))
   )
@@ -356,9 +367,7 @@ T - tag prefix
 
 (use-package markdown-mode
   :init
-  (setq markdown-css-filepath
-	(concat (getenv "HOME") "/.emacs.d/config/markdown/github.css")
-	)
+  (setq markdown-css-filepath (ec-path "markdown" "github.css"))
   (setq markdown-command
       (concat
        "pandoc"
@@ -407,7 +416,7 @@ T - tag prefix
   :requires hydra
 
   :config
-  (setq mc/list-file "~/.emacs.d/config/mc/.mc-lists.el")
+  (setq mc/list-file (ec-path "mc" ".mc-lists.el"))
   (defhydra hydra-multiple-cursors (:hint nil)
     "
  Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")
@@ -665,7 +674,7 @@ T - tag prefix
 
 (use-package yasnippet
   :config
-  (setq yas-snippet-dirs (append yas-snippet-dirs '("~/.emacs.d/config/yasnippet")))
+  (setq yas-snippet-dirs (append yas-snippet-dirs (ec-path "yasnippet")))
   (yas-reload-all)
 
   :hook

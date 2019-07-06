@@ -49,6 +49,9 @@
   )
 (load custom-file)
 
+;; Maximize
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 ;; Packages
 (use-package ag
   :bind

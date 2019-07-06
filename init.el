@@ -197,11 +197,12 @@
 
 (use-package helm
   :config
-  (setq helm-always-two-windows nil)
-  (setq helm-display-buffer-display-height 16)
-  (setq helm-default-display-buffer-functions '(display-buffer-in-side-window))
-  (setq helm-buffer-max-length 80)
-  (setq helm-ff-lynx-style-map nil)
+  (setq helm-always-two-windows nil
+	helm-display-buffer-display-height 16
+	helm-default-display-buffer-functions '(display-buffer-in-side-window)
+	helm-buffer-max-length 80
+	helm-ff-lynx-style-map nil
+	)
   (with-eval-after-load "helm-files"
     (bind-key "C-<backspace>" #'backward-kill-word helm-find-files-map)
     )
@@ -367,22 +368,20 @@ T - tag prefix
 
 (use-package markdown-mode
   :init
-  (setq markdown-css-filepath (ec-path "markdown" "github.css"))
   (setq markdown-command
-      (concat
-       "pandoc"
-       " --mathjax"
-       " --metadata pagetitle=\"...\""
-       " --standalone"
-       " --css=" markdown-css-filepath
-       " --self-contained"
-       " --from=markdown --to=html5"
-       " --highlight-style=pygments"
-       )
-      )
-  (setq markdown-fontify-code-blocks-natively t)
-  (setq markdown-header-scaling t)
-  (setq markdown-preview-stylesheets (list))
+	(concat "pandoc"
+		" --mathjax"
+		" --metadata pagetitle=\"...\""
+		" --standalone"
+		" --css=" (ec-path "markdown" "github.css")
+		" --self-contained"
+		" --from=markdown --to=html5"
+		" --highlight-style=pygments"
+	 )
+	markdown-fontify-code-blocks-natively t
+	markdown-header-scaling t
+	markdown-preview-stylesheets (list)
+	)
 
   :custom-face
   (markdown-header-face   ((t (:inherit font-lock-function-name-face :weight bold))))
@@ -450,10 +449,11 @@ T - tag prefix
 
 (use-package neotree
   :config
-  (setq neo-theme (if (display-graphic-p) 'nerd 'ascii))
-  (setq neo-smart-open t)
-  (setq neo-window-fixed-size nil)
-  (setq neo-window-width 30)
+  (setq neo-theme (if (display-graphic-p) 'nerd 'ascii)
+	neo-smart-open t
+	neo-window-fixed-size nil
+	neo-window-width 30
+	)
 
   :hook
   (
@@ -471,8 +471,9 @@ T - tag prefix
 
 (use-package nlinum
   :config
-  (setq nlinum-format "%4d\u2502")
-  (setq nlinum-highlight-current-line t)
+  (setq nlinum-format "%4d\u2502"
+	nlinum-highlight-current-line t
+	)
   (global-nlinum-mode)
   (global-hl-line-mode)
   )
@@ -526,8 +527,9 @@ T - tag prefix
 (use-package popwin
   :config
   (popwin-mode 1)
-  (setq popwin:popup-window-height 0.25)
-  (setq popwin:special-display-config nil)
+  (setq popwin:popup-window-height 0.25
+	popwin:special-display-config nil
+	)
   (push '(compilation-mode
 	  :dedicated t
 	  :position bottom
@@ -612,8 +614,9 @@ T - tag prefix
   :requires hydra
 
   :config
-  (setq vdiff-diff-algorithm 'git-diff-patience)
-  (setq vdiff-subtraction-fill-char ? )
+  (setq vdiff-diff-algorithm 'git-diff-patience
+	vdiff-subtraction-fill-char ?
+	)
   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
   (define-key vdiff-3way-mode-map (kbd "C-c") vdiff-mode-prefix-map)
   (defhydra hydra-vdiff-entry (:hint nil)

@@ -4,11 +4,11 @@
 (require 'package)
 (setq package-archives
       '(
-	("gnu"          . "https://elpa.gnu.org/packages/")
-	("melpa"        . "https://melpa.org/packages/")
-	("melpa-stable" . "https://stable.melpa.org/packages/")
-	("marmalade"    . "https://marmalade-repo.org/packages/")
-	)
+        ("gnu"          . "https://elpa.gnu.org/packages/")
+        ("melpa"        . "https://melpa.org/packages/")
+        ("melpa-stable" . "https://stable.melpa.org/packages/")
+        ("marmalade"    . "https://marmalade-repo.org/packages/")
+        )
       )
 (package-initialize)
 (when (not package-archive-contents)
@@ -38,10 +38,10 @@
 
 (mapc #'ec-load
       '(
-	"helpers.el"
-	"keybindings.el"
-	"ui.el"
-	)
+        "helpers.el"
+        "keybindings.el"
+        "ui.el"
+        )
       )
 
 ;; Ghostscript
@@ -84,7 +84,7 @@
 
   :config
   (defhydra hydra-wgrep-ag (:exit t
-			    :idle 1.0)
+                            :idle 1.0)
     "wgrep-ag"
     ("e" wgrep-change-to-wgrep-mode "edit")
     ("f" wgrep-finish-edit "finish edits")
@@ -93,9 +93,9 @@
 
   :bind
   (:map ag-mode-map
-	("M-i" . 'hydra-wgrep-ag/body))
+        ("M-i" . 'hydra-wgrep-ag/body))
   (:map wgrep-mode-map
-	("M-i" . 'hydra-wgrep-ag/body))
+        ("M-i" . 'hydra-wgrep-ag/body))
   )
 
 (use-package cc-mode)
@@ -105,8 +105,8 @@
 
   :bind
   (:map c-mode-base-map
-	("C-;" . 'clang-format-buffer)
-	)
+        ("C-;" . 'clang-format-buffer)
+        )
   )
 
 (use-package cmake-mode
@@ -125,19 +125,19 @@
 
   :bind
   (:map company-mode-map
-	("C-<SPC>" . 'company-complete)
-	)
+        ("C-<SPC>" . 'company-complete)
+        )
   )
 
 (use-package dashboard
   :init
   (setq dashboard-items
-	'(
-	  (recents   . 10)
-	  (projects  . 10)
-	  (bookmarks . 10)
-	  )
-	)
+        '(
+          (recents   . 10)
+          (projects  . 10)
+          (bookmarks . 10)
+          )
+        )
 
   :config
   (dashboard-setup-startup-hook)
@@ -175,8 +175,8 @@
 
   :bind
   (:map elpy-mode-map
-	("C-<SPC>" . 'elpy-company-backend)
-	)
+        ("C-<SPC>" . 'elpy-company-backend)
+        )
   )
 
 (use-package fill-column-indicator
@@ -209,11 +209,11 @@
 (use-package helm
   :config
   (setq helm-always-two-windows nil
-	helm-display-buffer-display-height 16
-	helm-default-display-buffer-functions '(display-buffer-in-side-window)
-	helm-buffer-max-length 80
-	helm-ff-lynx-style-map nil
-	)
+        helm-display-buffer-display-height 16
+        helm-default-display-buffer-functions '(display-buffer-in-side-window)
+        helm-buffer-max-length 80
+        helm-ff-lynx-style-map nil
+        )
   (with-eval-after-load "helm-files"
     (bind-key "C-<backspace>" #'backward-kill-word helm-find-files-map)
     )
@@ -224,11 +224,11 @@
   ("C-M-x" . 'execute-extended-command)
   ("C-x C-f" . 'helm-find-files)
   (:map helm-map
-	("<left>" . 'backward-char)
-	("<right>" . 'forward-char)
-	("<tab>" . 'helm-execute-persistent-action)
-	("C-z" . 'helm-select-action)
-	)
+        ("<left>" . 'backward-char)
+        ("<right>" . 'forward-char)
+        ("<tab>" . 'helm-execute-persistent-action)
+        ("C-z" . 'helm-select-action)
+        )
   )
 
 (use-package helm-ag
@@ -236,8 +236,8 @@
 
   :config
   (defhydra hydra-helm-ag (:exit t
-			   :hint nil
-			   :idle 1.0)
+                           :hint nil
+                           :idle 1.0)
     "
  ^Interactive^       ^Current^           [Ag Search]
 ----------------------------------------------------
@@ -264,7 +264,7 @@
 
   :config
   (defhydra hydra-highlight-symbol (:hint nil
-				    :idle 1.0)
+                                    :idle 1.0)
     "
  ^Navigation^       ^Current symbol^     ^Miscellaneous^          [highlight-symbol]^
 -------------------------------------------------------------------------------
@@ -344,8 +344,8 @@ T - tag prefix
 
   :bind
   (:map dired-mode-map
-	("." . hydra-dired/body)
-	)
+        ("." . hydra-dired/body)
+        )
   )
 
 (use-package ialign)
@@ -360,7 +360,7 @@ T - tag prefix
 
   :config
   (defhydra hydra-magit (:exit t
-			 :idle 1.0)
+                         :idle 1.0)
     "Magit"
     ("b" magit-blame-addition "blame")
     ("c" magit-checkout "checkout")
@@ -374,25 +374,25 @@ T - tag prefix
   :bind
   ("M-g" . 'hydra-magit/body)
   (:map magit-blame-read-only-mode-map
-	("c" . 'magit-blame-copy-hash))
+        ("c" . 'magit-blame-copy-hash))
   )
 
 (use-package markdown-mode
   :init
   (setq markdown-command
-	(concat "pandoc"
-		" --mathjax"
-		" --metadata pagetitle=\"...\""
-		" --standalone"
-		" --css=" (ec-path "markdown" "github.css")
-		" --self-contained"
-		" --from=markdown --to=html5"
-		" --highlight-style=pygments"
-	 )
-	markdown-fontify-code-blocks-natively t
-	markdown-header-scaling t
-	markdown-preview-stylesheets (list)
-	)
+        (concat "pandoc"
+                " --mathjax"
+                " --metadata pagetitle=\"...\""
+                " --standalone"
+                " --css=" (ec-path "markdown" "github.css")
+                " --self-contained"
+                " --from=markdown --to=html5"
+                " --highlight-style=pygments"
+         )
+        markdown-fontify-code-blocks-natively t
+        markdown-header-scaling t
+        markdown-preview-stylesheets (list)
+        )
 
   :custom-face
   (markdown-header-face   ((t (:inherit font-lock-function-name-face :weight bold))))
@@ -455,16 +455,16 @@ T - tag prefix
   :bind
   ("M-n" . 'hydra-multiple-cursors/body)
   (:map mc/keymap
-	("<return>" . nil))
+        ("<return>" . nil))
   )
 
 (use-package neotree
   :config
   (setq neo-theme (if (display-graphic-p) 'nerd 'ascii)
-	neo-smart-open t
-	neo-window-fixed-size nil
-	neo-window-width 30
-	)
+        neo-smart-open t
+        neo-window-fixed-size nil
+        neo-window-width 30
+        )
 
   :hook
   (
@@ -475,16 +475,16 @@ T - tag prefix
   :bind
   ("<f8>" . 'neotree-toggle)
   (:map neotree-mode-map
-	("c" . 'neotree-change-root)
-	("u" . 'neotree-select-up-node)
-	)
+        ("c" . 'neotree-change-root)
+        ("u" . 'neotree-select-up-node)
+        )
   )
 
 (use-package nlinum
   :config
   (setq nlinum-format "%4d\u2502"
-	nlinum-highlight-current-line t
-	)
+        nlinum-highlight-current-line t
+        )
   (global-nlinum-mode)
   (global-hl-line-mode)
   )
@@ -496,9 +496,9 @@ T - tag prefix
 
   :bind
   (:map c-mode-base-map
-	("M-." . 'rtags-find-symbol-at-point)
-	("M-," . 'rtags-find-references-at-point)
-	)
+        ("M-." . 'rtags-find-symbol-at-point)
+        ("M-," . 'rtags-find-references-at-point)
+        )
   )
 
 (use-package company-rtags
@@ -531,33 +531,33 @@ T - tag prefix
 
   :bind
   (:map origami-mode-map
-	("<C-tab>" . 'origami-recursively-toggle-node)
-	)
+        ("<C-tab>" . 'origami-recursively-toggle-node)
+        )
   )
 
 (use-package popwin
   :config
   (popwin-mode 1)
   (setq popwin:popup-window-height 0.25
-	popwin:special-display-config nil
-	)
+        popwin:special-display-config nil
+        )
   (push '(compilation-mode
-	  :dedicated t
-	  :position bottom
-	  :stick t
-	  :noselect t)
-	popwin:special-display-config)
+          :dedicated t
+          :position bottom
+          :stick t
+          :noselect t)
+        popwin:special-display-config)
   (push '(" *undo-tree*"
-	  :dedicated t
-	  :position bottom
-	  :stick t
-	  :noselect nil)
-	popwin:special-display-config)
+          :dedicated t
+          :position bottom
+          :stick t
+          :noselect nil)
+        popwin:special-display-config)
   (push '(ag-mode
-	  :position bottom
-	  :stick t
-	  :noselect t)
-	popwin:special-display-config)
+          :position bottom
+          :stick t
+          :noselect t)
+        popwin:special-display-config)
   )
 
 (use-package projectile
@@ -574,7 +574,7 @@ T - tag prefix
   (defun actual-helm-projectile-find-file-dwim ()
     (interactive)
     (if (not (projectile-project-p))
-	(helm-projectile-switch-project)
+        (helm-projectile-switch-project)
       (helm-projectile-find-file)
       )
     )
@@ -591,13 +591,13 @@ T - tag prefix
 
   :init
   (setq helm-swoop-split-window-function
-	'(lambda (buffer &rest restvar)
-	   (helm-default-display-buffer buffer)))
+        '(lambda (buffer &rest restvar)
+           (helm-default-display-buffer buffer)))
 
   :config
   (defhydra hydra-helm-swoop (:exit t
-			      :hint nil
-			      :columns 3)
+                              :hint nil
+                              :columns 3)
     ("a" helm-multi-swoop-all "All buffers")
     ("m" helm-multi-swoop "Multiple buffers")
     ("s" helm-multi-swoop-current-mode "All same major-mode buffers")
@@ -626,8 +626,8 @@ T - tag prefix
 
   :config
   (setq vdiff-diff-algorithm 'git-diff-patience
-	vdiff-subtraction-fill-char ?
-	)
+        vdiff-subtraction-fill-char ?
+        )
   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
   (define-key vdiff-3way-mode-map (kbd "C-c") vdiff-mode-prefix-map)
   (defhydra hydra-vdiff-entry (:hint nil)
@@ -664,8 +664,8 @@ T - tag prefix
 
   :bind
   (:map magit-mode-map
-	("e" . 'vdiff-magit-dwim)
-	("E" . 'vdiff-magit-popup))
+        ("e" . 'vdiff-magit-dwim)
+        ("E" . 'vdiff-magit-popup))
   )
 
 (use-package visual-regexp-steroids

@@ -4,7 +4,7 @@
 
   ;; Font
   (add-to-list 'default-frame-alist
-	       '(font . "Meslo LG M DZ for Powerline-9"))
+               '(font . "Meslo LG M DZ for Powerline-9"))
 
   ;; Others
   (tool-bar-mode -1)

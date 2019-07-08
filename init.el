@@ -17,7 +17,9 @@
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 (require 'use-package)
-(setq use-package-always-ensure t)
+(setq use-package-always-ensure t
+      use-package-verbose t
+      )
 
 (require 'cl)
 (defun concat-path (&rest parts)
@@ -62,6 +64,15 @@
 
 ;; Maximize
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; Spaces
+(setq indent-tabs-mode nil)
+
+;; Prefer newer files
+(setq load-prefer-newer t)
+
+;; Title bar
+(setq frame-title-format "[Emacs] %f")
 
 ;; Packages
 (use-package ag
@@ -677,7 +688,7 @@ T - tag prefix
 
 (use-package yasnippet
   :config
-  (setq yas-snippet-dirs (append yas-snippet-dirs (ec-path "yasnippet")))
+  (add-to-list 'yas-snippet-dirs (ec-path "yasnippet"))
   (yas-reload-all)
 
   :hook

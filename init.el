@@ -151,7 +151,10 @@
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-city-lights t)
+  (if (display-graphic-p)
+      (load-theme 'doom-city-lights t)
+    (load-theme 'doom-sourcerer t)
+    )
   (doom-themes-neotree-config)
   )
 

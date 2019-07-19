@@ -613,6 +613,19 @@ T - tag prefix
   ("M-f" . 'hydra-helm-swoop/body)
   )
 
+(use-package server
+  :init
+  (server-mode 1)
+  (unless (server-running-p)
+    (server-start)
+    )
+
+  :hook (server-done . suspend-frame)
+
+  :bind
+  ("C-x y" . 'server-edit)
+  )
+
 (use-package undo-tree
   :config
   (global-undo-tree-mode)

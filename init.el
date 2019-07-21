@@ -66,7 +66,7 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; Spaces
-(setq indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 
 ;; Prefer newer files
 (setq load-prefer-newer t)

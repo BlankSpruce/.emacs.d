@@ -82,7 +82,7 @@
   ("C-S-k" . 'ag)
   )
 (use-package wgrep-ag
-  :requires ag hydra
+  :after ag hydra
 
   :config
   (defhydra hydra-wgrep-ag (:exit t
@@ -103,7 +103,7 @@
 (use-package cc-mode)
 
 (use-package clang-format
-  :requires cc-mode
+  :after cc-mode
 
   :bind
   (:map c-mode-base-map
@@ -195,7 +195,7 @@
   )
 
 (use-package flycheck
-  :requires cc-mode
+  :after cc-mode
 
   :hook
   (
@@ -242,7 +242,7 @@
   )
 
 (use-package helm-ag
-  :requires ag hydra
+  :after ag hydra
 
   :config
   (defhydra hydra-helm-ag (:exit t
@@ -270,7 +270,7 @@
   )
 
 (use-package highlight-symbol
-  :requires hydra
+  :after hydra
 
   :config
   (defhydra hydra-highlight-symbol (:hint nil
@@ -366,7 +366,7 @@ T - tag prefix
   )
 
 (use-package magit
-  :requires hydra
+  :after hydra
 
   :config
   (defhydra hydra-magit (:exit t
@@ -413,7 +413,7 @@ T - tag prefix
   )
 
 (use-package markdown-preview-mode
-  :requires hydra
+  :after hydra
 
   :config
   (defhydra hydra-markdown ()
@@ -433,7 +433,7 @@ T - tag prefix
   )
 
 (use-package multiple-cursors
-  :requires hydra
+  :after hydra
 
   :config
   (setq mc/list-file (ec-path "mc" ".mc-lists.el"))
@@ -512,14 +512,14 @@ T - tag prefix
   )
 
 (use-package company-rtags
-  :requires company cc-mode rtags
+  :after company cc-mode rtags
 
   :config
   (push 'company-rtags company-backends)
   )
 
 (use-package flycheck-rtags
-  :requires cc-mode flycheck rtags
+  :after cc-mode flycheck rtags
 
   :config
   (defun flycheck-with-rtags-setup ()
@@ -571,14 +571,14 @@ T - tag prefix
   )
 
 (use-package projectile
-  :requires ag
+  :after ag
   :config
   (projectile-global-mode)
   (setq projectile-enable-caching t)
   )
 
 (use-package helm-projectile
-  :requires helm projectile helm-ag
+  :after helm projectile helm-ag
 
   :config
   (defun actual-helm-projectile-find-file-dwim ()
@@ -597,7 +597,7 @@ T - tag prefix
 (use-package helm-swoop
   :load-path "config/static/helm-swoop/"
 
-  :requires helm hydra projectile
+  :after helm hydra projectile
 
   :init
   (setq helm-swoop-split-window-function
@@ -657,7 +657,7 @@ T - tag prefix
   )
 
 (use-package vdiff
-  :requires hydra
+  :after hydra
 
   :config
   (setq vdiff-diff-algorithm 'git-diff-patience
@@ -736,7 +736,8 @@ T - tag prefix
 (use-package yasnippet-snippets)
 
 (use-package helm-c-yasnippet
-  :requires yasnippet
+  :after yasnippet
+
   :config
   (setq helm-yas-space-match-any-greedy t)
 

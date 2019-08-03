@@ -16,10 +16,6 @@
 (set-keybinding "M-w" 'delete-window)
 (set-keybinding "M-q" 'kill-buffer)
 (set-keybinding "M-p" 'reposition-window)
-; Reload buffer
-(defun revert-buffer-without-confirmation ()
-    (interactive) (revert-buffer t t))
-(set-keybinding "<f5>" 'revert-buffer-without-confirmation)
 
 ;; Go to line
 (set-keybinding "C-l" 'goto-line)

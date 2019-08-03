@@ -44,6 +44,9 @@
 (use-package helpers
   :demand t
   :load-path "config/"
+
+  :bind
+  ([f5] . revert-buffer-without-confirmation)
   )
 
 (use-package keybindings

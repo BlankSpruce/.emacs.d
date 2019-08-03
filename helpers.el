@@ -11,4 +11,9 @@
   (apply 'concat-path (cons emacs-config parts))
   )
 
+(defun revert-buffer-without-confirmation ()
+  (interactive)
+  (revert-buffer t t)
+  )
+
 (provide 'helpers)

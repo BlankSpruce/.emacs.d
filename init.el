@@ -386,6 +386,7 @@ T - tag prefix
     ("c" magit-checkout "checkout")
     ("h" magit-log-all "log")
     ("l" magit-log-buffer-file "file log")
+    ("m" magit-file-rename "rename file")
     ("n" magit-branch-and-checkout "new branch from current one")
     ("r" magit-show-refs-popup "show branches")
     ("s" magit-status "status")

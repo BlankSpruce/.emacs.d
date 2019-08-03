@@ -25,3 +25,4 @@
 ;; Highlight matching parentheses
 (show-paren-mode)
 
+(provide 'ui)

@@ -22,21 +22,24 @@
       use-package-verbose t
       )
 
-  )
-  )
-
-;; Load configs
-(defun ec-load (&rest parts)
-  (load-file (apply #'ec-path parts))
+;; Local packages
+(use-package helpers
+  :demand t
+  :load-path "config/"
   )
 
-(mapc #'ec-load
-      '(
-        "helpers.el"
-        "keybindings.el"
-        "ui.el"
-        )
-      )
+(use-package keybindings
+  :demand t
+  :load-path "config/"
+  )
+
+(use-package ui
+  :load-path "config/"
+  )
+
+(use-package ttcn-3-mode
+  :load-path "config/static/ttcn-3-mode"
+  )
 
 ;; Ghostscript
 (if (eq system-type 'windows-nt)
@@ -56,7 +59,7 @@
 ;; Prefer newer files
 (setq load-prefer-newer t)
 
-;; Packages
+;; Foreign packages
 (use-package ag
   :bind
   ("C-S-k" . 'ag)

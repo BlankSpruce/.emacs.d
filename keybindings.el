@@ -32,3 +32,5 @@
 
 ;; Compilation
 (set-keybinding "<f2>" 'compile)
+
+(provide 'keybindings)

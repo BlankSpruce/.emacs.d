@@ -52,6 +52,20 @@
 (use-package keybindings
   :demand t
   :load-path "config/"
+
+  :config
+  (cua-mode)
+
+  :bind*
+  ("C-a" . mark-whole-buffer)
+  ("C-l" . goto-line)
+  ("C-s" . save-buffer)
+  ("C-/" . comment-line)
+  ("M-o" . split-window-horizontally)
+  ("M-e" . split-window-vertically)
+  ("M-w" . delete-window)
+  ("M-q" . kill-buffer)
+  ("M-p" . reposition-window)
   )
 
 (use-package ui

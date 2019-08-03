@@ -2,6 +2,24 @@
 (prefer-coding-system 'utf-8)
 (defconst emacs-config (expand-file-name "config" user-emacs-directory))
 
+;; Ghostscript
+(if (eq system-type 'windows-nt)
+    (setq doc-view-ghostscript-program "gswin64c")
+  )
+
+;; Customize file
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(if (not (file-exists-p custom-file))
+    (with-temp-buffer (write-file custom-file))
+  )
+(load custom-file)
+
+;; Spaces
+(setq-default indent-tabs-mode nil)
+
+;; Prefer newer files
+(setq load-prefer-newer t)
+
 (require 'package)
 (setq package-archives
       '(
@@ -40,24 +58,6 @@
 (use-package ttcn-3-mode
   :load-path "config/static/ttcn-3-mode"
   )
-
-;; Ghostscript
-(if (eq system-type 'windows-nt)
-    (setq doc-view-ghostscript-program "gswin64c")
-  )
-
-;; Customize file
-(setq custom-file (concat-path user-emacs-directory "custom.el"))
-(if (not (file-exists-p custom-file))
-    (with-temp-buffer (write-file custom-file))
-  )
-(load custom-file)
-
-;; Spaces
-(setq-default indent-tabs-mode nil)
-
-;; Prefer newer files
-(setq load-prefer-newer t)
 
 ;; Foreign packages
 (use-package ag

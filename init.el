@@ -51,8 +51,15 @@
   )
 
 (use-package keybindings
+  :after hydra helpers ialign
   :demand t
   :load-path "config/"
+
+  :hydra (hydra-miscellaneous (:exit t) ""
+  ("a" ialign "Interactive align")
+  ("r" reload-emacs-config "Reload emacs config")
+  ("w" whitespace-cleanup "Cleanup whitespaces")
+  )
 
   :config
   (cua-mode)
@@ -67,6 +74,7 @@
   ("M-w" . delete-window)
   ("M-q" . kill-buffer)
   ("M-p" . reposition-window)
+  ([f12] . hydra-miscellaneous/body)
   )
 
 (use-package ui

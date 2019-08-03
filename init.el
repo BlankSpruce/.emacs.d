@@ -39,6 +39,7 @@
 (setq use-package-always-ensure t
       use-package-verbose t
       )
+(use-package use-package-hydra)
 
 ;; Local packages
 (use-package helpers
@@ -84,9 +85,8 @@
 (use-package wgrep-ag
   :after ag hydra
 
-  :config
-  (defhydra hydra-wgrep-ag (:exit t
-                            :idle 1.0)
+  :hydra (hydra-wgrep-ag (:exit t
+                          :idle 1.0)
     "wgrep-ag"
     ("e" wgrep-change-to-wgrep-mode "edit")
     ("f" wgrep-finish-edit "finish edits")
@@ -305,10 +305,9 @@ T - tag prefix
 (use-package helm-ag
   :after ag hydra
 
-  :config
-  (defhydra hydra-helm-ag (:exit t
-                           :hint nil
-                           :idle 1.0)
+  :hydra (hydra-helm-ag (:exit t
+                         :hint nil
+                         :idle 1.0)
     "
  ^Interactive^       ^Current^           [Ag Search]
 ----------------------------------------------------
@@ -333,9 +332,8 @@ T - tag prefix
 (use-package highlight-symbol
   :after hydra
 
-  :config
-  (defhydra hydra-highlight-symbol (:hint nil
-                                    :idle 1.0)
+  :hydra (hydra-highlight-symbol (:hint nil
+                                  :idle 1.0)
     "
  ^Navigation^       ^Current symbol^     ^Miscellaneous^          [highlight-symbol]^
 -------------------------------------------------------------------------------
@@ -347,6 +345,8 @@ T - tag prefix
     ("h" highlight-symbol)
     ("r" highlight-symbol-query-replace)
     )
+
+  :config
   (setq highlight-symbol-idle-delay 0.7)
 
   :hook
@@ -371,9 +371,8 @@ T - tag prefix
 (use-package magit
   :after hydra
 
-  :config
-  (defhydra hydra-magit (:exit t
-                         :idle 1.0)
+  :hydra (hydra-magit (:exit t
+                       :idle 1.0)
     "Magit"
     ("b" magit-blame-addition "blame")
     ("c" magit-checkout "checkout")
@@ -418,8 +417,7 @@ T - tag prefix
 (use-package markdown-preview-mode
   :after hydra
 
-  :config
-  (defhydra hydra-markdown ()
+  :hydra (hydra-markdown ()
     "Markdown"
     ("p" markdown-preview-mode "preview")
     ("c" markdown-preview-cleanup "cleanup")
@@ -440,7 +438,8 @@ T - tag prefix
 
   :config
   (setq mc/list-file (ec-path "mc" ".mc-lists.el"))
-  (defhydra hydra-multiple-cursors (:hint nil)
+
+  :hydra (hydra-multiple-cursors (:hint nil)
     "
  Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")
 ------------------------------------------------------------------
@@ -607,10 +606,9 @@ T - tag prefix
         '(lambda (buffer &rest restvar)
            (helm-default-display-buffer buffer)))
 
-  :config
-  (defhydra hydra-helm-swoop (:exit t
-                              :hint nil
-                              :columns 3)
+  :hydra (hydra-helm-swoop (:exit t
+                            :hint nil
+                            :columns 3)
     ("a" helm-multi-swoop-all "All buffers")
     ("m" helm-multi-swoop "Multiple buffers")
     ("s" helm-multi-swoop-current-mode "All same major-mode buffers")
@@ -668,7 +666,8 @@ T - tag prefix
         )
   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
   (define-key vdiff-3way-mode-map (kbd "C-c") vdiff-mode-prefix-map)
-  (defhydra hydra-vdiff-entry (:hint nil)
+
+  :hydra (hydra-vdiff-entry (:hint nil)
     "
  2-way^^              3-way^^              Miscellaneous
 ------------------------------------------------------------------------

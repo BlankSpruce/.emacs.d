@@ -601,6 +601,8 @@ T - tag prefix
   ("M-f" . 'hydra-helm-swoop/body)
   )
 
+(use-package restart-emacs)
+
 (use-package savehist
   :config
   (savehist-mode)

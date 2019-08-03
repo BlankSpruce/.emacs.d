@@ -16,4 +16,14 @@
   (revert-buffer t t)
   )
 
+(defun edit-current-file-as-root ()
+  (interactive)
+  (let ((file (buffer-file-name)))
+    (if file
+        (find-file (concat "/sudo::" file))
+      (message "Buffer not associated with file")
+      )
+    )
+  )
+
 (provide 'helpers)

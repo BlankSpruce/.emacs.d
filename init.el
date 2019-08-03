@@ -1,5 +1,6 @@
 ;; Melpa
 (prefer-coding-system 'utf-8)
+(defconst emacs-config (expand-file-name "config" user-emacs-directory))
 
 (require 'package)
 (setq package-archives
@@ -26,7 +27,6 @@
   (reduce (lambda (a b) (expand-file-name b a)) parts)
   )
 
-(defconst emacs-config (concat-path user-emacs-directory "config"))
 (defun ec-path (&rest parts)
   (apply 'concat-path (cons emacs-config parts))
   )

@@ -56,17 +56,11 @@
   )
 (load custom-file)
 
-;; Maximize
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-
 ;; Spaces
 (setq-default indent-tabs-mode nil)
 
 ;; Prefer newer files
 (setq load-prefer-newer t)
-
-;; Title bar
-(setq frame-title-format "[Emacs] %f")
 
 ;; Packages
 (use-package ag

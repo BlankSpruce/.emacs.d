@@ -6,6 +6,12 @@
   (add-to-list 'default-frame-alist
                '(font . "Meslo LG M DZ for Powerline-9"))
 
+  ;; Maximize
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+  ;; Title bar
+  (setq frame-title-format "[Emacs] %f")
+
   ;; Others
   (tool-bar-mode -1)
   (scroll-bar-mode -1)

@@ -117,6 +117,11 @@
         )
   )
 
+(use-package compile
+  :bind
+  ([f2] . compile)
+  )
+
 (use-package dashboard
   :init
   (setq dashboard-items

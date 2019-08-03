@@ -26,7 +26,4 @@
 ;; Select all
 (set-keybinding "C-a" 'mark-whole-buffer)
 
-;; Compilation
-(set-keybinding "<f2>" 'compile)
-
 (provide 'keybindings)

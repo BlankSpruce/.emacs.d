@@ -49,12 +49,6 @@
     (setq doc-view-ghostscript-program "gswin64c")
   )
 
-;; TRAMP
-(setq tramp-default-method "ssh")
-
-;; Save history
-(savehist-mode 1)
-
 ;; Customize file
 (setq custom-file (concat-path user-emacs-directory "custom.el"))
 (if (not (file-exists-p custom-file))
@@ -613,6 +607,11 @@ T - tag prefix
   ("M-f" . 'hydra-helm-swoop/body)
   )
 
+(use-package savehist
+  :config
+  (savehist-mode)
+  )
+
 (use-package server
   :init
   (server-mode 1)
@@ -624,6 +623,11 @@ T - tag prefix
 
   :bind
   ("C-x y" . 'server-edit)
+  )
+
+(use-package tramp
+  :config
+  (setq tramp-default-method "ssh")
   )
 
 (use-package undo-tree

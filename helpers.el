@@ -26,4 +26,8 @@
     )
   )
 
+(defun open-zsh ()
+  (ansi-term "zsh" "zsh")
+  )
+
 (provide 'helpers)

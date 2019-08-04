@@ -51,7 +51,7 @@
   )
 
 (use-package keybindings
-  :after hydra helpers ialign
+  :after hydra helpers ialign popwin
   :demand t
   :load-path "config/"
 
@@ -61,10 +61,22 @@
   ("l" nlinum-mode "Line numbers")
   ("r" reload-emacs-config "Reload emacs config")
   ("w" whitespace-cleanup "Cleanup whitespaces")
+  ("z" popwin-open-zsh "Open zsh")
   )
 
   :config
   (cua-mode)
+  (defun popwin-open-zsh ()
+    (interactive)
+    (popwin:display-buffer-1
+     (or (get-buffer "*zsh*")
+         (save-window-excursion
+           (open-zsh)
+           )
+         )
+     )
+    (popwin:stick-popup-window)
+    )
 
   :bind*
   ("C-a" . mark-whole-buffer)
@@ -645,6 +657,15 @@ T - tag prefix
 
   :bind
   ("C-x y" . 'server-edit)
+  )
+
+(use-package eterm-256color
+  :hook (term-mode . eterm-256color-mode)
+  )
+
+(use-package term
+  :config
+  (setq-default term-scroll-show-maximum-output t)
   )
 
 (use-package tramp

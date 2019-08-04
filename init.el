@@ -57,6 +57,8 @@
 
   :hydra (hydra-miscellaneous (:exit t) ""
   ("a" ialign "Interactive align")
+  ("h" hl-line-mode "Line highlighting")
+  ("l" nlinum-mode "Line numbers")
   ("r" reload-emacs-config "Reload emacs config")
   ("w" whitespace-cleanup "Cleanup whitespaces")
   )
@@ -156,9 +158,6 @@
 
   :config
   (dashboard-setup-startup-hook)
-
-  :hook
-  (dashboard-mode . (lambda (&rest _) (nlinum-mode -1)))
 
   :bind
   ("<f7>" . (lambda () (interactive) (switch-to-buffer dashboard-buffer-name)))
@@ -487,12 +486,6 @@ T - tag prefix
         neo-window-width 30
         )
 
-  :hook
-  (
-   ;; Disable line numbering in neotree
-   (neo-after-create . (lambda (&rest _) (nlinum-mode -1)))
-   )
-
   :bind
   ("<f8>" . 'neotree-toggle)
   (:map neotree-mode-map
@@ -506,8 +499,12 @@ T - tag prefix
   (setq nlinum-format "%4d\u2502"
         nlinum-highlight-current-line t
         )
-  (global-nlinum-mode)
-  (global-hl-line-mode)
+
+  :hook
+  (
+   (prog-mode . nlinum-mode)
+   (prog-mode . hl-line-mode)
+   )
   )
 
 (use-package rtags

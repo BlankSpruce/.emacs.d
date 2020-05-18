@@ -16,6 +16,7 @@
 
 ;; Spaces
 (setq-default indent-tabs-mode nil)
+(winner-mode 1)
 
 ;; Prefer newer files
 (setq load-prefer-newer t)
@@ -53,32 +54,24 @@
   )
 
 (use-package keybindings
-  :after hydra helpers ialign popwin
+  :after hydra helpers ialign
   :demand t
-  :load-path "config/"
+  :ensure nil
 
   :hydra (hydra-miscellaneous (:exit t) ""
   ("a" ialign "Interactive align")
   ("h" hl-line-mode "Line highlighting")
   ("l" nlinum-mode "Line numbers")
   ("r" reload-emacs-config "Reload emacs config")
+  ("t" toggle-truncate-lines "Toggle truncate lines")
   ("w" whitespace-cleanup "Cleanup whitespaces")
-  ("z" popwin-open-zsh "Open zsh")
   )
 
   :config
   (cua-mode)
-  (defun popwin-open-zsh ()
-    (interactive)
-    (popwin:display-buffer-1
-     (or (get-buffer "*zsh*")
-         (save-window-excursion
-           (open-zsh)
-           )
-         )
-     )
-    (popwin:stick-popup-window)
-    )
+
+  :bind
+  ("C-/" . comment-line)
 
   :bind*
   ("C-a" . mark-whole-buffer)
@@ -94,11 +87,7 @@
   )
 
 (use-package ui
-  :load-path "config/"
-  )
-
-(use-package ttcn-3-mode
-  :load-path "config/static/ttcn-3-mode"
+  :ensure nil
   )
 
 ;; Foreign packages
@@ -156,8 +145,16 @@
   )
 
 (use-package compile
+  :after helpers
+
+  :config
+  (setq compilation-scroll-output 'first-error)
+
+  :hook (compilation-filter . colorize-compilation-buffer)
+
   :bind
-  ([f2] . compile)
+  ([f2]   . compile)
+  ([C-f2] . recompile)
   )
 
 (use-package dashboard
@@ -178,6 +175,7 @@
   )
 
 (use-package dired
+  :after hydra
   :ensure nil
   :config
   (defhydra hydra-dired (:hint nil :color pink)
@@ -348,6 +346,9 @@ T - tag prefix
 
   :bind
   ("M-a" . 'hydra-helm-ag/body)
+
+  :hook
+  (cc-mode . (lambda () (local-unset-key (kbd "M-a"))))
   )
 
 (use-package highlight-symbol
@@ -567,36 +568,13 @@ T - tag prefix
         )
   )
 
-(use-package popwin
-  :config
-  (popwin-mode 1)
-  (setq popwin:popup-window-height 0.25
-        popwin:special-display-config nil
-        )
-  (push '(compilation-mode
-          :dedicated t
-          :position bottom
-          :stick t
-          :noselect t)
-        popwin:special-display-config)
-  (push '(" *undo-tree*"
-          :dedicated t
-          :position bottom
-          :stick t
-          :noselect nil)
-        popwin:special-display-config)
-  (push '(ag-mode
-          :position bottom
-          :stick t
-          :noselect t)
-        popwin:special-display-config)
-  )
-
 (use-package projectile
   :after ag
   :config
   (projectile-global-mode)
-  (setq projectile-enable-caching t)
+  (setq projectile-enable-caching t
+        projectile-indexing-method 'hybrid
+        )
   )
 
 (use-package helm-projectile

@@ -1,6 +1,6 @@
 ;; Melpa
 (prefer-coding-system 'utf-8)
-(defconst emacs-config (expand-file-name "config" user-emacs-directory))
+(defconst emacs-config (expand-file-name user-emacs-directory))
 
 ;; Ghostscript
 (if (eq system-type 'windows-nt)
@@ -42,9 +42,11 @@
 (use-package use-package-hydra)
 
 ;; Local packages
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
 (use-package helpers
   :demand t
-  :load-path "config/"
+  :ensure nil
 
   :bind
   ([f5] . revert-buffer-without-confirmation)
@@ -615,8 +617,6 @@ T - tag prefix
   )
 
 (use-package helm-swoop
-  :load-path "config/static/helm-swoop/"
-
   :after helm hydra projectile
 
   :init

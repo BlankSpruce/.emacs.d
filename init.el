@@ -390,6 +390,54 @@ T - tag prefix
   (ido-mode t)
   )
 
+(use-package lsp-mode
+  :config
+  (require 'lsp-clients)
+
+  :hook (c++-mode . lsp)
+  :commands lsp
+  :custom (lsp-prefer-flymake nil)
+  )
+
+(setq-default lsp-clients-clangd-args
+              '(
+                "-j=1"
+                "--background-index"
+                "--hedear-insertion=iwyu"
+                "--suggest-missing-includes"
+                "--clang-tidy"
+                )
+              lsp-ui-doc-max-height 30
+              lsp-ui-doc-max-width 120
+              ;; lsp-ui-doc-use-webkit t
+              lsp-ui-sideline-ignore-duplicate t
+              lsp-ui-sideline-show-hover nil
+              )
+
+(use-package lsp-ui
+  :config
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-flycheck-enable nil
+        lsp-ui-sideline-enable nil
+        )
+
+  :bind
+  (:map lsp-ui-mode-map
+        ("C-," . xref-pop-marker-stack)
+        ("C-." . lsp-ui-peek-find-definitions)
+        ("C-?" . lsp-ui-peek-find-references)
+        )
+  )
+
+(use-package company-lsp
+  :after company
+  :config
+  (push 'company-lsp company-backends)
+  (setq company-lsp-async t
+        company-lsp-cache-candidates 'auto
+        )
+  )
+
 (use-package magit
   :after hydra
 
@@ -519,42 +567,6 @@ T - tag prefix
   (
    (prog-mode . nlinum-mode)
    (prog-mode . hl-line-mode)
-   )
-  )
-
-(use-package rtags
-  :init
-  (setq rtags-completions-enabled t)
-  (rtags-start-process-unless-running)
-
-  :bind
-  (:map c-mode-base-map
-        ("M-." . 'rtags-find-symbol-at-point)
-        ("M-," . 'rtags-find-references-at-point)
-        )
-  )
-
-(use-package company-rtags
-  :after company cc-mode rtags
-
-  :config
-  (push 'company-rtags company-backends)
-  )
-
-(use-package flycheck-rtags
-  :after cc-mode flycheck rtags
-
-  :config
-  (defun flycheck-with-rtags-setup ()
-    (flycheck-select-checker 'rtags)
-    ;; RTags create more accurate overlays
-    (setq-local flycheck-highlighting-mode nil)
-    (setq-local flycheck-check-syntax-automatically nil)
-    )
-
-  :hook
-  (
-   (c-mode-common . flycheck-with-rtags-setup)
    )
   )
 

@@ -91,26 +91,27 @@
   )
 
 ;; Foreign packages
-(use-package ag
+(use-package rg
   :bind
-  ("C-S-k" . 'ag)
+  ("C-S-k" . 'rg)
   )
-(use-package wgrep-ag
-  :after ag hydra
+(use-package wgrep-rg
+  :ensure nil
+  :after rg hydra
 
-  :hydra (hydra-wgrep-ag (:exit t
+  :hydra (hydra-wgrep-rg (:exit t
                           :idle 1.0)
-    "wgrep-ag"
+    "wgrep-rg"
     ("e" wgrep-change-to-wgrep-mode "edit")
     ("f" wgrep-finish-edit "finish edits")
     ("s" wgrep-save-all-buffers "save edits")
     )
 
   :bind
-  (:map ag-mode-map
-        ("M-i" . 'hydra-wgrep-ag/body))
+  (:map rg-mode-map
+        ("M-i" . 'hydra-wgrep-rg/body))
   (:map wgrep-mode-map
-        ("M-i" . 'hydra-wgrep-ag/body))
+        ("M-i" . 'hydra-wgrep-rg/body))
   )
 
 (use-package cc-mode)
@@ -322,7 +323,12 @@ T - tag prefix
   )
 
 (use-package helm-ag
-  :after ag hydra
+  :after rg hydra
+
+  :custom
+  (setq helm-ag-base-command "rg --no-heading"
+        helm-ag-success-exit-status '(0 2)
+        )
 
   :hydra (hydra-helm-ag (:exit t
                          :hint nil
@@ -581,7 +587,7 @@ T - tag prefix
   )
 
 (use-package projectile
-  :after ag
+  :after rg
   :config
   (projectile-global-mode)
   (setq projectile-enable-caching t

@@ -82,7 +82,7 @@
   ("M-e" . split-window-vertically)
   ("M-w" . delete-window)
   ("M-q" . kill-buffer)
-  ("M-p" . reposition-window)
+  ("M-p" . recenter-top-bottom)
   ([f12] . hydra-miscellaneous/body)
   )
 

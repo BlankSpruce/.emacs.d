@@ -1,0 +1,11 @@
+*.cache
+network-security.data
+*.eld
+*~
+custom.el
+elpa/
+elpy/
+emojis/
+history
+recentf
+transient/

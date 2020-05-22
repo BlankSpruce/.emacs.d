@@ -91,10 +91,8 @@
   )
 
 ;; Foreign packages
-(use-package rg
-  :bind
-  ("C-S-k" . 'rg)
-  )
+(use-package rg)
+
 (use-package wgrep-rg
   :ensure nil
   :after rg hydra
@@ -325,8 +323,8 @@ T - tag prefix
 (use-package helm-ag
   :after rg hydra
 
-  :custom
-  (setq helm-ag-base-command "rg --no-heading"
+  :init
+  (setq helm-ag-base-command "rg --line-number --no-heading --smart-case"
         helm-ag-success-exit-status '(0 2)
         )
 
@@ -334,12 +332,15 @@ T - tag prefix
                          :hint nil
                          :idle 1.0)
     "
- ^Interactive^       ^Current^           [Ag Search]
+^^              ^Interactive^       ^Current^           [Ag Search]
 ----------------------------------------------------
- [_b_] buffers       [_B_] buffers
- [_d_] directory     [_D_] directory
- [_f_] file          [_F_] file
- [_p_] project       [_P_] project"
+[_j_] just rg   [_b_] buffers       [_B_] buffers
+[_k_] dwim      [_d_] directory     [_D_] directory
+[_l_] project   [_f_] file          [_F_] file
+^^              [_p_] project       [_P_] project"
+    ("j" rg)
+    ("k" rg-dwim)
+    ("l" rg-project)
     ("b" helm-do-ag-buffers)
     ("d" helm-do-ag)
     ("f" helm-do-ag-this-file)
@@ -351,10 +352,10 @@ T - tag prefix
     )
 
   :bind
-  ("M-a" . 'hydra-helm-ag/body)
+  ("M-k" . 'hydra-helm-ag/body)
 
   :hook
-  (cc-mode . (lambda () (local-unset-key (kbd "M-a"))))
+  (cc-mode . (lambda () (local-unset-key (kbd "M-k"))))
   )
 
 (use-package highlight-symbol
@@ -609,7 +610,6 @@ T - tag prefix
 
   :bind
   ("C-k" . 'actual-helm-projectile-find-file-dwim)
-  ("M-k" . 'helm-projectile-ag)
   )
 
 (use-package helm-swoop

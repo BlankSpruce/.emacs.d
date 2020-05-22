@@ -637,6 +637,8 @@ T - tag prefix
 
 (use-package restart-emacs)
 
+(use-package rmsbolt)
+
 (use-package savehist
   :config
   (savehist-mode)

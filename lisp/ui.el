@@ -4,7 +4,7 @@
 
   ;; Font
   (add-to-list 'default-frame-alist
-               '(font . "Meslo LG M DZ for Powerline-12"))
+               '(font . "Meslo LG S DZ for Powerline-11"))
 
   ;; Maximize
   (add-to-list 'default-frame-alist '(fullscreen . maximized))

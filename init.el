@@ -117,6 +117,9 @@
 (use-package clang-format
   :after cc-mode
 
+  :init
+  (setq clang-format-style "LLVM")
+
   :bind
   (:map c-mode-base-map
         ("C-;" . 'clang-format-buffer)
@@ -650,8 +653,6 @@ T - tag prefix
   (unless (server-running-p)
     (server-start)
     )
-
-  :hook (server-done . suspend-frame)
 
   :bind
   ("C-x y" . 'server-edit)

@@ -126,6 +126,13 @@
         )
   )
 
+(use-package color-identifiers-mode
+  :config
+  (global-color-identifiers-mode)
+  (setq color-identifiers:timer (run-with-idle-timer 1.5 t 'color-identifiers:refresh)
+        )
+  )
+
 (use-package cmake-mode
   :config
   (setq cmake-tab-width 4)

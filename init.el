@@ -681,8 +681,14 @@ T - tag prefix
 
 (use-package undo-tree
   :config
-  (global-undo-tree-mode)
+  (setq undo-tree-visualizer-timestamps t)
   (unbind-key "C-/" undo-tree-map)
+
+  :hook
+  (
+   (text-mode . undo-tree-mode)
+   (prog-mode . undo-tree-mode)
+   )
 
   :bind
   ("C-z" . 'undo-tree-undo)

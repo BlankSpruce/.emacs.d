@@ -368,21 +368,39 @@ T - tag prefix
   (cc-mode . (lambda () (local-unset-key (kbd "M-k"))))
   )
 
-(use-package highlight-symbol
+(use-package hl-anything
   :after hydra
 
-  :hydra (hydra-highlight-symbol (:hint nil
-                                  :idle 1.0)
+  :config
+  (defun my-hl-find-prev-thing ()
+    (interactive)
+    (hl-find-prev-thing)
+    (deactivate-mark)
+    )
+  (defun my-hl-find-next-thing ()
+    (interactive)
+    (hl-find-next-thing)
+    (deactivate-mark)
+    )
+
+  :hydra (hydra-highlight (:hint nil
+                           :idle 1.0)
     "
- ^Navigation^       ^Current symbol^     ^Miscellaneous^          [highlight-symbol]^
--------------------------------------------------------------------------------
- [_,_] previous     [_h_] highlight      [_c_] clear highlights
- [_._] next         [_r_] replace"
-    ("," highlight-symbol-prev)
-    ("." highlight-symbol-next)
-    ("c" highlight-symbol-remove-all)
-    ("h" highlight-symbol)
-    ("r" highlight-symbol-query-replace)
+^Navigation^      ^Local^ ^Global^          ^Others^       [highlights]
+^----------^------^-----^-^------^----------^------^-------------------
+[_,_] previous    [_h_]   [_H_] highlight   [_s_] save
+[_._] next        [_c_]   [_C_] clear       [_r_] restore
+^^^^                      [_T_] toggle
+"
+    ("," my-hl-find-prev-thing)
+    ("." my-hl-find-next-thing)
+    ("h" hl-highlight-thingatpt-local)
+    ("c" hl-unhighlight-all-local)
+    ("H" hl-highlight-thingatpt-global)
+    ("C" hl-unhighlight-all-global)
+    ("T" hl-global-highlight-on/off)
+    ("s" hl-save-highlights)
+    ("r" hl-restore-highlights)
     )
 
   :config
@@ -390,12 +408,12 @@ T - tag prefix
 
   :hook
   (
-   (text-mode . highlight-symbol-mode)
-   (prog-mode . highlight-symbol-mode)
+   (text-mode . hl-highlight-mode)
+   (prog-mode . hl-highlight-mode)
    )
 
   :bind
-  ("M-h" . 'hydra-highlight-symbol/body)
+  ("M-h" . 'hydra-highlight/body)
   )
 
 (use-package hydra)

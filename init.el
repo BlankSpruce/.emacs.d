@@ -117,8 +117,8 @@
 (use-package clang-format
   :after cc-mode
 
-  :init
-  (setq clang-format-style "LLVM")
+  :custom
+  (clang-format-style "LLVM")
 
   :bind
   (:map c-mode-base-map
@@ -129,13 +129,14 @@
 (use-package color-identifiers-mode
   :config
   (global-color-identifiers-mode)
-  (setq color-identifiers:timer (run-with-idle-timer 1.5 t 'color-identifiers:refresh)
-        )
+
+  :custom
+  (color-identifiers:timer (run-with-idle-timer 1.5 t 'color-identifiers:refresh))
   )
 
 (use-package cmake-mode
-  :config
-  (setq cmake-tab-width 4)
+  :custom
+  (cmake-tab-width 4)
   )
 
 (use-package company
@@ -156,8 +157,8 @@
 (use-package compile
   :after helpers
 
-  :config
-  (setq compilation-scroll-output 'first-error)
+  :custom
+  (compilation-scroll-output 'first-error)
 
   :hook (compilation-filter . colorize-compilation-buffer)
 
@@ -167,8 +168,8 @@
   )
 
 (use-package dashboard
-  :init
-  (setq dashboard-items
+  :custom
+  (dashboard-items
         '(
           (recents   . 10)
           (projects  . 10)
@@ -279,8 +280,8 @@ T - tag prefix
   )
 
 (use-package fill-column-indicator
-  :config
-  (setq fci-rule-column 140)
+  :custom
+  (fci-rule-column 140)
   )
 
 (use-package flycheck
@@ -306,13 +307,14 @@ T - tag prefix
   )
 
 (use-package helm
+  :custom
+  (helm-always-two-windows nil)
+  (helm-display-buffer-display-height 16)
+  (helm-default-display-buffer-functions '(display-buffer-in-side-window))
+  (helm-buffer-max-length 80)
+  (helm-ff-lynx-style-map nil)
+
   :config
-  (setq helm-always-two-windows nil
-        helm-display-buffer-display-height 16
-        helm-default-display-buffer-functions '(display-buffer-in-side-window)
-        helm-buffer-max-length 80
-        helm-ff-lynx-style-map nil
-        )
   (with-eval-after-load "helm-files"
     (bind-key "C-<backspace>" #'backward-kill-word helm-find-files-map)
     )
@@ -333,10 +335,9 @@ T - tag prefix
 (use-package helm-ag
   :after rg hydra
 
-  :init
-  (setq helm-ag-base-command "rg --line-number --no-heading --smart-case"
-        helm-ag-success-exit-status '(0 2)
-        )
+  :custom
+  (helm-ag-base-command "rg --line-number --no-heading --smart-case")
+  (helm-ag-success-exit-status '(0 2))
 
   :hydra (hydra-helm-ag (:exit t
                          :hint nil
@@ -403,8 +404,8 @@ T - tag prefix
     ("r" hl-restore-highlights)
     )
 
-  :config
-  (setq highlight-symbol-idle-delay 0.7)
+  :custom
+  (highlight-symbol-idle-delay 0.7)
 
   :hook
   (
@@ -450,11 +451,10 @@ T - tag prefix
               )
 
 (use-package lsp-ui
-  :config
-  (setq lsp-ui-doc-enable nil
-        lsp-ui-flycheck-enable nil
-        lsp-ui-sideline-enable nil
-        )
+  :custom
+  (lsp-ui-doc-enable nil)
+  (lsp-ui-flycheck-enable nil)
+  (lsp-ui-sideline-enable nil)
 
   :bind
   (:map lsp-ui-mode-map
@@ -468,9 +468,10 @@ T - tag prefix
   :after company
   :config
   (push 'company-lsp company-backends)
-  (setq company-lsp-async t
-        company-lsp-cache-candidates 'auto
-        )
+
+  :custom
+  (company-lsp-async t)
+  (company-lsp-cache-candidates 'auto)
   )
 
 (use-package magit
@@ -496,8 +497,8 @@ T - tag prefix
   )
 
 (use-package markdown-mode
-  :init
-  (setq markdown-command
+  :custom
+  (markdown-command
         (concat "pandoc"
                 " --mathjax"
                 " --metadata pagetitle=\"...\""
@@ -506,11 +507,11 @@ T - tag prefix
                 " --self-contained"
                 " --from=markdown --to=html5"
                 " --highlight-style=pygments"
-         )
-        markdown-fontify-code-blocks-natively t
-        markdown-header-scaling t
-        markdown-preview-stylesheets (list)
+                )
         )
+  (markdown-fontify-code-blocks-natively t)
+  (markdown-header-scaling t)
+  (markdown-preview-stylesheets (list))
 
   :custom-face
   (markdown-header-face   ((t (:inherit font-lock-function-name-face :weight bold))))
@@ -542,8 +543,8 @@ T - tag prefix
 (use-package multiple-cursors
   :after hydra
 
-  :config
-  (setq mc/list-file (ec-path "mc" ".mc-lists.el"))
+  :custom
+  (mc/list-file (ec-path "mc" ".mc-lists.el"))
 
   :hydra (hydra-multiple-cursors (:hint nil)
     "
@@ -577,12 +578,11 @@ T - tag prefix
   )
 
 (use-package neotree
-  :config
-  (setq neo-theme (if (display-graphic-p) 'nerd 'ascii)
-        neo-smart-open t
-        neo-window-fixed-size nil
-        neo-window-width 30
-        )
+  :custom
+  (neo-theme (if (display-graphic-p) 'nerd 'ascii))
+  (neo-smart-open t)
+  (neo-window-fixed-size nil)
+  (neo-window-width 30)
 
   :bind
   ("<f8>" . 'neotree-toggle)
@@ -593,10 +593,9 @@ T - tag prefix
   )
 
 (use-package nlinum
-  :config
-  (setq nlinum-format "%4d\u2502"
-        nlinum-highlight-current-line t
-        )
+  :custom
+  (nlinum-format "%4d\u2502")
+  (nlinum-highlight-current-line t)
 
   :hook
   (
@@ -619,9 +618,10 @@ T - tag prefix
   :after rg
   :config
   (projectile-global-mode)
-  (setq projectile-enable-caching t
-        projectile-indexing-method 'hybrid
-        )
+
+  :custom
+  (projectile-enable-caching t)
+  (projectile-indexing-method 'hybrid)
   )
 
 (use-package helm-projectile
@@ -643,10 +643,11 @@ T - tag prefix
 (use-package helm-swoop
   :after helm hydra projectile
 
-  :init
-  (setq helm-swoop-split-window-function
+  :custom
+  (helm-swoop-split-window-function
         '(lambda (buffer &rest restvar)
-           (helm-default-display-buffer buffer)))
+           (helm-default-display-buffer buffer))
+        )
 
   :hydra (hydra-helm-swoop (:exit t
                             :hint nil
@@ -693,13 +694,15 @@ T - tag prefix
   )
 
 (use-package tramp
-  :config
-  (setq tramp-default-method "ssh")
+  :custom
+  (tramp-default-method "ssh")
   )
 
 (use-package undo-tree
+  :custom
+  (undo-tree-visualizer-timestamps t)
+
   :config
-  (setq undo-tree-visualizer-timestamps t)
   (unbind-key "C-/" undo-tree-map)
 
   :hook
@@ -717,10 +720,11 @@ T - tag prefix
 (use-package vdiff
   :after hydra
 
+  :custom
+  (vdiff-diff-algorithm 'git-diff-patience)
+  (vdiff-subtraction-fill-char ?\?)
+
   :config
-  (setq vdiff-diff-algorithm 'git-diff-patience
-        vdiff-subtraction-fill-char ?
-        )
   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
   (define-key vdiff-3way-mode-map (kbd "C-c") vdiff-mode-prefix-map)
 
@@ -763,8 +767,8 @@ T - tag prefix
   )
 
 (use-package visual-regexp-steroids
-  :config
-  (setq vr/engine 'python)
+  :custom
+  (vr/engine 'python)
 
   :bind
   ("M-r" . 'vr/query-replace)
@@ -797,8 +801,8 @@ T - tag prefix
 (use-package helm-c-yasnippet
   :after yasnippet
 
-  :config
-  (setq helm-yas-space-match-any-greedy t)
+  :custom
+  (helm-yas-space-match-any-greedy t)
 
   :bind
   ("M-/" . 'helm-yas-complete)

@@ -54,12 +54,14 @@
   )
 
 (use-package keybindings
-  :after hydra helpers ialign
+  :after fzf hydra helpers ialign
   :demand t
   :ensure nil
 
   :hydra (hydra-miscellaneous (:exit t) ""
   ("a" ialign "Interactive align")
+  ("f" fzf "fzf here")
+  ("F" fzf-directory "fzf in selected directory")
   ("h" hl-line-mode "Line highlighting")
   ("l" nlinum-mode "Line numbers")
   ("r" reload-emacs-config "Reload emacs config")
@@ -297,6 +299,8 @@ T - tag prefix
    (c-mode-common . flycheck-mode)
    )
   )
+
+(use-package fzf)
 
 (use-package git-gutter-fringe
   :config

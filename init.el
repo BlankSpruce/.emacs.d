@@ -260,6 +260,11 @@ T - tag prefix
   )
 
 (use-package elpy
+  :defer t
+
+  :init
+  (advice-add 'python-mode :before 'elpy-enable)
+
   :config
   ; Conflicts with windmove
   (unbind-key "<M-up>"    elpy-mode-map)

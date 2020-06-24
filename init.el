@@ -336,8 +336,6 @@ T - tag prefix
   (:map helm-map
         ("<left>" . 'backward-char)
         ("<right>" . 'forward-char)
-        ("<tab>" . 'helm-execute-persistent-action)
-        ("C-z" . 'helm-select-action)
         )
   )
 

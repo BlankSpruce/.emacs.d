@@ -54,16 +54,17 @@
   )
 
 (use-package keybindings
-  :after fzf hydra helpers ialign
+  :after helm-fd hydra helpers ialign markdown-preview-mode
   :demand t
   :ensure nil
 
   :hydra (hydra-miscellaneous (:exit t) ""
   ("a" ialign "Interactive align")
-  ("f" fzf "fzf here")
-  ("F" fzf-directory "fzf in selected directory")
+  ("f" helm-fd "Find file here")
+  ("F" (lambda () (interactive) (helm-fd 1)) "Find file in selected directory")
   ("h" hl-line-mode "Line highlighting")
   ("l" nlinum-mode "Line numbers")
+  ("m" hydra-markdown/body "Markdown preview")
   ("r" reload-emacs-config "Reload emacs config")
   ("t" toggle-truncate-lines "Toggle truncate lines")
   ("w" whitespace-cleanup "Cleanup whitespaces")
@@ -376,6 +377,8 @@ T - tag prefix
   (cc-mode . (lambda () (local-unset-key (kbd "M-k"))))
   )
 
+(use-package helm-fd)
+
 (use-package hl-anything
   :after hydra
 
@@ -536,9 +539,6 @@ T - tag prefix
     ("p" markdown-preview-mode "preview")
     ("c" markdown-preview-cleanup "cleanup")
     )
-
-  :bind
-  ("M-m" . 'hydra-markdown/body)
   )
 
 (use-package move-text
@@ -779,6 +779,11 @@ T - tag prefix
 
   :bind
   ("M-r" . 'vr/query-replace)
+  )
+
+(use-package which-key
+  :config
+  (which-key-mode)
   )
 
 (use-package windmove

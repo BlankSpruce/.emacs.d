@@ -53,7 +53,7 @@
   ([f5] . revert-buffer-without-confirmation)
   )
 
-(use-package keybindings
+(use-package blankspruce
   :after helm-fd hydra helpers ialign markdown-preview-mode
   :demand t
   :ensure nil
@@ -71,7 +71,20 @@
   )
 
   :config
+  (setq-default cursor-type 'bar)
+  (set-frame-parameter nil 'fullscreen 'maximized)
+  (set-face-font 'default "Meslo LG S DZ for Powerline-12")
   (cua-mode)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (column-number-mode 1)
+  (line-number-mode 1)
+  (show-paren-mode)
+
+  :custom
+  (frame-title-format "[Emacs] %f")
+  (frame-resize-pixelwise t)
 
   :bind
   ("C-/" . comment-line)
@@ -89,8 +102,6 @@
   ([f12] . hydra-miscellaneous/body)
   )
 
-(use-package ui
-  :ensure nil
   )
 
 ;; Foreign packages

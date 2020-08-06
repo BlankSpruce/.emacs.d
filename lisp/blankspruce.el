@@ -1,0 +1,2 @@
+;; Placeholder module
+(provide 'blankspruce)

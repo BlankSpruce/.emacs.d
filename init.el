@@ -636,6 +636,9 @@ T - tag prefix
   :after rg
   :config
   (projectile-global-mode)
+  (when (executable-find "fd")
+    (setq projectile-git-command "fd . -0")
+    )
 
   :custom
   (projectile-enable-caching t)

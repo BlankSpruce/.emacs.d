@@ -66,6 +66,7 @@
   ("l" nlinum-mode "Line numbers")
   ("m" hydra-markdown/body "Markdown preview")
   ("r" reload-emacs-config "Reload emacs config")
+  ("S" edit-current-file-as-root "Edit current file as root")
   ("t" toggle-truncate-lines "Toggle truncate lines")
   ("w" whitespace-cleanup "Cleanup whitespaces")
   )

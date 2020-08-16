@@ -559,6 +559,15 @@ T - tag prefix
   ("<C-S-down>" . 'move-text-down)
   )
 
+(use-package multi-term
+  :custom
+  (multi-term-program "zsh")
+
+  :bind
+  (:map term-raw-map  ("C-c t" . term-line-mode))
+  (:map term-mode-map ("C-c t" . term-char-mode))
+  )
+
 (use-package multiple-cursors
   :after hydra
 

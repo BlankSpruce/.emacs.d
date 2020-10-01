@@ -103,9 +103,24 @@
   ([f12] . hydra-miscellaneous/body)
   )
 
+;; Foreign packages
+(use-package ace-window
+  :after hydra
+
+  :hydra
+  (hydra-ace-window
+   (:exit t :idle 1.0)
+   "Ace window"
+   ("M-m" ace-window "Ace window")
+   ("m" ace-window "Ace window")
+   ("d" ace-delete-window "Delete window")
+   ("s" ace-swap-window "Swap windows")
+   )
+
+  :bind*
+  ("M-m" . hydra-ace-window/body)
   )
 
-;; Foreign packages
 (use-package rg)
 
 (use-package wgrep-rg

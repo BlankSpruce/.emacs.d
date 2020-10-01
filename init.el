@@ -346,6 +346,8 @@ T - tag prefix
   ("M-x" . 'helm-M-x)
   ("C-M-x" . 'execute-extended-command)
   ("C-x C-f" . 'helm-find-files)
+  ("C-f" . 'helm-occur)
+  ("M-f" . 'helm-occur-visible-buffers)
   (:map helm-map
         ("<left>" . 'backward-char)
         ("<right>" . 'forward-char)
@@ -669,30 +671,6 @@ T - tag prefix
 
   :bind
   ("C-k" . 'actual-helm-projectile-find-file-dwim)
-  )
-
-(use-package helm-swoop
-  :after helm hydra projectile
-
-  :custom
-  (helm-swoop-split-window-function
-        '(lambda (buffer &rest restvar)
-           (helm-default-display-buffer buffer))
-        )
-
-  :hydra (hydra-helm-swoop (:exit t
-                            :hint nil
-                            :columns 3)
-    ("a" helm-multi-swoop-all "All buffers")
-    ("m" helm-multi-swoop "Multiple buffers")
-    ("s" helm-multi-swoop-current-mode "All same major-mode buffers")
-    ("p" helm-multi-swoop-projectile "All current project buffers")
-    ("f" helm-swoop "Swoop with preinput")
-    )
-
-  :bind
-  ("C-f" . 'helm-swoop-without-pre-input)
-  ("M-f" . 'hydra-helm-swoop/body)
   )
 
 (use-package restart-emacs)

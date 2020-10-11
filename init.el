@@ -1,3 +1,6 @@
+;; Garbage collection threshold
+(setq gc-cons-threshold (* 50 1000 1000))
+
 ;; Melpa
 (prefer-coding-system 'utf-8)
 (defconst emacs-config (expand-file-name user-emacs-directory))
@@ -45,6 +48,11 @@
 ;; Local packages
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+(use-package esup
+  :config
+  (setq esup-depth 0)
+  )
+
 (use-package helpers
   :demand t
   :ensure nil
@@ -63,7 +71,7 @@
   ("f" helm-fd "Find file here")
   ("F" (lambda () (interactive) (helm-fd 1)) "Find file in selected directory")
   ("h" hl-line-mode "Line highlighting")
-  ("l" nlinum-mode "Line numbers")
+  ("l" display-line-numbers-mode "Line numbers")
   ("m" hydra-markdown/body "Markdown preview")
   ("r" reload-emacs-config "Reload emacs config")
   ("S" edit-current-file-as-root "Edit current file as root")
@@ -80,7 +88,7 @@
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
   (column-number-mode 1)
-  (line-number-mode 1)
+  (display-line-numbers-mode 1)
   (show-paren-mode)
 
   :custom
@@ -637,14 +645,10 @@ T - tag prefix
         )
   )
 
-(use-package nlinum
-  :custom
-  (nlinum-format "%4d\u2502")
-  (nlinum-highlight-current-line t)
-
+(use-package display-line-numbers
   :hook
   (
-   (prog-mode . nlinum-mode)
+   (prog-mode . display-line-numbers-mode)
    (prog-mode . hl-line-mode)
    )
   )
@@ -836,3 +840,6 @@ T - tag prefix
   :bind
   ("M-/" . 'helm-yas-complete)
   )
+
+;; Garbage collection threshold lower after loading packages
+(setq gc-cons-threshold (* 2 1000 1000))

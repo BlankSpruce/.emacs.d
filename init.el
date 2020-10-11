@@ -351,6 +351,11 @@ T - tag prefix
     nil nil 'bottom)
   )
 
+(use-package graphviz-dot-mode
+  :custom
+  (graphviz-dot-indent-width 4)
+  )
+
 (use-package helm
   :custom
   (helm-always-two-windows nil)

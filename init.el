@@ -1,6 +1,9 @@
 ;; Garbage collection threshold
 (setq gc-cons-threshold (* 50 1000 1000))
 
+;; Ask before exit
+(setq confirm-kill-emacs 'yes-or-no-p)
+
 ;; Melpa
 (prefer-coding-system 'utf-8)
 (defconst emacs-config (expand-file-name user-emacs-directory))

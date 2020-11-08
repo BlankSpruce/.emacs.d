@@ -596,9 +596,30 @@ T - tag prefix
   :custom
   (multi-term-program "zsh")
 
-  :bind
-  (:map term-raw-map  ("C-c t" . term-line-mode))
-  (:map term-mode-map ("C-c t" . term-char-mode))
+  :config
+  (defun multi-term-bind-keys ()
+    (dolist
+        (bind
+         '(("C-<backspace>" . term-send-backward-kill-word)
+           ("C-<delete>" . term-send-forward-kill-word)
+           ("C-<left>" . term-send-backward-word)
+           ("C-<right>" . term-send-forward-word)
+           ("C-c C-j" . term-line-mode)
+           ("C-c C-k" . term-char-mode)
+           ("C-c C-v" . scroll-up)
+           ("C-c C-z" . term-stop-subjob)
+           ("C-c C-r" . term-send-reverse-search-history)
+           ("M-DEL" . term-send-backward-kill-word)
+           ("M-d" . term-send-forward-kill-word)
+           ("M-r" . term-send-reverse-search-history)
+           )
+         )
+      (add-to-list 'term-bind-key-alist bind)
+      )
+    )
+
+  :hook
+  (term-mode . multi-term-bind-keys)
   )
 
 (use-package multiple-cursors

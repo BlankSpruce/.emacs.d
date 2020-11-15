@@ -527,17 +527,37 @@ T - tag prefix
 (use-package magit
   :after hydra
 
+  :custom
+  (dotfiles-git-dir (concat "--git-dir=" (expand-file-name "~/.dotfiles")))
+  (dotfiles-work-tree (concat "--work-tree=" (expand-file-name "~")))
+
+  :config
+  (defun dotfiles-magit-status ()
+    (interactive)
+    (add-to-list 'magit-git-global-arguments dotfiles-git-dir)
+    (add-to-list 'magit-git-global-arguments dotfiles-work-tree)
+    (call-interactively 'magit-status)
+    )
+  (defun my-magit-status ()
+    (interactive)
+    (setq magit-git-global-arguments (remove dotfiles-git-dir magit-git-global-arguments))
+    (setq magit-git-global-arguments (remove dotfiles-work-tree magit-git-global-arguments))
+    (call-interactively 'magit-status)
+    )
+
   :hydra (hydra-magit (:exit t
                        :idle 1.0)
     "Magit"
+    ("a" magit-stage-file "stage file")
     ("b" magit-blame-addition "blame")
     ("c" magit-checkout "checkout")
+    ("d" dotfiles-magit-status "status (dotfiles)")
     ("h" magit-log-all "log")
     ("l" magit-log-buffer-file "file log")
     ("m" magit-file-rename "rename file")
     ("n" magit-branch-and-checkout "new branch from current one")
     ("r" magit-show-refs "show branches")
-    ("s" magit-status "status")
+    ("s" my-magit-status "status")
     )
 
   :bind

@@ -65,14 +65,12 @@
   )
 
 (use-package blankspruce
-  :after helm-fd hydra helpers ialign markdown-preview-mode
+  :after helm hydra helpers ialign markdown-preview-mode
   :demand t
   :ensure nil
 
   :hydra (hydra-miscellaneous (:exit t) ""
   ("a" ialign "Interactive align")
-  ("f" helm-fd "Find file here")
-  ("F" (lambda () (interactive) (helm-fd 1)) "Find file in selected directory")
   ("h" hl-line-mode "Line highlighting")
   ("l" display-line-numbers-mode "Line numbers")
   ("m" hydra-markdown/body "Markdown preview")
@@ -415,8 +413,6 @@ T - tag prefix
   :hook
   (cc-mode . (lambda () (local-unset-key (kbd "M-k"))))
   )
-
-(use-package helm-fd)
 
 (use-package hl-anything
   :after hydra

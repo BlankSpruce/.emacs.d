@@ -155,18 +155,6 @@
 
 (use-package cc-mode)
 
-(use-package clang-format
-  :after cc-mode
-
-  :custom
-  (clang-format-style "LLVM")
-
-  :bind
-  (:map c-mode-base-map
-        ("C-;" . 'clang-format-buffer)
-        )
-  )
-
 (use-package color-identifiers-mode
   :config
   (global-color-identifiers-mode)
@@ -337,6 +325,12 @@ T - tag prefix
   (
    (c-mode-common . flycheck-mode)
    )
+  )
+
+(use-package format-all
+  :bind
+  (:map c-mode-base-map ("C-;" . 'format-all-buffer))
+  (:map python-mode-map ("C-;" . 'format-all-buffer))
   )
 
 (use-package fzf)

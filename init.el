@@ -482,28 +482,23 @@ T - tag prefix
   )
 
 (use-package lsp-mode
-  :config
-  (require 'lsp-clients)
-
-  :hook (c++-mode . lsp)
-  :commands lsp
   :custom (lsp-prefer-flymake nil)
   )
 
-(setq-default lsp-clients-clangd-args
-              '(
-                "-j=1"
-                "--background-index"
-                "--hedear-insertion=iwyu"
-                "--suggest-missing-includes"
-                "--clang-tidy"
-                )
-              lsp-ui-doc-max-height 30
-              lsp-ui-doc-max-width 120
-              ;; lsp-ui-doc-use-webkit t
-              lsp-ui-sideline-ignore-duplicate t
-              lsp-ui-sideline-show-hover nil
-              )
+(use-package ccls
+  :custom
+  (ccls-executable "/usr/bin/ccls")
+  (ccls-initialization-options
+   '(:index
+     (:comments 0 :threads 2 :initialBlackList ".")
+     :completion
+     (:detailedLabel t)
+     )
+   )
+
+  :hook
+  ((c-mode c++-mode) . (lambda () (require 'ccls) (lsp)))
+  )
 
 (use-package lsp-ui
   :custom

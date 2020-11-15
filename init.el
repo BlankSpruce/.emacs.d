@@ -85,7 +85,7 @@
   :config
   (setq-default cursor-type 'bar)
   (set-frame-parameter nil 'fullscreen 'maximized)
-  (set-face-font 'default "Meslo LG S DZ for Powerline-12")
+  (set-face-font 'default "MesloLGS NF-11")
   (cua-mode)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)

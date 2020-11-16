@@ -22,7 +22,6 @@
 
 ;; Spaces
 (setq-default indent-tabs-mode nil)
-(winner-mode 1)
 
 ;; Prefer newer files
 (setq load-prefer-newer t)
@@ -104,9 +103,6 @@
   ("C-l" . goto-line)
   ("C-s" . save-buffer)
   ("C-/" . comment-line)
-  ("M-o" . split-window-horizontally)
-  ("M-e" . split-window-vertically)
-  ("M-w" . delete-window)
   ("M-q" . kill-buffer)
   ("M-p" . recenter-top-bottom)
   ([f12] . hydra-miscellaneous/body)
@@ -114,20 +110,38 @@
 
 ;; Foreign packages
 (use-package ace-window
-  :after hydra
+  :after winner
 
-  :hydra
-  (hydra-ace-window
-   (:exit t :idle 1.0)
-   "Ace window"
-   ("M-m" ace-window "Ace window")
-   ("m" ace-window "Ace window")
-   ("d" ace-delete-window "Delete window")
-   ("s" ace-swap-window "Swap windows")
+  :config
+  (defun bs/winner-undo ()
+    (progn
+      (winner-undo)
+      (setq this-command 'winner-undo)
+      )
+    )
+
+  :custom
+  (aw-reverse-frame-list t)
+  (aw-dispatch-always t)
+  (aw-dispatch-alist
+   '(
+     (?o split-window-horizontally)
+     (?e split-window-vertically)
+     (?w delete-window)
+
+     (?b balance-windows)
+     (?m delete-other-windows "Maximize window")
+
+     (?d ace-delete-window)
+     (?s ace-swap-window)
+
+     (?j bs/winner-undo)
+     (?k winner-redo)
+     )
    )
 
   :bind*
-  ("M-m" . hydra-ace-window/body)
+  ("M-o" . ace-window)
   )
 
 (use-package rg)
@@ -839,6 +853,11 @@ T - tag prefix
 (use-package which-key
   :config
   (which-key-mode)
+  )
+
+(use-package winner
+  :init
+  (winner-mode 1)
   )
 
 (use-package windmove

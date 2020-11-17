@@ -423,6 +423,10 @@ T - tag prefix
 
   :bind
   ("M-k" . 'hydra-helm-ag/body)
+  (:map helm-ag-mode-map
+        ("RET" . 'helm-ag-mode-jump-other-window)
+        ("C-o" . 'helm-ag-mode-jump)
+        )
 
   :hook
   (cc-mode . (lambda () (local-unset-key (kbd "M-k"))))

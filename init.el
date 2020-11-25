@@ -435,18 +435,6 @@ T - tag prefix
 (use-package hl-anything
   :after hydra
 
-  :config
-  (defun my-hl-find-prev-thing ()
-    (interactive)
-    (hl-find-prev-thing)
-    (deactivate-mark)
-    )
-  (defun my-hl-find-next-thing ()
-    (interactive)
-    (hl-find-next-thing)
-    (deactivate-mark)
-    )
-
   :hydra (hydra-highlight (:hint nil
                            :idle 1.0)
     "
@@ -454,10 +442,11 @@ T - tag prefix
 ^----------^------^-----^-^------^----------^------^-------------------
 [_,_] previous    [_h_]   [_H_] highlight   [_s_] save
 [_._] next        [_c_]   [_C_] clear       [_r_] restore
-^^^^                      [_T_] toggle
+[_q_] quit        ^^      [_T_] toggle
 "
-    ("," my-hl-find-prev-thing)
-    ("." my-hl-find-next-thing)
+    ("," hl-find-prev-thing)
+    ("." hl-find-next-thing)
+    ("q" (lambda () (interactive) (deactivate-mark)) :exit t)
     ("h" hl-highlight-thingatpt-local)
     ("c" hl-unhighlight-all-local)
     ("H" hl-highlight-thingatpt-global)

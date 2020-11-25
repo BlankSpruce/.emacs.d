@@ -383,8 +383,6 @@ T - tag prefix
   ("M-x" . 'helm-M-x)
   ("C-M-x" . 'execute-extended-command)
   ("C-x C-f" . 'helm-find-files)
-  ("C-f" . 'helm-occur)
-  ("M-f" . 'helm-occur-visible-buffers)
   (:map helm-map
         ("<left>" . 'backward-char)
         ("<right>" . 'forward-char)
@@ -751,6 +749,32 @@ T - tag prefix
 
   :bind
   ("C-x y" . 'server-edit)
+  )
+
+(use-package swiper
+  :hydra
+  (hydra-inside-swiper
+   (:exit t)
+   "Inside swiper"
+   ("a" swiper-avy "Jump to candidate")
+   ("m" swiper-mc "Multiple cursors")
+   ("r" swiper-recenter-top-bottom "Recenter")
+   ("t" swiper-toggle-face-matching "Toggle face matching")
+   )
+
+  (hydra-swiper
+   (:exit t)
+   "Swiper"
+   ("a" swiper-all "All buffers")
+   ("f" swiper-thing-at-point "Thing at point")
+   )
+
+  :bind
+  ("C-f" . 'swiper)
+  ("M-f" . 'hydra-swiper/body)
+  (:map swiper-map
+        ("M-i" . 'hydra-inside-swiper/body)
+        )
   )
 
 (use-package eterm-256color

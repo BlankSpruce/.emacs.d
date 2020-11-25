@@ -8,4 +8,7 @@
 (setq mc/cmds-to-run-once
       '(
         hydra-multiple-cursors/mc/edit-lines-and-exit
+        hydra-inside-swiper/swiper-mc-and-exit
+        swiper
+        swiper-mc
         ))

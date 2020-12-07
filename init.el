@@ -325,6 +325,11 @@ T - tag prefix
         )
   )
 
+(use-package expand-region
+  :bind
+  ("M-@" . 'er/expand-region)
+  )
+
 (use-package fill-column-indicator
   :custom
   (fci-rule-column 140)

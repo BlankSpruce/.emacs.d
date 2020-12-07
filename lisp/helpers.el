@@ -60,4 +60,19 @@
     )
   )
 
+(defun eval-and-replace ()
+  (interactive)
+  (backward-kill-sexp)
+  (condition-case nil
+      (prin1
+       (eval (read (current-kill 0)))
+       (current-buffer)
+       )
+    (error
+     (message "Invalid expression")
+     (insert (current-kill 0))
+     )
+    )
+  )
+
 (provide 'helpers)

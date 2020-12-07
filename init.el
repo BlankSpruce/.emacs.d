@@ -70,6 +70,7 @@
 
   :hydra (hydra-miscellaneous (:exit t) ""
   ("a" ialign "Interactive align")
+  ("e" eval-and-replace "Eval and replace")
   ("h" hl-line-mode "Line highlighting")
   ("l" display-line-numbers-mode "Line numbers")
   ("m" hydra-markdown/body "Markdown preview")

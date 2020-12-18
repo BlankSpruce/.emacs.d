@@ -329,6 +329,7 @@ T - tag prefix
 (use-package expand-region
   :bind
   ("M-@" . 'er/expand-region)
+  ("M-#" . 'er/contract-region)
   )
 
 (use-package fill-column-indicator

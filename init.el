@@ -78,6 +78,7 @@
   ("S" edit-current-file-as-root "Edit current file as root")
   ("t" toggle-truncate-lines "Toggle truncate lines")
   ("w" whitespace-cleanup "Cleanup whitespaces")
+  ("?" which-key-show-major-mode "which-key major mode")
   )
 
   :config

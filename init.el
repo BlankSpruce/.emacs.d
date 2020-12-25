@@ -235,6 +235,15 @@
   :ensure nil
   )
 
+(use-package dired-subtree
+  :bind
+  (:map dired-mode-map
+        ("<tab>"           . dired-subtree-toggle)
+        ("<C-tab>"         . dired-subtree-cycle)
+        ("<S-iso-lefttab>" . dired-subtree-remove)
+        )
+  )
+
 (use-package doom-themes
   :config
   (if (display-graphic-p)

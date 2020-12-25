@@ -64,7 +64,7 @@
   )
 
 (use-package blankspruce
-  :after helm hydra helpers ialign markdown-preview-mode
+  :after helm hydra helpers ialign markdown-preview-mode which-key
   :demand t
   :ensure nil
 
@@ -823,8 +823,7 @@
 
 (use-package which-key
   :after dired
-  :config
-  (which-key-mode)
+  :hook (after-init . which-key-mode)
 
   :bind
   (:map dired-mode-map ("." . which-key-show-major-mode))

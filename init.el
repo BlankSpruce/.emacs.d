@@ -85,11 +85,11 @@
   (setq-default cursor-type 'bar)
   (set-frame-parameter nil 'fullscreen 'maximized)
   (set-face-font 'default "MesloLGS NF-11")
-  (cua-mode)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
   (column-number-mode 1)
+  (delete-selection-mode 1)
   (display-line-numbers-mode 1)
   (show-paren-mode)
 
@@ -423,10 +423,10 @@
 
 (use-package ialign)
 
-(use-package ido
-  :config
-  (ido-mode t)
-  )
+;; (use-package ido
+;;   :config
+;;   (ido-mode t)
+;;   )
 
 (use-package lsp-mode
   :custom (lsp-prefer-flymake nil)

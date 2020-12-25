@@ -327,12 +327,14 @@
   (with-eval-after-load "helm-files"
     (bind-key "C-<backspace>" #'backward-kill-word helm-find-files-map)
     )
+  (helm-mode 1)
 
   :bind
-  ("<f6>" . 'helm-buffers-list)
-  ("M-x" . 'helm-M-x)
-  ("C-M-x" . 'execute-extended-command)
-  ("C-x C-f" . 'helm-find-files)
+  ("<f6>" . 'helm-mini)
+  ([remap apropos-command] . 'helm-apropos)
+  ([remap execute-extended-command] . 'helm-M-x)
+  ([remap find-file] . 'helm-find-files)
+  ([remap yank-pop] . 'helm-show-kill-ring)
   (:map helm-map
         ("<left>" . 'backward-char)
         ("<right>" . 'forward-char)

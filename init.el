@@ -244,6 +244,8 @@
   :hook (after-init . doom-modeline-mode)
   )
 
+(use-package elmacro)
+
 (use-package elpy
   :defer t
 

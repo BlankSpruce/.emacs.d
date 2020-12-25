@@ -64,22 +64,26 @@
   )
 
 (use-package blankspruce
-  :after helm hydra helpers ialign markdown-preview-mode which-key
+  :after helm hydra helpers ialign markdown-preview-mode origami which-key
   :demand t
   :ensure nil
 
-  :hydra (hydra-miscellaneous (:exit t) ""
-  ("a" ialign "Interactive align")
-  ("e" eval-and-replace "Eval and replace")
-  ("h" hl-line-mode "Line highlighting")
-  ("l" display-line-numbers-mode "Line numbers")
-  ("m" hydra-markdown/body "Markdown preview")
-  ("r" reload-emacs-config "Reload emacs config")
-  ("S" edit-current-file-as-root "Edit current file as root")
-  ("t" toggle-truncate-lines "Toggle truncate lines")
-  ("w" whitespace-cleanup "Cleanup whitespaces")
-  ("?" which-key-show-major-mode "which-key major mode")
-  )
+  :hydra
+  (hydra-miscellaneous
+   (:exit t :columns 4)
+   ""
+   ("a" ialign "Interactive align")
+   ("e" eval-and-replace "Eval and replace")
+   ("h" hl-line-mode "Line highlighting")
+   ("l" display-line-numbers-mode "Line numbers")
+   ("m" hydra-markdown/body "Markdown preview")
+   ("o" hydra-origami/body "Origami")
+   ("r" reload-emacs-config "Reload emacs config")
+   ("S" edit-current-file-as-root "Edit current file as root")
+   ("t" toggle-truncate-lines "Toggle truncate lines")
+   ("w" whitespace-cleanup "Cleanup whitespaces")
+   ("?" which-key-show-major-mode "which-key major-mode")
+   )
 
   :config
   (setq-default cursor-type 'bar)
@@ -650,10 +654,22 @@
   :config
   (global-origami-mode)
 
-  :bind
-  (:map origami-mode-map
-        ("<C-tab>" . 'origami-recursively-toggle-node)
-        )
+  :hydra
+  (hydra-origami
+   (:color red)
+   "
+_o_pen node    _n_ext fold       _t_oggle forward  _s_how current only
+_c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
+  "
+   ("o" origami-open-node)
+   ("c" origami-close-node)
+   ("n" origami-next-fold)
+   ("p" origami-previous-fold)
+   ("t" origami-forward-toggle-node)
+   ("a" origami-toggle-all-nodes)
+   ("s" origami-show-only-node)
+   ("r" origami-reset)
+   )
   )
 
 (use-package projectile

@@ -74,6 +74,7 @@
    ""
    ("a" ialign "Interactive align")
    ("e" eval-and-replace "Eval and replace")
+   ("f" bs/fuzzy-find-file "Fuzzy find file")
    ("h" hl-line-mode "Line highlighting")
    ("l" display-line-numbers-mode "Line numbers")
    ("m" hydra-markdown/body "Markdown preview")
@@ -96,6 +97,9 @@
   (delete-selection-mode 1)
   (display-line-numbers-mode 1)
   (show-paren-mode)
+  (defun bs/fuzzy-find-file ()
+    (interactive)
+    (helm-find t))
 
   :custom
   (frame-title-format "[Emacs] %f")

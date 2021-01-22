@@ -441,10 +441,11 @@
 
 (use-package ialign)
 
-;; (use-package ido
-;;   :config
-;;   (ido-mode t)
-;;   )
+(use-package keyfreq
+  :config
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1)
+  )
 
 (use-package lsp-mode
   :custom (lsp-prefer-flymake nil)

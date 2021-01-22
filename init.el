@@ -239,6 +239,11 @@
   :ensure nil
   )
 
+(use-package dired-sidebar
+  :bind
+  ([f8] . dired-sidebar-toggle-sidebar)
+  )
+
 (use-package dired-subtree
   :bind
   (:map dired-mode-map
@@ -254,7 +259,6 @@
       (load-theme 'doom-city-lights t)
     (load-theme 'doom-sourcerer t)
     )
-  (doom-themes-neotree-config)
   )
 
 (use-package doom-modeline
@@ -638,21 +642,6 @@
   ("M-n" . 'hydra-multiple-cursors/body)
   (:map mc/keymap
         ("<return>" . nil))
-  )
-
-(use-package neotree
-  :custom
-  (neo-theme (if (display-graphic-p) 'nerd 'ascii))
-  (neo-smart-open t)
-  (neo-window-fixed-size nil)
-  (neo-window-width 30)
-
-  :bind
-  ("<f8>" . 'neotree-toggle)
-  (:map neotree-mode-map
-        ("c" . 'neotree-change-root)
-        ("u" . 'neotree-select-up-node)
-        )
   )
 
 (use-package display-line-numbers

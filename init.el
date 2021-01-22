@@ -120,6 +120,7 @@
   :after winner
 
   :config
+  (ace-window-display-mode)
   (defun bs/winner-undo ()
     (progn
       (winner-undo)
@@ -146,6 +147,7 @@
      (?k winner-redo)
      )
    )
+  (aw-background nil)
 
   :bind*
   ("M-o" . ace-window)

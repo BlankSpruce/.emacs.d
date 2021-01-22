@@ -58,9 +58,6 @@
 (use-package helpers
   :demand t
   :ensure nil
-
-  :bind
-  ([f5] . revert-buffer-without-confirmation)
   )
 
 (use-package blankspruce
@@ -75,6 +72,7 @@
    ("a" ialign "Interactive align")
    ("e" eval-and-replace "Eval and replace")
    ("f" bs/fuzzy-find-file "Fuzzy find file")
+   ("F" format-all-buffer)
    ("h" hl-line-mode "Line highlighting")
    ("l" display-line-numbers-mode "Line numbers")
    ("m" hydra-markdown/body "Markdown preview")
@@ -105,16 +103,15 @@
   (frame-title-format "[Emacs] %f")
   (frame-resize-pixelwise t)
 
-  :bind
-  ("C-/" . comment-line)
-
   :bind*
   ("C-a" . mark-whole-buffer)
   ("C-l" . goto-line)
   ("C-s" . save-buffer)
-  ("C-/" . comment-line)
+  ("C-;" . comment-line)
+  ("<C-return>" . rectangle-mark-mode)
   ("M-q" . kill-buffer)
   ("M-p" . recenter-top-bottom)
+  ([f5] . revert-buffer-without-confirmation)
   ([f12] . hydra-miscellaneous/body)
   )
 
@@ -312,11 +309,7 @@
    )
   )
 
-(use-package format-all
-  :bind
-  (:map c-mode-base-map ("C-;" . 'format-all-buffer))
-  (:map python-mode-map ("C-;" . 'format-all-buffer))
-  )
+(use-package format-all)
 
 (use-package fzf)
 
@@ -767,16 +760,13 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
   :custom
   (undo-tree-visualizer-timestamps t)
 
-  :config
-  (unbind-key "C-/" undo-tree-map)
-
   :hook
   (
    (text-mode . undo-tree-mode)
    (prog-mode . undo-tree-mode)
    )
 
-  :bind
+  :bind*
   ("C-z" . 'undo-tree-undo)
   ("C-S-z" . 'undo-tree-redo)
   ("M-z" . 'undo-tree-visualize)

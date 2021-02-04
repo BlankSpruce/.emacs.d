@@ -400,6 +400,21 @@
   (cc-mode . (lambda () (local-unset-key (kbd "M-k"))))
   )
 
+(use-package helpful
+  :after helm
+
+  :custom
+  (helm-describe-function-function 'helpful-symbol)
+  (helm-describe-variable-function 'helpful-symbol)
+
+  :bind*
+  ([remap describe-key] . 'helpful-key)
+  ([remap describe-function] . 'helpful-callable)
+  ([remap describe-variable] . 'helpful-variable)
+  ([remap Info-goto-emacs-command-node] . 'helpful-function)
+  ("<f1> ." . 'helpful-at-point)
+  )
+
 (use-package hl-anything
   :after hydra
 

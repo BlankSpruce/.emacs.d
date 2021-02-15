@@ -118,40 +118,44 @@
 
 ;; Foreign packages
 (use-package ace-window
-  :after winner
-
   :config
   (ace-window-display-mode)
   (defun bs/winner-undo ()
-    (progn
-      (winner-undo)
-      (setq this-command 'winner-undo)
-      )
+    (interactive)
+    (winner-undo)
+    (setq this-command 'winner-undo)
     )
+
+  :hydra
+  (hydra-windows
+   (:hint nil :idle 1.0)
+   "
+Split        ^^Winner         ^^Other
+                            ^^^^_q_uit
+| _o_          undo _z_         _s_wap
+- _e_          redo _Z_         _d_elete
+                            ^^^^_b_alance
+"
+   ("o" split-window-horizontally :exit t)
+   ("e" split-window-vertically :exit t)
+
+   ("z" bs/winner-undo)
+   ("Z" winner-redo :exit t)
+
+   ("s" ace-swap-window :exit t)
+   ("d" delete-window :exit t)
+
+   ("b" balance-windows :exit t)
+   ("q" nil)
+   )
 
   :custom
   (aw-reverse-frame-list t)
-  (aw-dispatch-always t)
-  (aw-dispatch-alist
-   '(
-     (?o split-window-horizontally)
-     (?e split-window-vertically)
-     (?w delete-window)
-
-     (?b balance-windows)
-     (?m delete-other-windows "Maximize window")
-
-     (?d ace-delete-window)
-     (?s ace-swap-window)
-
-     (?j bs/winner-undo)
-     (?k winner-redo)
-     )
-   )
   (aw-background nil)
 
   :bind*
-  ("M-o" . ace-window)
+  ("M-o" . 'ace-window)
+  ("M-O" . 'hydra-windows/body)
   )
 
 (use-package rg)
@@ -273,12 +277,6 @@
   :init
   (advice-add 'python-mode :before 'elpy-enable)
 
-  :config
-  ; Conflicts with windmove
-  (unbind-key "<M-up>"    elpy-mode-map)
-  (unbind-key "<M-down>"  elpy-mode-map)
-  (unbind-key "<M-left>"  elpy-mode-map)
-  (unbind-key "<M-right>" elpy-mode-map)
 
   :hook
   (
@@ -856,14 +854,6 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
 (use-package winner
   :init
   (winner-mode 1)
-  )
-
-(use-package windmove
-  :bind
-  ("<M-left>" . 'windmove-left)
-  ("<M-right>" . 'windmove-right)
-  ("<M-up>" . 'windmove-up)
-  ("<M-down>" . 'windmove-down)
   )
 
 (use-package yaml-mode)

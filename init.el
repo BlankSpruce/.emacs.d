@@ -81,6 +81,7 @@
    ("S" edit-current-file-as-root "Edit current file as root")
    ("t" toggle-truncate-lines "Toggle truncate lines")
    ("w" whitespace-cleanup "Cleanup whitespaces")
+   ("z" multi-term "multi-term")
    ("?" which-key-show-major-mode "which-key major-mode")
    )
 
@@ -775,14 +776,11 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
   )
 
 (use-package undo-tree
+  :config
+  (global-undo-tree-mode 1)
+
   :custom
   (undo-tree-visualizer-timestamps t)
-
-  :hook
-  (
-   (text-mode . undo-tree-mode)
-   (prog-mode . undo-tree-mode)
-   )
 
   :bind*
   ("C-z" . 'undo-tree-undo)

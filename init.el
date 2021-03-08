@@ -304,7 +304,14 @@ Split        ^^Winner         ^^Other
   (cc-mode . flycheck-mode)
   )
 
-(use-package format-all)
+(use-package format-all
+  :config
+  (define-format-all-formatter gersemi
+    (:executable "gersemi")
+    (:install "pip install gersemi")
+    (:languages "CMake")
+    (:format (format-all--buffer-easy executable "-")))
+  )
 
 (use-package fzf)
 

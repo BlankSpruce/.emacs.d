@@ -51,6 +51,7 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (use-package esup
+  :commands (esup)
   :config
   (setq esup-depth 0)
   )
@@ -61,7 +62,6 @@
   )
 
 (use-package blankspruce
-  :after helm hydra helpers ialign markdown-preview-mode origami which-key
   :demand t
   :ensure nil
 
@@ -158,32 +158,30 @@ Split        ^^Winner         ^^Other
   ("M-O" . 'hydra-windows/body)
   )
 
-(use-package rg)
-
-(use-package wgrep-rg
-  :ensure nil
-  :after rg hydra
-
-  :hydra (hydra-wgrep-rg (:exit t
-                          :idle 1.0)
-    "wgrep-rg"
-    ("e" wgrep-change-to-wgrep-mode "edit")
-    ("f" wgrep-finish-edit "finish edits")
-    ("s" wgrep-save-all-buffers "save edits")
-    )
+(use-package rg
+  :hydra
+  (hydra-wgrep-rg
+   (:exit t :idle 1.0)
+   "wgrep-rg"
+   ("e" wgrep-change-to-wgrep-mode "edit")
+   ("f" wgrep-finish-edit "finish edits")
+   ("s" wgrep-save-all-buffers "save edits")
+   )
 
   :bind
   (:map rg-mode-map
         ("M-i" . 'hydra-wgrep-rg/body))
   (:map wgrep-mode-map
         ("M-i" . 'hydra-wgrep-rg/body))
+
+  :commands (rg rg-dwim rg-project)
   )
 
 (use-package cc-mode)
 
 (use-package color-identifiers-mode
-  :config
-  (global-color-identifiers-mode)
+  :hook
+  (prog-mode . color-identifiers-mode)
 
   :custom
   (color-identifiers:timer (run-with-idle-timer 1.5 t 'color-identifiers:refresh))
@@ -302,12 +300,8 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package flycheck
-  :after cc-mode
-
   :hook
-  (
-   (c-mode-common . flycheck-mode)
-   )
+  (cc-mode . flycheck-mode)
   )
 
 (use-package format-all)
@@ -335,7 +329,6 @@ Split        ^^Winner         ^^Other
 (use-package helm
   :custom
   (helm-always-two-windows nil)
-  (helm-display-buffer-display-height 16)
   (helm-default-display-buffer-functions '(display-buffer-in-side-window))
   (helm-buffer-max-length 80)
   (helm-ff-lynx-style-map nil)
@@ -359,8 +352,6 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package helm-ag
-  :after rg hydra
-
   :custom
   (helm-ag-base-command "rg --line-number --no-heading --smart-case")
   (helm-ag-success-exit-status '(0 2))
@@ -400,8 +391,6 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package helpful
-  :after helm
-
   :custom
   (helm-describe-function-function 'helpful-symbol)
   (helm-describe-variable-function 'helpful-symbol)
@@ -415,8 +404,6 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package hl-anything
-  :after hydra
-
   :hydra (hydra-highlight (:hint nil
                            :idle 1.0)
     "
@@ -462,10 +449,12 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package lsp-mode
+  :commands (lsp)
   :custom (lsp-prefer-flymake nil)
   )
 
 (use-package ccls
+  :after lsp-mode
   :custom
   (ccls-executable "/usr/bin/ccls")
   (ccls-initialization-options
@@ -477,7 +466,7 @@ Split        ^^Winner         ^^Other
    )
 
   :hook
-  ((c-mode c++-mode) . (lambda () (require 'ccls) (lsp)))
+  (cc-mode . (lambda () (require 'ccls) (lsp)))
   )
 
 (use-package lsp-ui
@@ -495,7 +484,8 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package company-lsp
-  :after company
+  :after company lsp-mode
+
   :config
   (push 'company-lsp company-backends)
 
@@ -507,11 +497,9 @@ Split        ^^Winner         ^^Other
 (use-package magit
   :after hydra
 
-  :custom
-  (dotfiles-git-dir (concat "--git-dir=" (expand-file-name "~/.dotfiles")))
-  (dotfiles-work-tree (concat "--work-tree=" (expand-file-name "~")))
-
   :config
+  (setq dotfiles-git-dir (concat "--git-dir=" (expand-file-name "~/.dotfiles"))
+        dotfiles-work-tree (concat "--work-tree=" (expand-file-name "~")))
   (defun dotfiles-magit-status ()
     (interactive)
     (add-to-list 'magit-git-global-arguments dotfiles-git-dir)
@@ -542,8 +530,8 @@ Split        ^^Winner         ^^Other
 
   :bind
   ("M-g" . 'hydra-magit/body)
-  (:map magit-blame-read-only-mode-map
-        ("c" . 'magit-blame-copy-hash))
+
+  :commands (hydra-magit/body)
   )
 
 (use-package markdown-mode
@@ -572,13 +560,13 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package markdown-preview-mode
-  :after hydra
-
   :hydra (hydra-markdown ()
     "Markdown"
     ("p" markdown-preview-mode "preview")
     ("c" markdown-preview-cleanup "cleanup")
     )
+
+  :commands (hydra-markdown/body)
   )
 
 (use-package move-text
@@ -618,8 +606,6 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package multiple-cursors
-  :after hydra
-
   :custom
   (mc/list-file (ec-path "mc" ".mc-lists.el"))
 
@@ -646,7 +632,7 @@ Split        ^^Winner         ^^Other
     ;; Help with click recognition in this hydra
     ("<down-mouse-1>" ignore)
     ("<drag-mouse-1>" ignore)
-    ("q" nil))
+    ("q" mc/keyboard-quit :exit t))
 
   :bind
   ("M-n" . 'hydra-multiple-cursors/body)
@@ -664,14 +650,23 @@ Split        ^^Winner         ^^Other
 
 (use-package origami
   :config
-  (global-origami-mode)
+  (defun bs/enable-origami ()
+    (interactive)
+    (unless origami-mode
+      (origami-mode 1)))
+
+  (defun bs/disable-origami ()
+    (interactive)
+    (origami-mode -1))
 
   :hydra
   (hydra-origami
-   (:color red)
+   (:pre (bs/enable-origami)
+    :color red
+    :hint nil)
    "
-_o_pen node    _n_ext fold       _t_oggle forward  _s_how current only
-_c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
+_o_pen node    _n_ext fold       _t_oggle forward  _s_how current only  _q_uit
+_c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit origami
   "
    ("o" origami-open-node)
    ("c" origami-close-node)
@@ -681,13 +676,14 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
    ("a" origami-toggle-all-nodes)
    ("s" origami-show-only-node)
    ("r" origami-reset)
+   ("q" nil)
+   ("Q" bs/disable-origami :exit t)
    )
   )
 
 (use-package projectile
-  :after rg
   :config
-  (projectile-global-mode)
+  (projectile-mode)
   (when (executable-find "fd")
     (setq projectile-git-command "fd . -0")
     )
@@ -698,8 +694,6 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
   )
 
 (use-package helm-projectile
-  :after helm projectile helm-ag
-
   :config
   (defun actual-helm-projectile-find-file-dwim ()
     (interactive)
@@ -740,6 +734,7 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
    "Inside swiper"
    ("a" swiper-avy "Jump to candidate")
    ("m" swiper-mc "Multiple cursors")
+   ("o" ivy-occur "Occur")
    ("r" swiper-recenter-top-bottom "Recenter")
    ("t" swiper-toggle-face-matching "Toggle face matching")
    )
@@ -748,11 +743,11 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
    (:exit t)
    "Swiper"
    ("a" swiper-all "All buffers")
-   ("f" swiper-thing-at-point "Thing at point")
+   ("f" swiper-isearch-thing-at-point "Thing at point")
    )
 
   :bind
-  ("C-f" . 'swiper)
+  ("C-f" . 'swiper-isearch)
   ("M-f" . 'hydra-swiper/body)
   (:map swiper-map
         ("M-i" . 'hydra-inside-swiper/body)
@@ -812,12 +807,9 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
     )
 
   :bind
-  ("M-d" . #'hydra-vdiff-entry/body)
-
-  :custom-face
-  (diff-added   ((t (:background "#335533" :foreground "#ddffdd"))))
-  (diff-removed ((t (:background "#553333" :foreground "#ffdddd"))))
-  (diff-changed ((t (:background "#333355" :foreground "#ddddff"))))
+  ("M-d" . 'hydra-vdiff-entry/body)
+  (:map vdiff-mode-map ("M-i" . 'vdiff-hydra/body))
+  (:map vdiff-3way-mode-map ("M-i" . 'vdiff-hydra/body))
   )
 
 (use-package vdiff-magit
@@ -844,7 +836,6 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
   )
 
 (use-package which-key
-  :after dired
   :hook (after-init . which-key-mode)
 
   :bind
@@ -864,17 +855,15 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset
   (yas-reload-all)
 
   :hook
-  (
-   (c++-mode    . yas-minor-mode)
-   (python-mode . yas-minor-mode)
-   )
+  (prog-mode . yas-minor-mode)
   )
 
-(use-package yasnippet-snippets)
+(use-package yasnippet-snippets
+  :after yasnippet
+  )
 
 (use-package helm-c-yasnippet
   :after yasnippet
-
   :custom
   (helm-yas-space-match-any-greedy t)
 

@@ -106,7 +106,6 @@
 
   :bind*
   ("C-a" . mark-whole-buffer)
-  ("C-l" . goto-line)
   ("C-s" . save-buffer)
   ("C-;" . comment-line)
   ("<C-return>" . rectangle-mark-mode)
@@ -156,6 +155,15 @@ Split        ^^Winner         ^^Other
   :bind*
   ("M-o" . 'ace-window)
   ("M-O" . 'hydra-windows/body)
+  )
+
+(use-package avy
+  :custom
+  (avy-case-fold-search nil)
+
+  :bind*
+  ("C-t" . avy-goto-char)
+  ("C-l" . avy-goto-line)
   )
 
 (use-package rg

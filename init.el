@@ -111,6 +111,8 @@
   ("<C-return>" . rectangle-mark-mode)
   ("M-q" . kill-buffer)
   ("M-p" . recenter-top-bottom)
+  ("M-[" . switch-to-prev-buffer)
+  ("M-]" . switch-to-next-buffer)
   ([f5] . revert-buffer-without-confirmation)
   ([f12] . hydra-miscellaneous/body)
   )
@@ -361,6 +363,7 @@ Split        ^^Winner         ^^Other
   ([remap find-file] . 'helm-find-files)
   ([remap yank-pop] . 'helm-show-kill-ring)
   (:map helm-map
+        ("<escape>" . 'helm-keyboard-quit)
         ("<left>" . 'backward-char)
         ("<right>" . 'forward-char)
         )

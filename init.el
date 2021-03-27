@@ -1,9 +1,6 @@
 ;; Garbage collection threshold
 (setq gc-cons-threshold (* 50 1000 1000))
 
-;; Ask before exit
-(setq confirm-kill-emacs 'yes-or-no-p)
-
 ;; Melpa
 (prefer-coding-system 'utf-8)
 (defconst emacs-config (expand-file-name user-emacs-directory))
@@ -12,19 +9,6 @@
 (if (eq system-type 'windows-nt)
     (setq doc-view-ghostscript-program "gswin64c")
   )
-
-;; Customize file
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(if (not (file-exists-p custom-file))
-    (with-temp-buffer (write-file custom-file))
-  )
-(load custom-file)
-
-;; Spaces
-(setq-default indent-tabs-mode nil)
-
-;; Prefer newer files
-(setq load-prefer-newer t)
 
 (require 'package)
 (setq package-archives
@@ -36,9 +20,8 @@
         )
       )
 (package-initialize)
-(when (not package-archive-contents)
-  (package-refresh-contents)
-)
+(unless package-archive-contents
+  (package-refresh-contents))
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 (require 'use-package)
@@ -64,6 +47,7 @@
 (use-package blankspruce
   :demand t
   :ensure nil
+  :after hydra
 
   :hydra
   (hydra-miscellaneous
@@ -86,7 +70,8 @@
    )
 
   :config
-  (setq-default cursor-type 'bar)
+  (setq-default cursor-type 'bar
+                indent-tabs-mode nil)
   (set-frame-parameter nil 'fullscreen 'maximized)
   (set-face-font 'default "MesloLGS NF-11")
   (tool-bar-mode -1)
@@ -96,13 +81,22 @@
   (delete-selection-mode 1)
   (display-line-numbers-mode 1)
   (show-paren-mode)
+  (unless (file-exists-p custom-file)
+    (with-temp-buffer (write-file custom-file)))
+  (load custom-file)
+  (put 'narrow-to-page 'disabled nil)
+  (put 'narrow-to-region 'disabled nil)
+
   (defun bs/fuzzy-find-file ()
     (interactive)
     (helm-find t))
 
   :custom
+  (confirm-kill-emacs 'yes-or-no-p)
+  (custom-file (expand-file-name "custom.el" user-emacs-directory))
   (frame-title-format "[Emacs] %f")
   (frame-resize-pixelwise t)
+  (load-prefer-newer t)
 
   :bind*
   ("C-a" . mark-whole-buffer)
@@ -157,6 +151,8 @@ Split        ^^Winner         ^^Other
   :bind*
   ("M-o" . 'ace-window)
   ("M-O" . 'hydra-windows/body)
+
+  :commands (hydra-windows/body)
   )
 
 (use-package avy
@@ -169,6 +165,8 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package rg
+  :after hydra
+
   :hydra
   (hydra-wgrep-rg
    (:exit t :idle 1.0)
@@ -370,6 +368,8 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package helm-ag
+  :after hydra
+
   :custom
   (helm-ag-base-command "rg --line-number --no-heading --smart-case")
   (helm-ag-success-exit-status '(0 2))
@@ -406,6 +406,8 @@ Split        ^^Winner         ^^Other
 
   :hook
   (cc-mode . (lambda () (local-unset-key (kbd "M-k"))))
+
+  :commands (hydra-helm-ag/body)
   )
 
 (use-package helpful
@@ -499,17 +501,6 @@ Split        ^^Winner         ^^Other
         ("C-." . lsp-ui-peek-find-definitions)
         ("C-?" . lsp-ui-peek-find-references)
         )
-  )
-
-(use-package company-lsp
-  :after company lsp-mode
-
-  :config
-  (push 'company-lsp company-backends)
-
-  :custom
-  (company-lsp-async t)
-  (company-lsp-cache-candidates 'auto)
   )
 
 (use-package magit

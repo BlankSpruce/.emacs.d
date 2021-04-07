@@ -817,8 +817,25 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   :config
   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map)
   (define-key vdiff-3way-mode-map (kbd "C-c") vdiff-mode-prefix-map)
+  (defun bs/filter-vdiff-buffers-args (args)
+    (let ((buffer-a (cl-first args))
+          (buffer-b (cl-second args))
+          (on-quit (cl-fourth args)))
+      (list buffer-a buffer-b nil on-quit t nil)))
 
-  :hydra (hydra-vdiff-entry (:hint nil)
+  (defun bs/filter-vdiff-buffers3-args (args)
+    (let ((buffer-a (cl-first args))
+          (buffer-b (cl-second args))
+          (buffer-c (cl-third args))
+          (on-quit (cl-fourth args)))
+      (list buffer-a buffer-b buffer-c on-quit t nil)))
+
+  (advice-add 'vdiff-buffers :filter-args 'bs/filter-vdiff-buffers-args)
+  (advice-add 'vdiff-buffers3 :filter-args 'bs/filter-vdiff-buffers3-args)
+
+  :hydra
+  (hydra-vdiff-entry
+   (:hint nil)
     "
  2-way^^              3-way^^              Miscellaneous
 ------------------------------------------------------------------------

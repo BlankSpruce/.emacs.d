@@ -319,6 +319,8 @@ Split        ^^Winner         ^^Other
     (:install "pip install gersemi")
     (:languages "CMake")
     (:format (format-all--buffer-easy executable "-")))
+
+  :commands (format-all-buffer)
   )
 
 (use-package fzf)
@@ -342,6 +344,8 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package helm
+  :defer t
+
   :custom
   (helm-always-two-windows nil)
   (helm-default-display-buffer-functions '(display-buffer-in-side-window))
@@ -688,9 +692,13 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
    ("q" nil)
    ("Q" bs/disable-origami :exit t)
    )
+
+  :commands (hydra-origami/body)
   )
 
 (use-package projectile
+  :defer nil
+
   :config
   (projectile-mode)
   (when (executable-find "fd")
@@ -703,6 +711,8 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   )
 
 (use-package helm-projectile
+  :after helm projectile
+
   :config
   (defun actual-helm-projectile-find-file-dwim ()
     (interactive)
@@ -714,6 +724,8 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
 
   :bind
   ("C-k" . 'actual-helm-projectile-find-file-dwim)
+
+  :commands (actual-helm-projectile-find-file-dwim)
   )
 
 (use-package restart-emacs)
@@ -768,6 +780,8 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   )
 
 (use-package term
+  :defer t
+
   :config
   (setq-default term-scroll-show-maximum-output t)
   )
@@ -788,6 +802,8 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   ("C-z" . 'undo-tree-undo)
   ("C-S-z" . 'undo-tree-redo)
   ("M-z" . 'undo-tree-visualize)
+
+  :commands (undo-tree-undo undo-tree-redo undo-tree-visualize)
   )
 
 (use-package vdiff
@@ -819,10 +835,12 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   ("M-d" . 'hydra-vdiff-entry/body)
   (:map vdiff-mode-map ("M-i" . 'vdiff-hydra/body))
   (:map vdiff-3way-mode-map ("M-i" . 'vdiff-hydra/body))
+
+  :commands (hydra-vdiff-entry/body)
   )
 
 (use-package vdiff-magit
-  :after magit vdiff
+  :after magit
 
   :config
   (transient-suffix-put 'magit-dispatch "e" :description "vdiff (dwim)")

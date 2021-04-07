@@ -60,6 +60,22 @@
     )
   )
 
+(defun bs/copy-file-location ()
+  (interactive)
+  (let ((copy
+         (lambda (result)
+           (kill-new result)
+           (message "Copied: %s" result)))
+        (resolve-path
+         (lambda (path) (file-relative-name path (projectile-project-root)))))
+    (if (equal major-mode 'dired-mode)
+        (funcall copy (funcall resolve-path default-directory))
+      (let ((name (buffer-file-name)))
+        (when name
+          (funcall
+           copy
+           (format "%s:%d" (funcall resolve-path name) (line-number-at-pos))))))))
+
 (defun eval-and-replace ()
   (interactive)
   (backward-kill-sexp)

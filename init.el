@@ -797,6 +797,7 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
 
   :custom
   (undo-tree-visualizer-timestamps t)
+  (undo-tree-enable-undo-in-region t)
 
   :bind*
   ("C-z" . 'undo-tree-undo)
@@ -864,6 +865,9 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
 
 (use-package which-key
   :hook (after-init . which-key-mode)
+
+  :config
+  (push '((nil . "ryo:.*:") . (nil . "")) which-key-replacement-alist)
 
   :bind
   (:map dired-mode-map ("." . which-key-show-major-mode))

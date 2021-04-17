@@ -3,12 +3,37 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        bs/beginning-of-indentation-or-line
+        bs/do-nothing
+        indent-for-tab-command
         ))
 
 (setq mc/cmds-to-run-once
       '(
-        hydra-multiple-cursors/mc/edit-lines-and-exit
+        helpful-key
         hydra-inside-swiper/swiper-mc-and-exit
+        hydra-multiple-cursors/body
+        hydra-multiple-cursors/ignore
+        hydra-multiple-cursors/mc/add-cursor-on-click
+        hydra-multiple-cursors/mc/edit-lines-and-exit
+        hydra-multiple-cursors/mc/insert-letters-and-exit
+        hydra-multiple-cursors/mc/insert-numbers-and-exit
+        hydra-multiple-cursors/mc/keyboard-quit-and-exit
+        hydra-multiple-cursors/mc/mark-all-in-region-regexp-and-exit
+        hydra-multiple-cursors/mc/mark-all-like-this-and-exit
+        hydra-multiple-cursors/mc/mark-next-like-this
+        hydra-multiple-cursors/mc/mark-previous-like-this
+        hydra-multiple-cursors/mc/skip-to-next-like-this
+        hydra-multiple-cursors/mc/skip-to-previous-like-this
+        hydra-multiple-cursors/mc/unmark-next-like-this
+        hydra-multiple-cursors/mc/unmark-previous-like-this
+        keyboard-escape-quit
+        keyboard-quit
+        ryo-modal-mode
+        ryo:3d3b74f114701f7ac8d0efa2730cf003:hydra-multiple-cursors/body
         swiper
+        swiper-isearch
         swiper-mc
+        winner-undo
+        y-or-n-p-insert-other
         ))

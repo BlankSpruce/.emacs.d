@@ -460,6 +460,8 @@ Split        ^^Winner         ^^Other
 
   :bind
   ("M-h" . 'hydra-highlight/body)
+
+  :commands (hydra-highlight/body)
   )
 
 (use-package hydra)
@@ -918,6 +920,243 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   :bind
   ("M-/" . 'helm-yas-complete)
   )
+
+(use-package ryo-modal
+  :hook
+  (markdown-mode . ryo-modal-mode)
+  (prog-mode     . ryo-modal-mode)
+
+  :bind*
+  ("M-m" . ryo-modal-mode)
+
+  :bind-keymap*
+  ([f9] . ryo-modal-mode-map)
+
+  :config
+  (setq ryo-modal-cursor-color "green")
+  (setq ryo-modal-cursor-type 'box)
+  (defun bs/copy-whole-line ()
+    (interactive)
+    (save-excursion
+      (let ((kill-read-only-ok t)
+            (buffer-read-only t))
+        (kill-whole-line nil))))
+
+  (defun bs/just-paste-last (times)
+    (interactive "P")
+    (dotimes (counter (or times 1))
+      (yank)))
+  (put 'bs/just-paste-last 'delete-selection 'yank)
+
+  (defun bs/beginning-of-indentation-or-line ()
+    (interactive)
+    (let ((current-point (point)))
+      (back-to-indentation)
+      (when (equal (point) current-point)
+        (beginning-of-line))))
+
+  (defun bs/do-nothing ()
+    (interactive))
+
+  (defun bs/ryo-modal-mode-which-key ()
+    (interactive)
+    (which-key-show-keymap 'ryo-modal-mode-map))
+
+  (defun bs/copy-symbol-at-point ()
+    (let ((thing (thing-at-point 'symbol)))
+      (when thing
+        (kill-new thing)
+        (message "Copied: %s" (substring-no-properties thing)))))
+
+  (defun bs/copy-region-or-symbol-at-point ()
+    (interactive)
+    (if (region-active-p)
+        (kill-ring-save (region-beginning) (region-end))
+      (bs/copy-symbol-at-point)))
+
+  (defun bs/universal-argument ()
+    (interactive)
+    (call-interactively
+     (if current-prefix-arg
+         'universal-argument-more
+       'universal-argument)))
+
+  (defun bs/kill-this-buffer ()
+    (interactive)
+    (when (yes-or-no-p "Kill this buffer? ")
+      (kill-this-buffer)))
+
+  (defun bs/newline-above ()
+    (interactive)
+    (beginning-of-line)
+    (newline-and-indent)
+    (previous-line)
+    (indent-according-to-mode))
+
+  (defun bs/newline-below ()
+    (interactive)
+    (end-of-line)
+    (newline-and-indent))
+
+  (defun bs/shell-command-on-region ()
+    (interactive)
+    (if (region-active-p)
+        (let ((current-prefix-arg 4))
+          (call-interactively 'shell-command-on-region))
+      (call-interactively 'shell-command-on-region)))
+
+  (defun bs/deactivate-mark ()
+    (interactive)
+    (deactivate-mark))
+
+  (ryo-modal-keys
+   ("<left>" bs/do-nothing)
+   ("<up>" bs/do-nothing)
+   ("<down>" bs/do-nothing)
+   ("<right>" bs/do-nothing)
+
+   ("1" "C-1")
+   ("2" "C-2")
+   ("3" "C-3")
+   ("4" "C-4")
+   ("5" "C-5")
+   ("6" "C-6")
+   ("7" "C-7")
+   ("8" "C-8")
+   ("9" "C-9")
+   ("0" "C-0")
+   ("-" "C--")
+   ("=" bs/universal-argument)
+
+   ("!" bs/do-nothing)
+   ("@" bs/do-nothing)
+   ("#" bs/do-nothing)
+   ("$" bs/do-nothing)
+   ("%" bs/do-nothing)
+   ("^" bs/do-nothing)
+   ("&" bs/do-nothing)
+   ("*" bs/do-nothing)
+   ("(" backward-sexp)
+   (")" forward-sexp)
+   ("_" bs/do-nothing)
+   ("+" bs/do-nothing)
+
+   ("Q" keyboard-escape-quit)
+   ("W" hydra-windows/body)
+   ("E" er/contract-region)
+   ("R" bs/do-nothing)
+   ("T" avy-goto-line)
+   ("Y" ryo-modal-repeat)
+   ("U" bs/do-nothing)
+   ("I" backward-paragraph)
+   ("O" forward-paragraph)
+   ("P" bs/do-nothing)
+   ("{" move-text-up)
+   ("}" move-text-down)
+   ("|" bs/shell-command-on-region)
+
+   ("q" keyboard-quit)
+   ("w" ace-window)
+   ("e" er/expand-region)
+   ("r" vr/query-replace)
+   ("t" avy-goto-char-timer)
+   ("y" ryo-modal-repeat)
+   ("u" bs/beginning-of-indentation-or-line)
+   ("i" previous-line)
+   ("o" next-line)
+   ("p" end-of-line)
+   ("[" bs/do-nothing)
+   ("]" bs/do-nothing)
+   ("\\" bs/do-nothing)
+
+   ("A" bs/do-nothing)
+   ("S" write-file)
+   ("D" bs/fuzzy-find-file)
+   ("F" swiper-thing-at-point)
+   ("G" hydra-helm-ag/body)
+   ("H" bs/newline-above)
+   ("J" backward-sentence)
+   ("K" backward-word)
+   ("L" forward-word)
+   (":" forward-sentence)
+   ("\"" bs/do-nothing)
+
+   ("a" bs/do-nothing)
+   ("s" save-buffer)
+   ("d" helm-find-files)
+   ("f" swiper)
+   ("g" rg-dwim)
+   ("h" bs/newline-below)
+   ("j" bs/beginning-of-indentation-or-line)
+   ("k" backward-char)
+   ("l" forward-char)
+   (";" end-of-line)
+   ("'" bs/do-nothing)
+
+   ("Z" undo-tree-redo)
+   ("X" kill-whole-line)
+   ("C" bs/copy-whole-line)
+   ("V" helm-show-kill-ring)
+   ("B" bs/do-nothing)
+   ("N" bs/do-nothing)
+   ("M" bs/deactivate-mark)
+   ("<" beginning-of-buffer)
+   (">" end-of-buffer)
+   ("?" bs/ryo-modal-mode-which-key)
+
+   ("z" undo-tree-undo)
+   ("x" kill-region)
+   ("c" bs/copy-region-or-symbol-at-point)
+   ("v" bs/just-paste-last)
+   ("b" cycle-spacing)
+   ("n" bs/do-nothing)
+   ("m" set-mark-command)
+   ("," "M-,")
+   ("." "M-.")
+   ("/" comment-line)
+
+   )
+  (ryo-modal-key
+   "SPC"
+   '(
+     ("M-m" ryo-modal-mode)
+
+     ("q" quit-window)
+     ("e"
+      (
+       ("b" eval-buffer)
+       ("r" eval-region)
+       ))
+     ("r" rectangle-mark-mode)
+     ("t" format-all-buffer)
+     ("u" hydra-miscellaneous/body)
+     ("o" hydra-origami/body)
+     ("[" switch-to-prev-buffer)
+     ("]" switch-to-next-buffer)
+
+     ("f" hydra-swiper/body)
+     ("g" hydra-magit/body)
+     ("h" hydra-highlight/body)
+
+     ("B"
+      (
+       ("q" bs/kill-this-buffer)
+       ("b" kill-buffer)
+       ))
+
+     ("z" undo-tree-visualize)
+     ("b" helm-mini)
+     ("n"
+      (
+       ("q" nil)
+       ("d" narrow-to-defun)
+       ("n" narrow-to-region)
+       ("p" narrow-to-page)
+       ("w" widen)
+       ))
+     ("m" hydra-multiple-cursors/body)
+     ))
+   )
 
 ;; Garbage collection threshold lower after loading packages
 (setq gc-cons-threshold (* 2 1000 1000))

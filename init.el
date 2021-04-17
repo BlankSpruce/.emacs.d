@@ -785,6 +785,7 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   ("M-f" . 'hydra-swiper/body)
   (:map swiper-map
         ("M-i" . 'hydra-inside-swiper/body)
+        ("<escape>" . 'minibuffer-keyboard-quit)
         )
   )
 

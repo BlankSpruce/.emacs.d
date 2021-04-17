@@ -357,6 +357,11 @@ Split        ^^Winner         ^^Other
   (helm-default-display-buffer-functions '(display-buffer-in-side-window))
   (helm-buffer-max-length 80)
   (helm-ff-lynx-style-map nil)
+  (helm-mini-default-sources
+   '(helm-source-buffers-list
+     helm-source-bookmarks
+     helm-source-recentf
+     helm-source-buffer-not-found))
 
   :config
   (with-eval-after-load "helm-files"

@@ -59,17 +59,33 @@
    ("e" eval-and-replace "Eval and replace")
    ("f" bs/fuzzy-find-file "Fuzzy find file")
    ("F" format-all-buffer "Format all buffer")
-   ("h" hl-line-mode "Line highlighting")
-   ("l" display-line-numbers-mode "Line numbers")
    ("m" hydra-markdown/body "Markdown preview")
    ("o" hydra-origami/body "Origami")
    ("q" nil :exit t)
    ("r" reload-emacs-config "Reload emacs config")
    ("S" edit-current-file-as-root "Edit current file as root")
-   ("t" toggle-truncate-lines "Toggle truncate lines")
+   ("t" hydra-toggles/body "Toggles")
    ("w" whitespace-cleanup "Cleanup whitespaces")
    ("z" multi-term "multi-term")
    ("?" which-key-show-major-mode "which-key major-mode")
+   )
+
+  (hydra-toggles
+   (:hint none)
+   "
+[_c_] ?c? Color indentifiers   [_l_] ?l? Display line numbers   [_t_] ?t? Truncate long lines
+[_f_] ?f? Follow               [_o_] ?o? Origami                [_E_] ?E? Debug on error
+[_h_] ?h? Highlight line       [_w_] ?w? Whitespace             [_Q_] ?Q? Debug on quit         [_q_] quit"
+   ("c" color-identifiers-mode (bs/toggle-to-string 'color-identifiers-mode))
+   ("f" follow-mode (bs/toggle-to-string 'follow-mode))
+   ("h" hl-line-mode (bs/toggle-to-string 'hl-line-mode))
+   ("l" display-line-numbers-mode (bs/toggle-to-string 'display-line-numbers))
+   ("o" origami-mode (bs/toggle-to-string 'origami-mode))
+   ("w" whitespace-mode (bs/toggle-to-string 'whitespace-mode))
+   ("t" toggle-truncate-lines (bs/toggle-to-string 'truncate-lines))
+   ("E" toggle-debug-on-error (bs/toggle-to-string 'debug-on-error))
+   ("Q" toggle-debug-on-quit (bs/toggle-to-string 'debug-on-quit))
+   ("q" nil :exit t)
    )
 
   :config

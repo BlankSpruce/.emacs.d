@@ -100,4 +100,9 @@
      (list mode)))
   (chmod (buffer-file-name) mode))
 
+(defun bs/toggle-to-string (var)
+  (if (and (boundp var) (symbol-value var))
+      (propertize "✔" 'face '((t :foreground "lime green")))
+    (propertize "✘" 'face '((t :foreground "dark red")))))
+
 (provide 'helpers)

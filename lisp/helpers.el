@@ -47,6 +47,10 @@
   (toggle-read-only)
   )
 
+(defun bs/loud-copy (string &optional format-string)
+  (kill-new string)
+  (message (or format-string "%s") string))
+
 (defun copy-file-name-to-clipboard ()
   "Copy the current buffer file name to the clipboard."
   (interactive)
@@ -54,18 +58,11 @@
                       default-directory
                     (buffer-file-name))))
     (when filename
-      (kill-new filename)
-      (message "Copied buffer file name '%s' to the clipboard." filename)
-      )
-    )
-  )
+      (bs/loud-copy filename "Copied buffer file name '%s' to the clipboard."))))
 
 (defun bs/copy-file-location ()
   (interactive)
-  (let ((copy
-         (lambda (result)
-           (kill-new result)
-           (message "Copied: %s" result)))
+  (let ((copy (lambda (result) (bs/loud-copy result "Copied: %s")))
         (resolve-path
          (lambda (path) (file-relative-name path (projectile-project-root)))))
     (if (equal major-mode 'dired-mode)
@@ -75,6 +72,12 @@
           (funcall
            copy
            (format "%s:%d" (funcall resolve-path name) (line-number-at-pos))))))))
+
+(defun bs/eval-command-and-produce-nice-output (command)
+  (interactive "sCommand: ")
+  (let* ((command-result (shell-command-to-string command))
+         (result (format "$ %s\n%s" command command-result)))
+    (bs/loud-copy result)))
 
 (defun eval-and-replace ()
   (interactive)
@@ -90,5 +93,11 @@
      )
     )
   )
+
+(defun bs/chmod-this (mode)
+  (interactive
+   (let ((mode (read-file-modes "Mode: " (buffer-file-name))))
+     (list mode)))
+  (chmod (buffer-file-name) mode))
 
 (provide 'helpers)

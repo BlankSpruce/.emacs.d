@@ -53,14 +53,17 @@
   (hydra-miscellaneous
    (:exit t :columns 4)
    ""
+   ("!" bs/eval-command-and-produce-nice-output "Eval command and produce nice output")
    ("a" ialign "Interactive align")
+   ("c" bs/chmod-this "Chmod this")
    ("e" eval-and-replace "Eval and replace")
    ("f" bs/fuzzy-find-file "Fuzzy find file")
-   ("F" format-all-buffer)
+   ("F" format-all-buffer "Format all buffer")
    ("h" hl-line-mode "Line highlighting")
    ("l" display-line-numbers-mode "Line numbers")
    ("m" hydra-markdown/body "Markdown preview")
    ("o" hydra-origami/body "Origami")
+   ("q" nil :exit t)
    ("r" reload-emacs-config "Reload emacs config")
    ("S" edit-current-file-as-root "Edit current file as root")
    ("t" toggle-truncate-lines "Toggle truncate lines")

@@ -170,6 +170,9 @@ Split        ^^Winner         ^^Other
 (use-package rg
   :after hydra
 
+  :custom
+  (wgrep-auto-save-buffer t)
+
   :hydra
   (hydra-wgrep-rg
    (:exit t :idle 1.0)

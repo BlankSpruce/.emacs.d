@@ -1,24 +1,15 @@
 ;; Garbage collection threshold
 (setq gc-cons-threshold (* 50 1000 1000))
 
-;; Melpa
-(prefer-coding-system 'utf-8)
-(defconst emacs-config (expand-file-name user-emacs-directory))
-
-;; Ghostscript
-(if (eq system-type 'windows-nt)
-    (setq doc-view-ghostscript-program "gswin64c")
-  )
-
 (require 'package)
 (setq package-archives
       '(
         ("gnu"          . "https://elpa.gnu.org/packages/")
         ("melpa"        . "https://melpa.org/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/")
-        ("marmalade"    . "https://marmalade-repo.org/packages/")
         )
       )
+(prefer-coding-system 'utf-8)
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
@@ -26,19 +17,16 @@
   (package-install 'use-package))
 (require 'use-package)
 (setq use-package-always-ensure t
-      use-package-verbose t
-      )
+      use-package-verbose t)
+
 (use-package use-package-hydra)
 
+(defun bs/emacs-d (path)
+  (expand-file-name path user-emacs-directory))
+
+(add-to-list 'load-path (bs/emacs-d "lisp"))
+
 ;; Local packages
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-
-(use-package esup
-  :commands (esup)
-  :config
-  (setq esup-depth 0)
-  )
-
 (use-package helpers
   :demand t
   :ensure nil
@@ -49,6 +37,29 @@
   :ensure nil
   :after hydra
 
+  :init
+  (set-face-font 'default "MesloLGS NF-12")
+
+  :config
+  (setq-default cursor-type 'bar
+                indent-tabs-mode nil)
+  (column-number-mode 1)
+  (delete-selection-mode 1)
+  (display-line-numbers-mode 1)
+  (show-paren-mode)
+  (unless (file-exists-p custom-file)
+    (with-temp-buffer (write-file custom-file)))
+  (load custom-file)
+  (put 'narrow-to-page 'disabled nil)
+  (put 'narrow-to-region 'disabled nil)
+
+  :custom
+  (confirm-kill-emacs 'yes-or-no-p)
+  (custom-file (bs/emacs-d "custom.el"))
+  (frame-title-format "[Emacs] %f")
+  (frame-resize-pixelwise t)
+  (load-prefer-newer t)
+
   :hydra
   (hydra-miscellaneous
    (:exit t :columns 4)
@@ -57,11 +68,10 @@
    ("a" ialign "Interactive align")
    ("c" bs/chmod-this "Chmod this")
    ("e" eval-and-replace "Eval and replace")
-   ("f" bs/fuzzy-find-file "Fuzzy find file")
    ("F" format-all-buffer "Format all buffer")
    ("m" hydra-markdown/body "Markdown preview")
    ("o" hydra-origami/body "Origami")
-   ("q" nil :exit t)
+   ("q" nil "Quit" :exit t)
    ("r" reload-emacs-config "Reload emacs config")
    ("S" edit-current-file-as-root "Edit current file as root")
    ("t" hydra-toggles/body "Toggles")
@@ -88,42 +98,11 @@
    ("q" nil :exit t)
    )
 
-  :config
-  (setq-default cursor-type 'bar
-                indent-tabs-mode nil)
-  (set-frame-parameter nil 'fullscreen 'maximized)
-  (set-face-font 'default "MesloLGS NF-11")
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (menu-bar-mode -1)
-  (column-number-mode 1)
-  (delete-selection-mode 1)
-  (display-line-numbers-mode 1)
-  (show-paren-mode)
-  (unless (file-exists-p custom-file)
-    (with-temp-buffer (write-file custom-file)))
-  (load custom-file)
-  (put 'narrow-to-page 'disabled nil)
-  (put 'narrow-to-region 'disabled nil)
-
-  (defun bs/fuzzy-find-file ()
-    (interactive)
-    (helm-find t))
-
-  :custom
-  (confirm-kill-emacs 'yes-or-no-p)
-  (custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (frame-title-format "[Emacs] %f")
-  (frame-resize-pixelwise t)
-  (load-prefer-newer t)
-
   :bind*
   ("C-a" . mark-whole-buffer)
   ("C-s" . save-buffer)
   ("C-;" . comment-line)
   ("<C-return>" . rectangle-mark-mode)
-  ("M-q" . kill-buffer)
-  ("M-p" . recenter-top-bottom)
   ("M-[" . switch-to-prev-buffer)
   ("M-]" . switch-to-next-buffer)
   ([f5] . revert-buffer-without-confirmation)
@@ -132,13 +111,14 @@
 
 ;; Foreign packages
 (use-package ace-window
+  :after hydra
+
   :config
   (ace-window-display-mode)
   (defun bs/winner-undo ()
     (interactive)
     (winner-undo)
-    (setq this-command 'winner-undo)
-    )
+    (setq this-command 'winner-undo))
 
   :hydra
   (hydra-windows
@@ -167,47 +147,20 @@ Split        ^^Winner         ^^Other
   (aw-reverse-frame-list t)
   (aw-background nil)
 
-  :bind*
-  ("M-o" . 'ace-window)
-  ("M-O" . 'hydra-windows/body)
-
   :commands (hydra-windows/body)
   )
 
 (use-package avy
   :custom
   (avy-case-fold-search nil)
-
-  :bind*
-  ("C-t" . avy-goto-char)
-  ("C-l" . avy-goto-line)
-  )
-
-(use-package rg
-  :after hydra
-
-  :custom
-  (wgrep-auto-save-buffer t)
-
-  :hydra
-  (hydra-wgrep-rg
-   (:exit t :idle 1.0)
-   "wgrep-rg"
-   ("e" wgrep-change-to-wgrep-mode "edit")
-   ("f" wgrep-finish-edit "finish edits")
-   ("s" wgrep-save-all-buffers "save edits")
-   )
-
-  :bind
-  (:map rg-mode-map
-        ("M-i" . 'hydra-wgrep-rg/body))
-  (:map wgrep-mode-map
-        ("M-i" . 'hydra-wgrep-rg/body))
-
-  :commands (rg rg-dwim rg-project)
   )
 
 (use-package cc-mode)
+
+(use-package cmake-mode
+  :custom
+  (cmake-tab-width 4)
+  )
 
 (use-package color-identifiers-mode
   :hook
@@ -215,11 +168,6 @@ Split        ^^Winner         ^^Other
 
   :custom
   (color-identifiers:timer (run-with-idle-timer 1.5 t 'color-identifiers:refresh))
-  )
-
-(use-package cmake-mode
-  :custom
-  (cmake-tab-width 4)
   )
 
 (use-package company
@@ -253,12 +201,12 @@ Split        ^^Winner         ^^Other
 (use-package dashboard
   :custom
   (dashboard-items
-        '(
-          (recents   . 10)
-          (projects  . 10)
-          (bookmarks . 10)
-          )
-        )
+   '(
+     (recents   . 10)
+     (projects  . 10)
+     (bookmarks . 10)
+     )
+   )
 
   :config
   (dashboard-setup-startup-hook)
@@ -269,20 +217,34 @@ Split        ^^Winner         ^^Other
 
 (use-package dired
   :ensure nil
+
+  :config
+  (use-package dired-sidebar
+    :bind
+    ([f8] . dired-sidebar-toggle-sidebar)
+    )
+
+  (use-package dired-subtree
+    :bind
+    (:map dired-mode-map
+          ("<tab>"           . dired-subtree-toggle)
+          ("<C-tab>"         . dired-subtree-cycle)
+          ("<S-iso-lefttab>" . dired-subtree-remove)
+          )
+    )
   )
 
-(use-package dired-sidebar
-  :bind
-  ([f8] . dired-sidebar-toggle-sidebar)
+(use-package display-line-numbers
+  :hook
+  (
+   (prog-mode . display-line-numbers-mode)
+   (prog-mode . hl-line-mode)
+   )
   )
 
-(use-package dired-subtree
-  :bind
-  (:map dired-mode-map
-        ("<tab>"           . dired-subtree-toggle)
-        ("<C-tab>"         . dired-subtree-cycle)
-        ("<S-iso-lefttab>" . dired-subtree-remove)
-        )
+(use-package doom-modeline
+  :hook
+  (after-init . doom-modeline-mode)
   )
 
 (use-package doom-themes
@@ -293,18 +255,20 @@ Split        ^^Winner         ^^Other
     )
   )
 
-(use-package doom-modeline
-  :hook (after-init . doom-modeline-mode)
-  )
-
 (use-package elmacro)
+
+(use-package esup
+  :custom
+  (esup-depth 0)
+
+  :commands (esup)
+  )
 
 (use-package elpy
   :defer t
 
   :init
   (advice-add 'python-mode :before 'elpy-enable)
-
 
   :hook
   (
@@ -318,11 +282,7 @@ Split        ^^Winner         ^^Other
         )
   )
 
-(use-package expand-region
-  :bind
-  ("M-@" . 'er/expand-region)
-  ("M-#" . 'er/contract-region)
-  )
+(use-package expand-region)
 
 (use-package fill-column-indicator
   :custom
@@ -380,10 +340,10 @@ Split        ^^Winner         ^^Other
      helm-source-buffer-not-found))
 
   :config
-  (with-eval-after-load "helm-files"
-    (bind-key "C-<backspace>" #'backward-kill-word helm-find-files-map)
-    )
   (helm-mode 1)
+  (defun bs/fuzzy-find-file ()
+    (interactive)
+    (helm-find t))
 
   :bind
   ("<f6>" . 'helm-mini)
@@ -396,49 +356,11 @@ Split        ^^Winner         ^^Other
         ("<left>" . 'backward-char)
         ("<right>" . 'forward-char)
         )
-  )
-
-(use-package helm-ag
-  :after hydra
-
-  :custom
-  (helm-ag-base-command "rg --line-number --no-heading --smart-case")
-  (helm-ag-success-exit-status '(0 2))
-
-  :hydra (hydra-helm-ag (:exit t
-                         :hint nil
-                         :idle 1.0)
-    "
-^^              ^Interactive^       ^Current^           [Ag Search]
-----------------------------------------------------
-[_j_] just rg   [_b_] buffers       [_B_] buffers
-[_k_] dwim      [_d_] directory     [_D_] directory
-[_l_] project   [_f_] file          [_F_] file
-^^              [_p_] project       [_P_] project"
-    ("j" rg)
-    ("k" rg-dwim)
-    ("l" rg-project)
-    ("b" helm-do-ag-buffers)
-    ("d" helm-do-ag)
-    ("f" helm-do-ag-this-file)
-    ("p" helm-do-ag-project-root)
-    ("B" helm-ag-buffers)
-    ("D" helm-ag)
-    ("F" helm-ag-this-file)
-    ("P" helm-ag-project-root)
-    )
-
-  :bind
-  ("M-k" . 'hydra-helm-ag/body)
-  (:map helm-ag-mode-map
-        ("RET" . 'helm-ag-mode-jump-other-window)
-        ("C-o" . 'helm-ag-mode-jump)
+  (:map helm-find-files-map
+        ("<C-backspace>" . 'backward-kill-word)
         )
 
-  :hook
-  (cc-mode . (lambda () (local-unset-key (kbd "M-k"))))
-
-  :commands (hydra-helm-ag/body)
+  :commands (bs/fuzzy-find-file)
   )
 
 (use-package helpful
@@ -455,26 +377,28 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package hl-anything
-  :hydra (hydra-highlight (:hint nil
-                           :idle 1.0)
-    "
+  :after hydra
+  :hydra
+  (hydra-highlight
+   (:hint nil :idle 1.0)
+   "
 ^Navigation^      ^Local^ ^Global^          ^Others^       [highlights]
 ^----------^------^-----^-^------^----------^------^-------------------
 [_,_] previous    [_h_]   [_H_] highlight   [_s_] save
 [_._] next        [_c_]   [_C_] clear       [_r_] restore
 [_q_] quit        ^^      [_T_] toggle
 "
-    ("," hl-find-prev-thing)
-    ("." hl-find-next-thing)
-    ("q" (lambda () (interactive) (deactivate-mark)) :exit t)
-    ("h" hl-highlight-thingatpt-local)
-    ("c" hl-unhighlight-all-local)
-    ("H" hl-highlight-thingatpt-global)
-    ("C" hl-unhighlight-all-global)
-    ("T" hl-global-highlight-on/off)
-    ("s" hl-save-highlights)
-    ("r" hl-restore-highlights)
-    )
+   ("," hl-find-prev-thing)
+   ("." hl-find-next-thing)
+   ("q" (lambda () (interactive) (deactivate-mark)) :exit t)
+   ("h" hl-highlight-thingatpt-local)
+   ("c" hl-unhighlight-all-local)
+   ("H" hl-highlight-thingatpt-global)
+   ("C" hl-unhighlight-all-global)
+   ("T" hl-global-highlight-on/off)
+   ("s" hl-save-highlights)
+   ("r" hl-restore-highlights)
+   )
 
   :custom
   (highlight-symbol-idle-delay 0.7)
@@ -484,9 +408,6 @@ Split        ^^Winner         ^^Other
    (text-mode . hl-highlight-mode)
    (prog-mode . hl-highlight-mode)
    )
-
-  :bind
-  ("M-h" . 'hydra-highlight/body)
 
   :commands (hydra-highlight/body)
   )
@@ -502,38 +423,40 @@ Split        ^^Winner         ^^Other
   )
 
 (use-package lsp-mode
-  :commands (lsp)
   :custom (lsp-prefer-flymake nil)
-  )
 
-(use-package ccls
-  :after lsp-mode
-  :custom
-  (ccls-executable "/usr/bin/ccls")
-  (ccls-initialization-options
-   '(:index
-     (:comments 0 :threads 2 :initialBlackList ".")
-     :completion
-     (:detailedLabel t)
+  :config
+  (use-package ccls
+    :after lsp-mode
+    :custom
+    (ccls-executable "/usr/bin/ccls")
+    (ccls-initialization-options
+     '(:index
+       (:comments 0 :threads 2 :initialBlackList ".")
+       :completion
+       (:detailedLabel t)
+       )
      )
-   )
 
-  :hook
-  (cc-mode . (lambda () (require 'ccls) (lsp)))
-  )
+    :hook
+    (cc-mode . (lambda () (require 'ccls) (lsp)))
+    )
 
-(use-package lsp-ui
-  :custom
-  (lsp-ui-doc-enable nil)
-  (lsp-ui-flycheck-enable nil)
-  (lsp-ui-sideline-enable nil)
+  (use-package lsp-ui
+    :custom
+    (lsp-ui-doc-enable nil)
+    (lsp-ui-flycheck-enable nil)
+    (lsp-ui-sideline-enable nil)
 
-  :bind
-  (:map lsp-ui-mode-map
-        ("C-," . xref-pop-marker-stack)
-        ("C-." . lsp-ui-peek-find-definitions)
-        ("C-?" . lsp-ui-peek-find-references)
-        )
+    :bind
+    (:map lsp-ui-mode-map
+          ("C-," . xref-pop-marker-stack)
+          ("C-." . lsp-ui-peek-find-definitions)
+          ("C-?" . lsp-ui-peek-find-references)
+          )
+    )
+
+  :commands (lsp)
   )
 
 (use-package magit
@@ -542,36 +465,46 @@ Split        ^^Winner         ^^Other
   :config
   (setq dotfiles-git-dir (concat "--git-dir=" (expand-file-name "~/.dotfiles"))
         dotfiles-work-tree (concat "--work-tree=" (expand-file-name "~")))
-  (defun dotfiles-magit-status ()
+  (defun bs/dotfiles-magit-status ()
     (interactive)
     (add-to-list 'magit-git-global-arguments dotfiles-git-dir)
     (add-to-list 'magit-git-global-arguments dotfiles-work-tree)
     (call-interactively 'magit-status)
     )
-  (defun my-magit-status ()
+  (defun bs/magit-status ()
     (interactive)
     (setq magit-git-global-arguments (remove dotfiles-git-dir magit-git-global-arguments))
     (setq magit-git-global-arguments (remove dotfiles-work-tree magit-git-global-arguments))
     (call-interactively 'magit-status)
     )
+  (use-package vdiff-magit
+    :config
+    (transient-suffix-put 'magit-dispatch "e" :description "vdiff (dwim)")
+    (transient-suffix-put 'magit-dispatch "e" :command 'vdiff-magit-dwim)
+    (transient-suffix-put 'magit-dispatch "E" :description "vdiff")
+    (transient-suffix-put 'magit-dispatch "E" :command 'vdiff-magit)
 
-  :hydra (hydra-magit (:exit t
-                       :idle 1.0)
-    "Magit"
-    ("a" magit-stage-file "stage file")
-    ("b" magit-blame-addition "blame")
-    ("c" magit-checkout "checkout")
-    ("d" dotfiles-magit-status "status (dotfiles)")
-    ("h" magit-log-all "log")
-    ("l" magit-log-buffer-file "file log")
-    ("m" magit-file-rename "rename file")
-    ("n" magit-branch-and-checkout "new branch from current one")
-    ("r" magit-show-refs "show branches")
-    ("s" my-magit-status "status")
+    :bind
+    (:map magit-mode-map
+          ("e" . 'vdiff-magit-dwim)
+          ("E" . 'vdiff-magit-popup))
     )
 
-  :bind
-  ("M-g" . 'hydra-magit/body)
+  :hydra
+  (hydra-magit
+   (:exit t :idle 1.0)
+   "Magit"
+   ("a" magit-stage-file "stage file")
+   ("b" magit-blame-addition "blame")
+   ("c" magit-checkout "checkout")
+   ("d" bs/dotfiles-magit-status "status (dotfiles)")
+   ("h" magit-log-all "log")
+   ("l" magit-log-buffer-file "file log")
+   ("m" magit-file-rename "rename file")
+   ("n" magit-branch-and-checkout "new branch from current one")
+   ("r" magit-show-refs "show branches")
+   ("s" bs/magit-status "status")
+   )
 
   :commands (hydra-magit/body)
   )
@@ -579,16 +512,16 @@ Split        ^^Winner         ^^Other
 (use-package markdown-mode
   :custom
   (markdown-command
-        (concat "pandoc"
-                " --mathjax"
-                " --metadata pagetitle=\"...\""
-                " --standalone"
-                " --css=" (ec-path "markdown" "github.css")
-                " --self-contained"
-                " --from=markdown --to=html5"
-                " --highlight-style=pygments"
-                )
-        )
+   (concat "pandoc"
+           " --mathjax"
+           " --metadata pagetitle=\"...\""
+           " --standalone"
+           " --css=" (bs/emacs-d "markdown/github.css")
+           " --self-contained"
+           " --from=markdown --to=html5"
+           " --highlight-style=pygments"
+           )
+   )
   (markdown-fontify-code-blocks-natively t)
   (markdown-header-scaling t)
   (markdown-preview-stylesheets (list))
@@ -599,95 +532,57 @@ Split        ^^Winner         ^^Other
   (markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.7))))
   (markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.4))))
   (markdown-table-face    ((t (:inherit font-lock-variable-name-face))))
-  )
-
-(use-package markdown-preview-mode
-  :hydra (hydra-markdown ()
-    "Markdown"
-    ("p" markdown-preview-mode "preview")
-    ("c" markdown-preview-cleanup "cleanup")
-    )
-
-  :commands (hydra-markdown/body)
-  )
-
-(use-package move-text
-  :bind
-  ("<C-S-up>" . 'move-text-up)
-  ("<C-S-down>" . 'move-text-down)
-  )
-
-(use-package multi-term
-  :custom
-  (multi-term-program "zsh")
 
   :config
-  (defun multi-term-bind-keys ()
-    (dolist
-        (bind
-         '(("C-<backspace>" . term-send-backward-kill-word)
-           ("C-<delete>" . term-send-forward-kill-word)
-           ("C-<left>" . term-send-backward-word)
-           ("C-<right>" . term-send-forward-word)
-           ("C-c C-j" . term-line-mode)
-           ("C-c C-k" . term-char-mode)
-           ("C-c C-v" . scroll-up)
-           ("C-c C-z" . term-stop-subjob)
-           ("C-c C-r" . term-send-reverse-search-history)
-           ("M-DEL" . term-send-backward-kill-word)
-           ("M-d" . term-send-forward-kill-word)
-           ("M-r" . term-send-reverse-search-history)
-           )
-         )
-      (add-to-list 'term-bind-key-alist bind)
-      )
-    )
+  (use-package markdown-preview-mode
+    :hydra
+    (hydra-markdown
+     ()
+     "Markdown"
+     ("p" markdown-preview-mode "preview")
+     ("c" markdown-preview-cleanup "cleanup")
+     )
 
-  :hook
-  (term-mode . multi-term-bind-keys)
+    :commands (hydra-markdown/body)
+    )
   )
+
+(use-package move-text)
 
 (use-package multiple-cursors
   :custom
-  (mc/list-file (ec-path "mc" ".mc-lists.el"))
+  (mc/list-file (bs/emacs-d "mc/.mc-lists.el"))
 
-  :hydra (hydra-multiple-cursors (:hint nil)
-    "
+  :hydra
+  (hydra-multiple-cursors
+   (:hint nil)
+   "
  Up^^             Down^^           Miscellaneous           % 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")
 ------------------------------------------------------------------
  [_p_]   Next     [_n_]   Next     [_l_] Edit lines  [_0_] Insert numbers
  [_P_]   Skip     [_N_]   Skip     [_a_] Mark all    [_A_] Insert letters
  [_M-p_] Unmark   [_M-n_] Unmark   [_s_] Search
- [Click] Cursor at point       [_q_] Quit"
-    ("l" mc/edit-lines :exit t)
-    ("a" mc/mark-all-like-this :exit t)
-    ("n" mc/mark-next-like-this)
-    ("N" mc/skip-to-next-like-this)
-    ("M-n" mc/unmark-next-like-this)
-    ("p" mc/mark-previous-like-this)
-    ("P" mc/skip-to-previous-like-this)
-    ("M-p" mc/unmark-previous-like-this)
-    ("s" mc/mark-all-in-region-regexp :exit t)
-    ("0" mc/insert-numbers :exit t)
-    ("A" mc/insert-letters :exit t)
-    ("<mouse-1>" mc/add-cursor-on-click)
-    ;; Help with click recognition in this hydra
-    ("<down-mouse-1>" ignore)
-    ("<drag-mouse-1>" ignore)
-    ("q" mc/keyboard-quit :exit t))
+ [Click] Cursor at point       ^^^^[_q_] Quit"
+   ("l" mc/edit-lines :exit t)
+   ("a" mc/mark-all-like-this :exit t)
+   ("n" mc/mark-next-like-this)
+   ("N" mc/skip-to-next-like-this)
+   ("M-n" mc/unmark-next-like-this)
+   ("p" mc/mark-previous-like-this)
+   ("P" mc/skip-to-previous-like-this)
+   ("M-p" mc/unmark-previous-like-this)
+   ("s" mc/mark-all-in-region-regexp :exit t)
+   ("0" mc/insert-numbers :exit t)
+   ("A" mc/insert-letters :exit t)
+   ("<mouse-1>" mc/add-cursor-on-click)
+   ;; Help with click recognition in this hydra
+   ("<down-mouse-1>" ignore)
+   ("<drag-mouse-1>" ignore)
+   ("q" mc/keyboard-quit :exit t))
 
   :bind
-  ("M-n" . 'hydra-multiple-cursors/body)
   (:map mc/keymap
         ("<return>" . nil))
-  )
-
-(use-package display-line-numbers
-  :hook
-  (
-   (prog-mode . display-line-numbers-mode)
-   (prog-mode . hl-line-mode)
-   )
   )
 
 (use-package origami
@@ -704,8 +599,8 @@ Split        ^^Winner         ^^Other
   :hydra
   (hydra-origami
    (:pre (bs/enable-origami)
-    :color red
-    :hint nil)
+         :color red
+         :hint nil)
    "
 _o_pen node    _n_ext fold       _t_oggle forward  _s_how current only  _q_uit
 _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit origami
@@ -726,38 +621,79 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   )
 
 (use-package projectile
-  :defer nil
-
   :config
   (projectile-mode)
   (when (executable-find "fd")
     (setq projectile-git-command "fd . -0")
     )
+  (use-package helm-projectile
+    :after helm
+
+    :config
+    (defun bs/helm-projectile-find-file-dwim ()
+      (interactive)
+      (if (not (projectile-project-p))
+          (helm-projectile-switch-project)
+        (helm-projectile-find-file)))
+    )
 
   :custom
   (projectile-enable-caching t)
   (projectile-indexing-method 'hybrid)
-  )
 
-(use-package helm-projectile
-  :after helm projectile
-
-  :config
-  (defun actual-helm-projectile-find-file-dwim ()
-    (interactive)
-    (if (not (projectile-project-p))
-        (helm-projectile-switch-project)
-      (helm-projectile-find-file)
-      )
-    )
-
-  :bind
-  ("C-k" . 'actual-helm-projectile-find-file-dwim)
-
-  :commands (actual-helm-projectile-find-file-dwim)
+  :commands (bs/helm-projectile-find-file-dwim)
   )
 
 (use-package restart-emacs)
+
+(use-package rg
+  :after hydra
+
+  :config
+  (use-package helm-ag
+    :after hydra
+
+    :custom
+    (helm-ag-base-command "rg --line-number --no-heading --smart-case")
+    (helm-ag-success-exit-status '(0 2))
+
+    :bind
+    (:map helm-ag-mode-map
+          ("RET" . 'helm-ag-mode-jump-other-window)
+          ("C-o" . 'helm-ag-mode-jump)
+          )
+    )
+
+  (use-package wgrep
+    :custom
+    (wgrep-auto-save-buffer t)
+    )
+
+  :hydra
+  (hydra-helm-ag
+   (:exit t :hint nil :idle 1.0)
+   "
+^^              ^Interactive^       ^Current^           [Ag Search]
+----------------------------------------------------
+[_j_] just rg   [_b_] buffers       [_B_] buffers
+[_k_] dwim      [_d_] directory     [_D_] directory
+[_l_] project   [_f_] file          [_F_] file
+^^              [_p_] project       [_P_] project"
+   ("j" rg)
+   ("k" rg-dwim)
+   ("l" rg-project)
+   ("b" helm-do-ag-buffers)
+   ("d" helm-do-ag)
+   ("f" helm-do-ag-this-file)
+   ("p" helm-do-ag-project-root)
+   ("B" helm-ag-buffers)
+   ("D" helm-ag)
+   ("F" helm-ag-this-file)
+   ("P" helm-ag-project-root)
+   )
+
+  :commands (hydra-helm-ag/body)
+  )
 
 (use-package rmsbolt)
 
@@ -768,13 +704,9 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
 
 (use-package server
   :init
-  (server-mode 1)
   (unless (server-running-p)
-    (server-start)
-    )
-
-  :bind
-  ("C-x y" . 'server-edit)
+    (server-mode 1)
+    (server-start))
   )
 
 (use-package swiper
@@ -797,16 +729,10 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
    )
 
   :bind
-  ("C-f" . 'swiper-isearch)
-  ("M-f" . 'hydra-swiper/body)
   (:map swiper-map
         ("M-i" . 'hydra-inside-swiper/body)
         ("<escape>" . 'minibuffer-keyboard-quit)
         )
-  )
-
-(use-package eterm-256color
-  :hook (term-mode . eterm-256color-mode)
   )
 
 (use-package term
@@ -814,6 +740,38 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
 
   :config
   (setq-default term-scroll-show-maximum-output t)
+  (use-package eterm-256color
+    :hook (term-mode . eterm-256color-mode)
+    )
+  (use-package multi-term
+    :custom
+    (multi-term-program "zsh")
+
+    :config
+    (defun multi-term-bind-keys ()
+      (dolist
+          (bind
+           '(("C-<backspace>" . term-send-backward-kill-word)
+             ("C-<delete>" . term-send-forward-kill-word)
+             ("C-<left>" . term-send-backward-word)
+             ("C-<right>" . term-send-forward-word)
+             ("C-c C-j" . term-line-mode)
+             ("C-c C-k" . term-char-mode)
+             ("C-c C-v" . scroll-up)
+             ("C-c C-z" . term-stop-subjob)
+             ("C-c C-r" . term-send-reverse-search-history)
+             ("M-DEL" . term-send-backward-kill-word)
+             ("M-d" . term-send-forward-kill-word)
+             ("M-r" . term-send-reverse-search-history)
+             )
+           )
+        (add-to-list 'term-bind-key-alist bind)
+        )
+      )
+
+    :hook
+    (term-mode . multi-term-bind-keys)
+    )
   )
 
 (use-package tramp
@@ -866,48 +824,29 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   :hydra
   (hydra-vdiff-entry
    (:hint nil)
-    "
+   "
  2-way^^              3-way^^              Miscellaneous
 ------------------------------------------------------------------------
  [_b_] Diff 2 buffers [_B_] Diff 3 buffers [_c_] Diff current file
  [_f_] Diff 2 files   [_F_] Diff 3 files   [_m_] Resolve merge conflict"
-    ("b" vdiff-buffers)
-    ("B" vdiff-buffers3)
-    ("f" vdiff-files)
-    ("F" vdiff-files3)
-    ("c" vdiff-current-file)
-    ("m" vdiff-merge-conflict)
-    )
+   ("b" vdiff-buffers)
+   ("B" vdiff-buffers3)
+   ("f" vdiff-files)
+   ("F" vdiff-files3)
+   ("c" vdiff-current-file)
+   ("m" vdiff-merge-conflict)
+   )
 
   :bind
-  ("M-d" . 'hydra-vdiff-entry/body)
   (:map vdiff-mode-map ("M-i" . 'vdiff-hydra/body))
   (:map vdiff-3way-mode-map ("M-i" . 'vdiff-hydra/body))
 
   :commands (hydra-vdiff-entry/body)
   )
 
-(use-package vdiff-magit
-  :after magit
-
-  :config
-  (transient-suffix-put 'magit-dispatch "e" :description "vdiff (dwim)")
-  (transient-suffix-put 'magit-dispatch "e" :command 'vdiff-magit-dwim)
-  (transient-suffix-put 'magit-dispatch "E" :description "vdiff")
-  (transient-suffix-put 'magit-dispatch "E" :command 'vdiff-magit)
-
-  :bind
-  (:map magit-mode-map
-        ("e" . 'vdiff-magit-dwim)
-        ("E" . 'vdiff-magit-popup))
-  )
-
 (use-package visual-regexp-steroids
   :custom
   (vr/engine 'python)
-
-  :bind
-  ("M-r" . 'vr/query-replace)
   )
 
 (use-package which-key
@@ -929,24 +868,21 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
 
 (use-package yasnippet
   :config
-  (add-to-list 'yas-snippet-dirs (ec-path "yasnippet"))
+  (add-to-list 'yas-snippet-dirs (bs/emacs-d "yasnippet"))
+  (use-package helm-c-yasnippet
+    :custom
+    (helm-yas-space-match-any-greedy t)
+
+    :bind
+    ("M-/" . 'helm-yas-complete)
+    )
+
+  (use-package yasnippet-snippets)
+
   (yas-reload-all)
 
   :hook
   (prog-mode . yas-minor-mode)
-  )
-
-(use-package yasnippet-snippets
-  :after yasnippet
-  )
-
-(use-package helm-c-yasnippet
-  :after yasnippet
-  :custom
-  (helm-yas-space-match-any-greedy t)
-
-  :bind
-  ("M-/" . 'helm-yas-complete)
   )
 
 (use-package ryo-modal
@@ -963,79 +899,6 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   :config
   (setq ryo-modal-cursor-color "green")
   (setq ryo-modal-cursor-type 'box)
-  (defun bs/copy-whole-line ()
-    (interactive)
-    (save-excursion
-      (let ((kill-read-only-ok t)
-            (buffer-read-only t))
-        (kill-whole-line nil))))
-
-  (defun bs/just-paste-last (times)
-    (interactive "P")
-    (dotimes (counter (or times 1))
-      (yank)))
-  (put 'bs/just-paste-last 'delete-selection 'yank)
-
-  (defun bs/beginning-of-indentation-or-line ()
-    (interactive)
-    (let ((current-point (point)))
-      (back-to-indentation)
-      (when (equal (point) current-point)
-        (beginning-of-line))))
-
-  (defun bs/do-nothing ()
-    (interactive))
-
-  (defun bs/ryo-modal-mode-which-key ()
-    (interactive)
-    (which-key-show-keymap 'ryo-modal-mode-map))
-
-  (defun bs/copy-symbol-at-point ()
-    (let ((thing (thing-at-point 'symbol)))
-      (when thing
-        (kill-new thing)
-        (message "Copied: %s" (substring-no-properties thing)))))
-
-  (defun bs/copy-region-or-symbol-at-point ()
-    (interactive)
-    (if (region-active-p)
-        (kill-ring-save (region-beginning) (region-end))
-      (bs/copy-symbol-at-point)))
-
-  (defun bs/universal-argument ()
-    (interactive)
-    (call-interactively
-     (if current-prefix-arg
-         'universal-argument-more
-       'universal-argument)))
-
-  (defun bs/kill-this-buffer ()
-    (interactive)
-    (when (yes-or-no-p "Kill this buffer? ")
-      (kill-this-buffer)))
-
-  (defun bs/newline-above ()
-    (interactive)
-    (beginning-of-line)
-    (newline-and-indent)
-    (previous-line)
-    (indent-according-to-mode))
-
-  (defun bs/newline-below ()
-    (interactive)
-    (end-of-line)
-    (newline-and-indent))
-
-  (defun bs/shell-command-on-region ()
-    (interactive)
-    (if (region-active-p)
-        (let ((current-prefix-arg 4))
-          (call-interactively 'shell-command-on-region))
-      (call-interactively 'shell-command-on-region)))
-
-  (defun bs/deactivate-mark ()
-    (interactive)
-    (deactivate-mark))
 
   (ryo-modal-keys
    ("<left>" bs/do-nothing)
@@ -1142,8 +1005,8 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
    ("," "M-,")
    ("." "M-.")
    ("/" comment-line)
-
    )
+
   (ryo-modal-key
    "SPC"
    '(
@@ -1156,15 +1019,17 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
        ("r" eval-region)
        ))
      ("r" rectangle-mark-mode)
-     ("t" format-all-buffer)
      ("u" hydra-miscellaneous/body)
      ("o" hydra-origami/body)
+     ("p" bs/helm-projectile-find-file-dwim)
      ("[" switch-to-prev-buffer)
      ("]" switch-to-next-buffer)
 
+     ("d" hydra-vdiff-entry/body)
      ("f" hydra-swiper/body)
      ("g" hydra-magit/body)
      ("h" hydra-highlight/body)
+     ("'" format-all-buffer)
 
      ("B"
       (
@@ -1184,7 +1049,7 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
        ))
      ("m" hydra-multiple-cursors/body)
      ))
-   )
+  )
 
 ;; Garbage collection threshold lower after loading packages
 (setq gc-cons-threshold (* 2 1000 1000))

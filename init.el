@@ -250,6 +250,12 @@ Split        ^^Winner         ^^Other
           ("<S-iso-lefttab>" . dired-subtree-remove)
           )
     )
+
+  :custom
+  (dired-listing-switches "-aGhlv --group-directories-first")
+
+  :hook
+  (dired-mode . (lambda () (interactive) (dired-hide-details-mode 1)))
   )
 
 (use-package display-line-numbers

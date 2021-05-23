@@ -168,6 +168,8 @@ Split        ^^Winner         ^^Other
   :commands (hydra-windows/body)
   )
 
+(use-package all-the-icons)
+
 (use-package avy
   :custom
   (avy-case-fold-search nil)
@@ -237,6 +239,11 @@ Split        ^^Winner         ^^Other
   :ensure nil
 
   :config
+  (use-package all-the-icons-dired
+    :hook
+    (dired-mode . all-the-icons-dired-mode)
+    )
+
   (use-package dired-sidebar
     :bind
     ([f8] . dired-sidebar-toggle-sidebar)

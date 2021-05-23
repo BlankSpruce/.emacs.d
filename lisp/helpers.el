@@ -19,18 +19,11 @@
     )
   )
 
-(defun insert-output-of-executed-line ()
-  "executes line at point in default shell and inserts stdout"
+(defun bs/eval-line-at-point-and-insert-output ()
   (interactive)
   (insert
    (shell-command-to-string
-    (delete-and-extract-region
-     (point-at-bol)
-     (point-at-eol)
-     )
-    )
-   )
-  )
+    (delete-and-extract-region (point-at-bol) (point-at-eol)))))
 
 (defun colorize-compilation-buffer ()
   (toggle-read-only)
@@ -70,20 +63,16 @@
          (result (format "$ %s\n%s" command command-result)))
     (bs/loud-copy result)))
 
-(defun eval-and-replace ()
+(defun bs/eval-s-expression-and-insert-output ()
   (interactive)
   (backward-kill-sexp)
   (condition-case nil
       (prin1
        (eval (read (current-kill 0)))
-       (current-buffer)
-       )
+       (current-buffer))
     (error
      (message "Invalid expression")
-     (insert (current-kill 0))
-     )
-    )
-  )
+     (insert (current-kill 0)))))
 
 (defun bs/chmod-this (mode)
   (interactive

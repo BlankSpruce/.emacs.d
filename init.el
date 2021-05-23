@@ -67,7 +67,7 @@
    ("!" bs/eval-command-and-produce-nice-output "Eval command and produce nice output")
    ("a" ialign "Interactive align")
    ("c" bs/chmod-this "Chmod this")
-   ("e" eval-and-replace "Eval and replace")
+   ("e" hydra-evals/body "Eval")
    ("F" format-all-buffer "Format all buffer")
    ("m" hydra-markdown/body "Markdown preview")
    ("o" hydra-origami/body "Origami")
@@ -98,6 +98,22 @@
    ("q" nil :exit t)
    )
 
+  (hydra-evals
+   (:hint nil :exit t)
+   "
+Elisp:                        ^^Shell:
+[_b_] buffer                    [_c_] command
+[_d_] defun                     [_l_] line and insert
+[_s_] S-expression and insert   [_n_] command and produce nice output
+[_r_] region                                                            [_q_] quit"
+   ("b" eval-buffer)
+   ("d" eval-defun)
+   ("s" bs/eval-s-expression-and-insert-output)
+   ("r" eval-region)
+   ("c" shell-command)
+   ("l" bs/eval-line-at-point-and-insert-output)
+   ("n" bs/eval-command-and-produce-nice-output)
+   ("q" nil))
   :bind*
   ("C-a" . mark-whole-buffer)
   ("C-s" . save-buffer)
@@ -107,6 +123,8 @@
   ("M-]" . switch-to-next-buffer)
   ([f5] . revert-buffer-without-confirmation)
   ([f12] . hydra-miscellaneous/body)
+
+  :commands (hydra-miscellaneous/body hydra-toggles/body hydra-evals/body)
   )
 
 ;; Foreign packages
@@ -1013,11 +1031,7 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
      ("M-m" ryo-modal-mode)
 
      ("q" quit-window)
-     ("e"
-      (
-       ("b" eval-buffer)
-       ("r" eval-region)
-       ))
+     ("e" hydra-evals/body)
      ("r" rectangle-mark-mode)
      ("u" hydra-miscellaneous/body)
      ("o" hydra-origami/body)

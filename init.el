@@ -295,24 +295,6 @@ Split        ^^Winner         ^^Other
   :commands (esup)
   )
 
-(use-package elpy
-  :defer t
-
-  :init
-  (advice-add 'python-mode :before 'elpy-enable)
-
-  :hook
-  (
-   (elpy-mode   . (lambda () (highlight-indentation-mode -1)))
-   (python-mode . elpy-mode)
-   )
-
-  :bind
-  (:map elpy-mode-map
-        ("C-<SPC>" . 'elpy-company-backend)
-        )
-  )
-
 (use-package expand-region)
 
 (use-package fill-column-indicator
@@ -486,6 +468,14 @@ Split        ^^Winner         ^^Other
           ("C-?" . lsp-ui-peek-find-references)
           )
     )
+  (lsp-register-custom-settings
+   '(("pyls.plugins.pyls_mypy.enabled" t t)
+     ("pyls.plugins.pyls_mypy.live_mode" nil t)
+     ("pyls.plugins.pyls_black.enabled" t t)
+     ("pyls.plugins.pyls_isort.enabled" t t)))
+
+  :hook
+  (python-mode . lsp)
 
   :commands (lsp)
   )

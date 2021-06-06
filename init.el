@@ -76,7 +76,7 @@
    ("S" edit-current-file-as-root "Edit current file as root")
    ("t" hydra-toggles/body "Toggles")
    ("w" whitespace-cleanup "Cleanup whitespaces")
-   ("z" multi-term "multi-term")
+   ("z" vterm "multi-term")
    ("?" which-key-show-major-mode "which-key major-mode")
    )
 
@@ -761,38 +761,6 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
 
   :config
   (setq-default term-scroll-show-maximum-output t)
-  (use-package eterm-256color
-    :hook (term-mode . eterm-256color-mode)
-    )
-  (use-package multi-term
-    :custom
-    (multi-term-program "zsh")
-
-    :config
-    (defun multi-term-bind-keys ()
-      (dolist
-          (bind
-           '(("C-<backspace>" . term-send-backward-kill-word)
-             ("C-<delete>" . term-send-forward-kill-word)
-             ("C-<left>" . term-send-backward-word)
-             ("C-<right>" . term-send-forward-word)
-             ("C-c C-j" . term-line-mode)
-             ("C-c C-k" . term-char-mode)
-             ("C-c C-v" . scroll-up)
-             ("C-c C-z" . term-stop-subjob)
-             ("C-c C-r" . term-send-reverse-search-history)
-             ("M-DEL" . term-send-backward-kill-word)
-             ("M-d" . term-send-forward-kill-word)
-             ("M-r" . term-send-reverse-search-history)
-             )
-           )
-        (add-to-list 'term-bind-key-alist bind)
-        )
-      )
-
-    :hook
-    (term-mode . multi-term-bind-keys)
-    )
   )
 
 (use-package tramp
@@ -868,6 +836,27 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
 (use-package visual-regexp-steroids
   :custom
   (vr/engine 'python)
+  )
+
+(use-package vterm
+  :config
+  (use-package eterm-256color)
+
+  :custom
+  (vterm-shell "zsh")
+
+  :custom-face
+  (vterm-color-red     ((t :foreground nil :background nil :inherit eterm-256color-red)))
+  (vterm-color-green   ((t :foreground nil :background nil :inherit eterm-256color-green)))
+  (vterm-color-yellow  ((t :foreground nil :background nil :inherit eterm-256color-yellow)))
+  (vterm-color-blue    ((t :foreground nil :background nil :inherit eterm-256color-blue)))
+  (vterm-color-magenta ((t :foreground nil :background nil :inherit eterm-256color-magenta)))
+  (vterm-color-cyan    ((t :foreground nil :background nil :inherit eterm-256color-cyan)))
+
+  :hook
+  (vterm-mode . eterm-256color-mode)
+
+  :commands (vterm)
   )
 
 (use-package which-key

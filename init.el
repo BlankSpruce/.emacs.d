@@ -76,7 +76,8 @@
    ("S" edit-current-file-as-root "Edit current file as root")
    ("t" hydra-toggles/body "Toggles")
    ("w" whitespace-cleanup "Cleanup whitespaces")
-   ("z" vterm "multi-term")
+   ("z" vterm "Vterm")
+   ("Z" hydra-multi-vterm/body "Multiple vterms")
    ("?" which-key-show-major-mode "which-key major-mode")
    )
 
@@ -841,6 +842,7 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
 (use-package vterm
   :config
   (use-package eterm-256color)
+  (use-package multi-vterm)
 
   :custom
   (vterm-shell "zsh")
@@ -856,7 +858,17 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   :hook
   (vterm-mode . eterm-256color-mode)
 
-  :commands (vterm)
+  :hydra
+  (hydra-multi-vterm
+   (:exit nil :hint nil)
+   ""
+   ("z" multi-vterm "New term" :exit t)
+   ("k" multi-vterm-prev "Previous term")
+   ("j" multi-vterm-next "Next term")
+   ("q" nil "Quit" :exit t)
+   )
+
+  :commands (vterm hydra-multi-vterm/body)
   )
 
 (use-package which-key

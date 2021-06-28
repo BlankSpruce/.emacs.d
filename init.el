@@ -69,6 +69,7 @@
    ("c" bs/chmod-this "Chmod this")
    ("e" hydra-evals/body "Eval")
    ("F" format-all-buffer "Format all buffer")
+   ("l" bs/reopen-file-literally "Reopen file literally")
    ("m" hydra-markdown/body "Markdown preview")
    ("o" hydra-origami/body "Origami")
    ("q" nil "Quit" :exit t)
@@ -143,21 +144,17 @@ Elisp:                        ^^Shell:
   (hydra-windows
    (:hint nil :idle 1.0)
    "
-Split        ^^Winner         ^^Other
-                            ^^^^_q_uit
-| _o_          undo _z_         _s_wap
-- _e_          redo _Z_         _d_elete
-                            ^^^^_b_alance
+Split:              ^^Winner:     ^^Other:
+[_o_] horizontally    [_z_] undo    [_s_] swap      [_m_] toggle maximize
+[_e_] vertically      [_Z_] redo    [_d_] delete    [_b_] balance            [_q_] quit
 "
    ("o" split-window-horizontally :exit t)
    ("e" split-window-vertically :exit t)
-
    ("z" bs/winner-undo)
    ("Z" winner-redo :exit t)
-
    ("s" ace-swap-window :exit t)
-   ("d" delete-window :exit t)
-
+   ("d" ace-delete-window :exit t)
+   ("m" bs/maximize-window :exit t)
    ("b" balance-windows :exit t)
    ("q" nil)
    )

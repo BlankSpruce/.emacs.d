@@ -159,4 +159,19 @@
   (interactive)
   (deactivate-mark))
 
+(defun bs/reopen-file-literally ()
+  (interactive)
+  (let ((b (buffer-file-name)))
+    (when b
+      (kill-this-buffer)
+      (find-file-literally b))))
+
+(defun bs/maximize-window ()
+  (interactive)
+  (if (= 1 (length (window-list)))
+      (jump-to-register 'window-layout)
+    (progn
+      (window-configuration-to-register 'window-layout)
+      (delete-other-windows))))
+
 (provide 'helpers)

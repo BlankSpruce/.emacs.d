@@ -166,12 +166,65 @@
       (kill-this-buffer)
       (find-file-literally b))))
 
+(defvar bs/window-layout)
+
 (defun bs/maximize-window ()
   (interactive)
   (if (= 1 (length (window-list)))
-      (jump-to-register 'window-layout)
+      (set-window-configuration bs/window-layout)
     (progn
-      (window-configuration-to-register 'window-layout)
+      (setq bs/window-layout (current-window-configuration))
       (delete-other-windows))))
 
+(defvar bs/hydra-indent/size 4)
+
+(defun bs/hydra-indent/bol (line)
+  (save-excursion
+    (goto-line line)
+    (line-beginning-position)))
+
+(defun bs/hydra-indent/eol (line)
+  (save-excursion
+    (goto-line line)
+    (line-end-position)))
+
+(defun bs/hydra-indent/indent-region (start end size)
+  (let* ((line-start (line-number-at-pos start))
+         (line-end (line-number-at-pos end))
+         (bol (bs/hydra-indent/bol line-start))
+         (eol (bs/hydra-indent/eol line-end)))
+    (let ((deactivate-mark nil))
+      (indent-rigidly bol eol size)
+      (goto-line line-end)
+      (end-of-line)
+      (set-mark bol))))
+
+(defun bs/hydra-indent/indent-impl (size)
+  (if (region-active-p)
+      (bs/hydra-indent/indent-region (region-beginning) (region-end) size)
+    (indent-rigidly (line-beginning-position) (line-end-position) size)))
+
+(defun bs/hydra-indent/indent ()
+  (interactive)
+  (bs/hydra-indent/indent-impl bs/hydra-indent/size))
+
+(defun bs/hydra-indent/dedent ()
+  (interactive)
+  (bs/hydra-indent/indent-impl (- bs/hydra-indent/size)))
+
+(defun bs/hydra-indent/increment ()
+  (interactive)
+  (setq bs/hydra-indent/size (1+ bs/hydra-indent/size)))
+
+(defun bs/hydra-indent/decrement ()
+  (interactive)
+  (setq bs/hydra-indent/size (max 1 (1- bs/hydra-indent/size))))
+
+(defun bs/hydra-indent/change (size)
+  (interactive "nIndent size: ")
+  (setq bs/hydra-indent/size size))
+
+(defun bs/hydra-indent/reset ()
+  (interactive)
+  (setq bs/hydra-indent/size 4))
 (provide 'helpers)

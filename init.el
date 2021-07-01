@@ -64,11 +64,10 @@
   (hydra-miscellaneous
    (:exit t :columns 4)
    ""
-   ("!" bs/eval-command-and-produce-nice-output "Eval command and produce nice output")
    ("a" ialign "Interactive align")
    ("c" bs/chmod-this "Chmod this")
    ("e" hydra-evals/body "Eval")
-   ("F" format-all-buffer "Format all buffer")
+   ("i" hydra-indent/body "Indent")
    ("l" bs/reopen-file-literally "Reopen file literally")
    ("m" hydra-markdown/body "Markdown preview")
    ("o" hydra-origami/body "Origami")
@@ -116,6 +115,24 @@ Elisp:                        ^^Shell:
    ("l" bs/eval-line-at-point-and-insert-output)
    ("n" bs/eval-command-and-produce-nice-output)
    ("q" nil))
+
+  (hydra-indent
+   (:hint nil :exit nil)
+   "
+Action:           ^^Indent size: %`bs/hydra-indent/size
+[_k_] move left     [_-_] decrement    [_c_] change
+[_l_] move right    [_=_] increment    [_r_] reset
+[_<tab>_] indent                                   ^^^^[_q_] quit"
+   ("-" bs/hydra-indent/decrement)
+   ("=" bs/hydra-indent/increment)
+   ("<tab>" indent-for-tab-command)
+   ("c" bs/hydra-indent/change)
+   ("k" bs/hydra-indent/dedent)
+   ("l" bs/hydra-indent/indent)
+   ("r" bs/hydra-indent/reset)
+   ("q" nil :exit t)
+   )
+
   :bind*
   ("C-a" . mark-whole-buffer)
   ("C-s" . save-buffer)
@@ -919,6 +936,10 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
   (setq ryo-modal-cursor-color "green")
   (setq ryo-modal-cursor-type 'box)
 
+  (defun bs/cycle-spacing-with-newlines ()
+    (interactive)
+    (cycle-spacing -1))
+
   (ryo-modal-keys
    ("<left>" bs/do-nothing)
    ("<up>" bs/do-nothing)
@@ -1007,7 +1028,7 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
    ("X" kill-whole-line)
    ("C" bs/copy-whole-line)
    ("V" helm-show-kill-ring)
-   ("B" bs/do-nothing)
+   ("B" bs/cycle-spacing-with-newlines)
    ("N" bs/do-nothing)
    ("M" bs/deactivate-mark)
    ("<" beginning-of-buffer)

@@ -450,6 +450,8 @@ Split:              ^^Winner:     ^^Other:
   (keyfreq-autosave-mode 1)
   )
 
+(use-package loccur)
+
 (use-package lsp-mode
   :custom (lsp-prefer-flymake nil)
 
@@ -975,7 +977,7 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
    ("Q" keyboard-escape-quit)
    ("W" hydra-windows/body)
    ("E" er/contract-region)
-   ("R" bs/do-nothing)
+   ("R" bs/query-replace-with-emacs-engine)
    ("T" avy-goto-line)
    ("Y" ryo-modal-repeat)
    ("U" bs/do-nothing)
@@ -1065,6 +1067,8 @@ _c_lose node   _p_revious fold   toggle _a_ll      origami _r_eset      _Q_uit o
      ("f" hydra-swiper/body)
      ("g" hydra-magit/body)
      ("h" hydra-highlight/body)
+     ("l" loccur)
+     ("L" loccur-current)
      ("'" format-all-buffer)
 
      ("B"

@@ -227,4 +227,10 @@
 (defun bs/hydra-indent/reset ()
   (interactive)
   (setq bs/hydra-indent/size 4))
+
+(defun bs/query-replace-with-emacs-engine ()
+  (interactive)
+  (let ((vr/engine 'emacs))
+    (call-interactively 'vr/query-replace)))
+
 (provide 'helpers)
